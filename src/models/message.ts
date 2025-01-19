@@ -1,4 +1,4 @@
-import User from "./user";
+import User from "./User";
 
 export default interface Message {
   _id: string;

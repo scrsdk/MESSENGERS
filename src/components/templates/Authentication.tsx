@@ -1,5 +1,5 @@
 "use client";
-import AppLoader from "@/components/modules/AppLoader";
+import Loading from "@/components/modules/Loading";
 import useUserStore from "@/store/userStore";
 import axios from "axios";
 import { ReactNode, lazy, useEffect, useState } from "react";
@@ -21,14 +21,16 @@ const Authentication = ({ children }: { children: ReactNode }) => {
             isLogin: true,
           });
         }
-      } catch (error: unknown) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         console.log(error.message);
       } finally {
+        setIsLoading(false);
       }
     })();
   }, [setter]);
 
-  if (isLoading) return <AppLoader />;
+  if (isLoading) return <Loading />;
 
   return <>{isLogin ? <>{children}</> : <AuthenticationForm />}</>;
 };

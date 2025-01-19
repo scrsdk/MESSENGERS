@@ -13,7 +13,7 @@ export default {
       colors: {
         chatBg: "#232735",
         leftBarBg: "#17212B",
-        darkGray: "#888888",
+        darkGray: "#777777",
         darkBlue: "#1566A3",
         lightBlue: "#60CDFF",
         mainGreen: "#6CCB5F",

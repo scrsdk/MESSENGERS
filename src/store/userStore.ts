@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import User from "@/models/user";
 import { create } from "zustand";
 
 interface Updater {
@@ -12,7 +12,7 @@ const useUserStore = create<User & Updater>((set) => ({
   lastName: "",
   username: "",
   password: "",
-  phone: "0",
+  phone: "",
   rooms: [],
   avatar: "",
   createdAt: "",
