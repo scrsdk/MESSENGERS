@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import User from "@/models/user";
 import useUserStore from "@/store/userStore";
 import { toaster } from "@/utils";
 import { Button } from "@heroui/button";
@@ -30,7 +30,7 @@ const SignUpForm = () => {
         });
         toaster(true, "You signed up successfully.");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toaster(false, error.response.data.message, 3000);
     }
   };
@@ -90,7 +90,7 @@ const SignUpForm = () => {
         {...register("password", {
           required: "This field is required!",
           validate: (value) =>
-            value?.length! > 20 || value?.length! < 8
+            (value && value.length! > 20) || (value && value.length! < 8)
               ? "Password length should be bigger than 8 & less than 20"
               : true,
         })}
