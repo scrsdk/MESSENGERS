@@ -28,11 +28,9 @@ export default function RootLayout({
         href="./images/apple-touch-icon.png"
       />
       <meta name="apple-mobile-web-app-title" content="Telegram" />
-      <body className="font-robotoRegular bg-leftBarBg overflow-hidden">
-        <HeroUIProvider>
-          <ToastContainer />
-          {children}
-        </HeroUIProvider>
+      <body className="font-vazirRegular bg-leftBarBg ">
+        <ToastContainer />
+        <HeroUIProvider>{children}</HeroUIProvider>
       </body>
     </html>
   );

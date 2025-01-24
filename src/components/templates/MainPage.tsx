@@ -1,13 +1,11 @@
 import LeftBar from "./LeftBar";
 import MiddleBar from "./MiddleBar";
-import RightBar from "./RightBar";
 
 const MainPage = () => {
   return (
-    <div className="flex items-center bg-leftBarBg size-full ch:size-full transition-all min-h-dvh duration-400 overflow-y-hidden relative overflow-hidden">
+    <div className="flex items-center bg-leftBarBg  transition-all h-dvh duration-400 relative overflow-y-hidden overflow-hidden">
       <LeftBar />
-      {/* <MiddleBar />
-      <RightBar /> */}
+      <MiddleBar />
     </div>
   );
 };

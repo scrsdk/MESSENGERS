@@ -27,16 +27,13 @@ const CreateRoomBtn = () => {
       <Button
         radius="full"
         size="sm"
-        className="fixed h-16 md:absolute bottom-4 right-4 md:right-0 xl:right-3 text-white bg-darkBlue flex-center z-[9999]"
+        className="fixed h-16 md:absolute bottom-4 right-4 md:right-0 xl:right-3 text-white bg-darkBlue flex-center z-[999]"
         onPress={() => setIsOptionsOpen((prev) => !prev)}
       >
         {isOptionsOpen ? (
-          <IoClose data-aos="zoom-out" className="size-7 z-[99999999]" />
+          <IoClose data-aos="zoom-out" className="size-7" />
         ) : (
-          <MdModeEditOutline
-            data-aos="zoom-out"
-            className="size-7 z-[99999999]"
-          />
+          <MdModeEditOutline data-aos="zoom-out" className="size-7" />
         )}
       </Button>
 
@@ -45,20 +42,10 @@ const CreateRoomBtn = () => {
         key={isOptionsOpen.toString()}
         className={`fixed md:absolute ${
           isOptionsOpen ? "max-h-fit" : "max-h-0"
-        } flex flex-col gap-1 px-2 right-4 md:right-0 xl:right-3 bottom-24 rounded-md ch:w-full ch:p-3 hover:ch:bg-chatBg/50  overflow-hidden transition-all  bg-[#272D3A] text-white z-[9999]`}
+        } flex flex-col right-4 md:right-0 xl:right-3 bottom-24 rounded-md ch:w-full ch:p-3 hover:ch:bg-chatBg/50  overflow-hidden transition-all cursor-pointer  bg-[#272D3A] text-white z-[9]`}
       >
-        <span
-          className="my-1 cursor-pointer"
-          onClick={() => setRoomType("channel")}
-        >
-          New Channel
-        </span>
-        <span
-          className="my-1 cursor-pointer"
-          onClick={() => setRoomType("group")}
-        >
-          New Group
-        </span>
+        <span onClick={() => setRoomType("channel")}>New Channel</span>
+        <span onClick={() => setRoomType("group")}>New Group</span>
       </div>
 
       {isOptionsOpen && (

@@ -12,7 +12,7 @@ export interface Props {
   shouldCloseAll: boolean;
   isChatPageLoaded: boolean;
   forceRender: boolean;
-  createRoom: (type: "chanel" | "group") => void;
+  createRoom: (type: "channel" | "group") => void;
 
   modalData: {
     isOpen: boolean;

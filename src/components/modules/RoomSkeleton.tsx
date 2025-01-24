@@ -3,7 +3,7 @@ import { Skeleton } from "@heroui/skeleton";
 const RoomSkeleton = () => {
   return (
     <div className="flex gap-3 flex-col overflow-hidden">
-      {Array(20)
+      {Array(15)
         .fill(0)
         .map((_, index) => (
           <div

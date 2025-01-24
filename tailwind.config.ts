@@ -2,14 +2,6 @@ import { heroui } from "@heroui/theme";
 import type { Config } from "tailwindcss";
 
 export default {
-  purge: {
-    content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
-    options: {
-      safelist: [
-        /^bg-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900)$/,
-      ],
-    },
-  },
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
