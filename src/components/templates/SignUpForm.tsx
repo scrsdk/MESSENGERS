@@ -54,7 +54,7 @@ const SignUpForm = () => {
           },
         })}
         classNames={{
-          label: "!text-blue-400",
+          label: "text-blue-400!",
         }}
         variant="bordered"
         color="primary"
@@ -74,7 +74,7 @@ const SignUpForm = () => {
           },
         })}
         classNames={{
-          label: "!text-blue-400",
+          label: "text-blue-400!",
         }}
         variant="bordered"
         color="primary"
@@ -95,7 +95,7 @@ const SignUpForm = () => {
               : true,
         })}
         classNames={{
-          label: "!text-blue-400",
+          label: "text-blue-400!",
         }}
         variant="bordered"
         color="primary"
@@ -115,7 +115,7 @@ const SignUpForm = () => {
         size="lg"
         radius="sm"
         className="w-full"
-        variant={isValid ? "shadow" : "flat"}
+        variant={isValid ? "shadow-sm" : "flat"}
         onClick={handleSubmit(submitForm)}
       >
         Sign up

@@ -206,7 +206,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             }
 
             <div className="flex justify-center flex-col gap-1">
-              <h3 className="font-bold text-[17px] font-vazirBold line-clamp-1 overflow-ellipsis">
+              <h3 className="font-bold text-[17px] font-vazirBold line-clamp-1 text-ellipsis">
                 {name + " " + lastName}
               </h3>
 

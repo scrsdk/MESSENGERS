@@ -1,6 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-chat-bg: #0e1621;
+  --color-left-bar-bg: #17212b;
+  --color-dark-gray: #777777;
+  --color-dark-blue: #1566a3;
+  --color-light-blue: #60cdff;
+  --color-main-green: #6ccb5f;
+
+  --font-vazir-regular: vazirRegular;
+  --font-vazir-bold: vazirBold;
+  --font-vazir-light: vazirLight;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 html,
 body {
@@ -40,12 +69,12 @@ body {
 
 .bottomBorderLeft::before {
   content: "";
-  @apply absolute bg-chatBg rounded-br-2xl z-[999] w-2 left-10 inset-y-0;
+  @apply absolute bg-chatBg rounded-br-2xl z-999 w-2 left-10 inset-y-0;
 }
 
 .bottomBorderRight::before {
   content: "";
-  @apply absolute bg-chatBg rounded-bl-2xl rounded-tr-xl z-[999] w-2 right-0 top-0 -bottom-px;
+  @apply absolute bg-chatBg rounded-bl-2xl rounded-tr-xl z-999 w-2 right-0 top-0 -bottom-px;
 }
 
 .z-full {
@@ -58,7 +87,7 @@ body {
 
 .highLightedMessage::after {
   content: "";
-  @apply bg-lightBlue/15 p-1 rounded-md transition-all duration-200 absolute inset-0 w-full z-[9999999999999];
+  @apply bg-lightBlue/15 p-1 rounded-md transition-all duration-200 absolute inset-0 w-full z-9999999999999;
 }
 
 .loader {

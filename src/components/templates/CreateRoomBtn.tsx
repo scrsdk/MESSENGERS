@@ -27,7 +27,7 @@ const CreateRoomBtn = () => {
       <Button
         radius="full"
         size="sm"
-        className="fixed h-16 md:absolute bottom-4 right-4 md:right-0 xl:right-3 text-white bg-darkBlue flex-center z-[999]"
+        className="fixed h-16 md:absolute bottom-4 right-4 md:right-0 xl:right-3 text-white bg-darkBlue flex-center z-999"
         onPress={() => setIsOptionsOpen((prev) => !prev)}
       >
         {isOptionsOpen ? (
@@ -42,7 +42,7 @@ const CreateRoomBtn = () => {
         key={isOptionsOpen.toString()}
         className={`fixed md:absolute ${
           isOptionsOpen ? "max-h-fit" : "max-h-0"
-        } flex flex-col right-4 md:right-0 xl:right-3 bottom-24 rounded-md ch:w-full ch:p-3 hover:ch:bg-chatBg/50  overflow-hidden transition-all cursor-pointer  bg-[#272D3A] text-white z-[9]`}
+        } flex flex-col right-4 md:right-0 xl:right-3 bottom-24 rounded-md ch:w-full ch:p-3 hover:ch:bg-chatBg/50  overflow-hidden transition-all cursor-pointer  bg-[#272D3A] text-white z-9`}
       >
         <span onClick={() => setRoomType("channel")}>New Channel</span>
         <span onClick={() => setRoomType("group")}>New Group</span>

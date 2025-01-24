@@ -112,7 +112,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
             }
           }}
           placeholder="Username"
-          className="outline-none bg-inherit w-full"
+          className="outline-hidden bg-inherit w-full"
           max={22}
           maxLength={22}
         />

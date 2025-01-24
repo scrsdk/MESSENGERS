@@ -68,7 +68,7 @@ const SearchPage = ({ closeSearch }: Props) => {
     <section
       data-aos="fade-up"
       onKeyUp={(e) => e.key == "Escape" && closeSearch()}
-      className={`text-white fixed md:max-w-[29.6%] max-w-full w-full h-full inset-0 overflow-auto bg-leftBarBg z-[9999] transition-all`}
+      className={`text-white fixed md:max-w-[29.6%] max-w-full w-full h-full inset-0 overflow-auto bg-leftBarBg z-9999 transition-all`}
     >
       <div className="flex sticky top-0 gap-3 bg-inherit items-center justify-between w-full ch:w-full px-2 py-4">
         <IoMdArrowRoundBack
@@ -81,7 +81,7 @@ const SearchPage = ({ closeSearch }: Props) => {
           ref={inputRef}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search"
-          className="bg-inherit placeholder:text-white/60 basis-[90%] outline-none"
+          className="bg-inherit placeholder:text-white/60 basis-[90%] outline-hidden"
           type="text"
         />
       </div>

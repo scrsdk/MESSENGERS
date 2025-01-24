@@ -90,7 +90,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
           value={updatedName}
           onChange={(e) => setUpdatedName(e.target.value)}
           placeholder="Name"
-          className="outline-none bg-inherit w-full"
+          className="outline-hidden bg-inherit w-full"
           max={20}
           maxLength={20}
         />
@@ -102,7 +102,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
           value={updatedLastName}
           onChange={(e) => setUpdatedLastName(e.target.value)}
           placeholder="Last name"
-          className="outline-none bg-inherit w-full"
+          className="outline-hidden bg-inherit w-full"
           max={20}
           maxLength={20}
         />
@@ -129,7 +129,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
               return updatedBio.length > 70 ? prev : updatedBio;
             });
           }}
-          className="resize-none w-full h-3 text-white bg-inherit outline-none"
+          className="resize-none w-full h-3 text-white bg-inherit outline-hidden"
           placeholder="Your biography"
         />
       </div>

@@ -144,7 +144,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
   };
 
   return (
-    <section className="fixed inset-y-0 max-w-full md:max-w-[29.6%] left-0 z-[9999999] bg-leftBarBg size-full bg-inherit text-white">
+    <section className="fixed inset-y-0 max-w-full md:max-w-[29.6%] left-0 z-9999999 bg-leftBarBg size-full bg-inherit text-white">
       <div className="flex gap-3 bg-inherit items-center justify-between w-full ch:w-full px-4 py-4">
         <IoMdArrowRoundBack
           onClick={getBackBtn}
@@ -193,7 +193,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
               type="text"
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
-              className="w-full basis-[90%] p-2 rounded bg-inherit outline-none"
+              className="w-full basis-[90%] p-2 rounded-sm bg-inherit outline-hidden"
               placeholder={`Enter ${roomType} name`}
             />
             <BsEmojiSmile className="basis-[10%] cursor-pointer shrink-0 size-5" />
@@ -205,7 +205,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-inherit p-1 w-full px-4 outline-none"
+            className="bg-inherit p-1 w-full px-4 outline-hidden"
             placeholder="Who would you like to add ?"
           />
 
@@ -231,7 +231,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
         disabled={isLoading}
         style={{ height: "64px" }}
         size="sm"
-        className="absolute right-4 md:right-0 xl:right-3 bottom-4 text-white rounded-full bg-darkBlue flex-center z-[99999999]"
+        className="absolute right-4 md:right-0 xl:right-3 bottom-4 text-white rounded-full bg-darkBlue flex-center z-99999999"
         onPress={() => {
           if (isRoomInfoPartShown) {
             createRoom();

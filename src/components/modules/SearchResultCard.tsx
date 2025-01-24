@@ -105,13 +105,13 @@ const SearchResultCard = (
         </div>
       )}
       <div className="flex flex-col justify-between border-b border-black/40 w-full py-2">
-        <p className="text-[17px] font-vazirBold line-clamp-1 overflow-ellipsis break-words">
+        <p className="text-[17px] font-vazirBold line-clamp-1 text-ellipsis break-words">
           {findBy == "participants" || findBy == "name"
             ? highlightChars(query, name!)
             : name}
         </p>
 
-        <p className="text-sm text-darkGray line-clamp-1 overflow-ellipsis break-words">
+        <p className="text-sm text-darkGray line-clamp-1 text-ellipsis break-words">
           {findBy == "messages" && roomData.messages?.length
             ? highlightChars(query, roomData.messages[0].message)
             : "last seen recently"}

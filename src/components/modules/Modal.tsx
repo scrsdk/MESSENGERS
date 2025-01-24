@@ -40,8 +40,8 @@ const Modal = () => {
       isOpen={isOpen}
       placement="center"
       classNames={{
-        wrapper: "z-[99999]",
-        backdrop: "z-[99999]",
+        wrapper: "z-99999",
+        backdrop: "z-99999",
       }}
       className="mx-5 md:mx-0 bg-[#232735] text-white"
       onClose={() => {

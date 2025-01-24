@@ -54,7 +54,7 @@ const SignInForm = () => {
           },
         })}
         classNames={{
-          label: "!text-blue-400",
+          label: "text-blue-400!",
         }}
         variant="bordered"
         color="primary"
@@ -71,7 +71,7 @@ const SignInForm = () => {
               ? "Password length should be bigger than 8 & less than 20"
               : true,
         })}
-        classNames={{ label: "!text-blue-400" }}
+        classNames={{ label: "text-blue-400!" }}
         variant="bordered"
         color="primary"
         radius="sm"
@@ -89,7 +89,7 @@ const SignInForm = () => {
         size="lg"
         radius="sm"
         className="w-full"
-        variant={isValid ? "shadow" : "flat"}
+        variant={isValid ? "shadow-sm" : "flat"}
         onClick={handleSubmit(submitForm)}
       >
         Sign in

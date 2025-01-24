@@ -13,13 +13,13 @@ import { getTimeFromDate } from "@/utils";
 import { FiBookmark } from "react-icons/fi";
 
 const gradients = [
-  "bg-gradient-to-b from-blue-400 to-blue-500",
-  "bg-gradient-to-b from-pink-400 to-pink-500",
-  "bg-gradient-to-b from-green-500 to-green-600",
-  "bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600",
-  "bg-gradient-to-b from-yellow-300 to-yellow-400",
-  "bg-gradient-to-b from-orange-300 to-orange-400",
-  "bg-gradient-to-b from-teal-400 to-teal-500",
+  "bg-linear-to-b from-blue-400 to-blue-500",
+  "bg-linear-to-b from-pink-400 to-pink-500",
+  "bg-linear-to-b from-green-500 to-green-600",
+  "bg-linear-to-b from-purple-400 via-purple-500 to-purple-600",
+  "bg-linear-to-b from-yellow-300 to-yellow-400",
+  "bg-linear-to-b from-orange-300 to-orange-400",
+  "bg-linear-to-b from-teal-400 to-teal-500",
 ];
 
 // Global state for color assignments
@@ -187,7 +187,7 @@ export const ChatCard = ({
     <div
       onClick={joinToRoom}
       className={
-        "flex items-center gap-3 px-1 relative h-16 cursor-pointer transition-all duration-300 rounded overflow-hidden "
+        "flex items-center gap-3 px-1 relative h-16 cursor-pointer transition-all duration-300 rounded-sm overflow-hidden "
       }
     >
       {roomID === myID ? (

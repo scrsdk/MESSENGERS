@@ -82,7 +82,7 @@ const VideoChat = ({ getBack }: { getBack: () => void }) => {
         <div className="flex w-full gap-3 flex-wrap items-center ch:flex-1 ch:bg-chatBg ch:rounded-md ch:p-3 ch:cursor-pointer">
           <button
             onClick={shareMyStream}
-            className="w-full flex-grow-1 flex-shrink-0"
+            className="w-full flex-grow-1 shrink-0"
           >
             Share my screen
           </button>
@@ -90,7 +90,7 @@ const VideoChat = ({ getBack }: { getBack: () => void }) => {
           <div className="flex items-center justify-between">
             <input
               onChange={(e) => setPeerReceiverID(e.target.value)}
-              className="border-none outline-none bg-inherit"
+              className="border-none outline-hidden bg-inherit"
               placeholder="Join Room"
             />
             <p onClick={joinCall} className="cursor-pointer">

@@ -72,7 +72,7 @@ const LeftBarMenu = ({ closeMenu, isOpen }: Props) => {
         onClick={closeMenu}
         className={`fixed ${
           isOpen ? "w-full" : "w-0 hidden"
-        } h-[100vw] left-0 inset-y-0 z-[9999] backdrop-filter bg-black/30`}
+        } h-[100vw] left-0 inset-y-0 z-9999 backdrop-filter bg-black/30`}
       />
 
       {activeRoute}

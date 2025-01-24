@@ -17,7 +17,7 @@ const LeftBarContainer = ({
   return (
     <section
       data-aos="fade-left"
-      className="fixed max-h-screen h-full overflow-y-auto overflow-x-hidden duration-300 transition-all inset-0 z-[9999999999] bg-leftBarBg text-white w-full"
+      className="fixed max-h-screen h-full overflow-y-auto overflow-x-hidden duration-300 transition-all inset-0 z-9999999999 bg-leftBarBg text-white w-full"
     >
       <div className=" w-full h-full max-w-full md:max-w-[30%]">
         <div className="flex items-center p-4 sticky top-0 bg-leftBarBg z-50 justify-between w-full text-white">

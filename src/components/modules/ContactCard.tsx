@@ -44,7 +44,7 @@ const ContactCard = ({
           </div>
         )}
         <div className="flex flex-col justify-between border-b border-black/40 w-full py-2">
-          <p className="text-[17px] font-vazirBold line-clamp-1 overflow-ellipsis">
+          <p className="text-[17px] font-vazirBold line-clamp-1 text-ellipsis">
             {name}
           </p>
 
