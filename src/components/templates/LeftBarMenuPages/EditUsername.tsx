@@ -97,7 +97,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
       }
     >
       <div className="flex flex-col gap-2 pb-4">
-        <p className="text-darkBlue font-segoeRegular pt-1 font-bold text-[16px]">
+        <p className="text-darkBlue font-vazirRegular pt-1 font-bold text-[16px]">
           Update username
         </p>
 
@@ -138,7 +138,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
           </p>
         )}
         You can choose a username on{" "}
-        <span className="font-bold font-segoeBold">Telegram</span>. If you do,
+        <span className="font-bold font-vazirBold">Telegram</span>. If you do,
         people will be able to find you by this username and contact you without
         needing your phone number.
         <br />

@@ -81,7 +81,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
       }
     >
       <div className="flex flex-col gap-2 pt-4">
-        <p className="text-darkBlue font-segoeRegular py-1 font-bold text-[16px]">
+        <p className="text-darkBlue font-vazirRegular py-1 font-bold text-[16px]">
           Your name
         </p>
 
@@ -112,7 +112,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
 
       <div className="flex flex-col gap-2 py-4">
         <div className="flex items-center w-full justify-between pt-4">
-          <p className="text-darkBlue font-segoeRegular font-bold text-[16px]">
+          <p className="text-darkBlue font-vazirRegular font-bold text-[16px]">
             Your bio
           </p>
           <p className="text-darkGray">

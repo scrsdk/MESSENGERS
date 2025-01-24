@@ -14,7 +14,7 @@ const MenuItem = ({ title, icon, onClick, spaceY = "py-3" }: ItemProps) => {
       className={`${spaceY} flex items-center gap-6 w-full cursor-pointer`}
     >
       <div className="ch:size-[26] ch:text-white/40">{icon}</div>
-      <p className="font-robotoRegular">{title}</p>
+      <p className="font-vazirRegular">{title}</p>
     </div>
   );
 };

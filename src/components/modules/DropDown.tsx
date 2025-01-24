@@ -39,7 +39,7 @@ const DropDown = ({ isOpen, dropDownItems, onClose }: Props) => {
       <DropdownMenu variant="faded" aria-label="Static Actions">
         {dropDownItems.map(({ onClick, title, icon }: any) => (
           <DropdownItem
-            className={`p-3 font-segoeLight ${!title?.length && "hidden"}`}
+            className={`p-3 font-vazirLight ${!title?.length && "hidden"}`}
             onClick={onClick}
             startContent={icon}
             style={{

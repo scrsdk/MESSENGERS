@@ -206,11 +206,11 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             }
 
             <div className="flex justify-center flex-col gap-1">
-              <h3 className="font-bold text-[17px] font-robotoBold line-clamp-1 overflow-ellipsis">
+              <h3 className="font-bold text-[17px] font-vazirBold line-clamp-1 overflow-ellipsis">
                 {name + " " + lastName}
               </h3>
 
-              <div className="font-bold text-[14px] text-darkGray font-robotoBold line-clamp-1 whitespace-normal text-nowrap">
+              <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
                 Online
               </div>
             </div>
@@ -225,7 +225,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
         <div className="px-4">
           <div className="flex flex-col gap-2 pt-4">
-            <p className="text-darkBlue font-robotoBold pt-1 font-bold text-sm">
+            <p className="text-darkBlue font-vazirBold pt-1 font-bold text-sm">
               Account
             </p>
 
@@ -277,7 +277,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           <p className="h-3 w-full bg-black/70 inset-x-0 my-3 absolute"></p>
 
           <div className="flex flex-col gap-2 pt-4">
-            <p className="text-darkBlue font-robotoBold pt-4 text-sm">
+            <p className="text-darkBlue font-vazirBold pt-4 text-sm">
               Settings
             </p>
 
@@ -328,7 +328,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           <p className="h-3 w-full bg-black/70 inset-x-0 my-3 absolute"></p>
 
           <div className="flex flex-col gap-2 pt-4">
-            <p className="text-darkBlue font-robotoBold pt-4 text-sm">Help</p>
+            <p className="text-darkBlue font-vazirBold pt-4 text-sm">Help</p>
 
             <MenuItem
               spaceY="py-1"
@@ -358,7 +358,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
         </div>
 
         <div className="w-full inset-x-0 mt-3 px-4 py-2 text-center bg-black/70">
-          Created with ❤️ by{" "}
+          Created with 💙 by{" "}
           <a
             target="_blank"
             href="https://github.com/Saeed-Abedini"

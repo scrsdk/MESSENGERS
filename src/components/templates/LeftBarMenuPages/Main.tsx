@@ -92,7 +92,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         )}
 
         <div>
-          <p className="font-bold font-segoeBold text-[17px]">
+          <p className="font-bold font-vazirBold text-[17px]">
             {name + " " + lastName}
           </p>
           <p className="text-darkGray text-[14px]">

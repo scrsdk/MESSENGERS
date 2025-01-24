@@ -2,6 +2,14 @@ import { heroui } from "@heroui/theme";
 import type { Config } from "tailwindcss";
 
 export default {
+  purge: {
+    content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
+    options: {
+      safelist: [
+        /^bg-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900)$/,
+      ],
+    },
+  },
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,7 +19,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        chatBg: "#232735",
+        chatBg: "#0E1621",
         leftBarBg: "#17212B",
         darkGray: "#777777",
         darkBlue: "#1566A3",
@@ -19,11 +27,21 @@ export default {
         mainGreen: "#6CCB5F",
       },
       fontFamily: {
-        robotoRegular: "robotoRegular",
-        robotoBold: "robotoBold",
-        robotoLight: "robotoLight",
+        vazirRegular: "vazirRegular",
+        vazirBold: "vazirBold",
+        vazirLight: "vazirLight",
       },
     },
   },
-  plugins: [heroui()],
+  plugins: [
+    heroui(),
+    function ({
+      addVariant,
+    }: {
+      addVariant: (variantName: string, selector: string) => void;
+    }) {
+      addVariant("ch", "& > *");
+      addVariant("ch-hover", "& > *:hover");
+    },
+  ],
 } satisfies Config;

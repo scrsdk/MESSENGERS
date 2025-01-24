@@ -8,18 +8,18 @@ body {
 }
 
 @font-face {
-  font-family: "robotoRegular";
-  src: url("../../public/fonts/Roboto-Regular.ttf");
+  font-family: "vazirRegular";
+  src: url("../../public/fonts/Vazirmatn-Regular.woff2");
 }
 
 @font-face {
-  font-family: "robotoBold";
-  src: url("../../public/fonts/Roboto-Bold.ttf");
+  font-family: "vazirBold";
+  src: url("../../public/fonts/Vazirmatn-Bold.woff2");
 }
 
 @font-face {
-  font-family: "robotoLight";
-  src: url("../../public/fonts/Roboto-Light.ttf");
+  font-family: "vazirLight";
+  src: url("../../public/fonts/Vazirmatn-Light.woff2");
 }
 
 .flex-center {
@@ -38,11 +38,6 @@ body {
   scrollbar-width: none;
 }
 
-.activeChat::after {
-  content: "";
-  @apply bg-lightBlue right-0 bottom-0 top-0 w-1 h-8 transition-all rounded-r-full;
-}
-
 .bottomBorderLeft::before {
   content: "";
   @apply absolute bg-chatBg rounded-br-2xl z-[999] w-2 left-10 inset-y-0;
@@ -51,10 +46,6 @@ body {
 .bottomBorderRight::before {
   content: "";
   @apply absolute bg-chatBg rounded-bl-2xl rounded-tr-xl z-[999] w-2 right-0 top-0 -bottom-px;
-}
-
-.fillScreen {
-  height: calc(100vh - 128px);
 }
 
 .z-full {
@@ -87,17 +78,5 @@ body {
 
   100% {
     transform: rotate(360deg);
-  }
-}
-
-@media (min-width: 768px) {
-  .fillScreen {
-    height: calc(100vh - 140px);
-  }
-}
-
-@media (min-width: 1280px) {
-  .fillScreen {
-    height: calc(100vh - 170px);
   }
 }

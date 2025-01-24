@@ -27,7 +27,7 @@ const LeftBarContainer = ({
               className="size-6 cursor-pointer"
             />
             {title ? (
-              <p className="font-bold font-robotoBold text-[17px]">{title}</p>
+              <p className="font-bold font-vazirBold text-[17px]">{title}</p>
             ) : null}
           </div>
 
