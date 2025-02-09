@@ -1,5 +1,5 @@
-import connectToDB from "./src/db.js";
 import { Server } from "socket.io";
+import connectToDB from "./src/db.js";
 import RoomSchema from "./src/schemas/roomSchema.js";
 import MessageSchema from "./src/schemas/messageSchema.js";
 import MediaSchema from "./src/schemas/mediaSchema.js";
@@ -10,7 +10,7 @@ const io = new Server(3001, {
     origin: "*",
     method: ["PUT", "POST"],
   },
-  pingTimeout: 20000,
+  pingTimeout: 30000,
 });
 
 console.log("Socket server is running on port 3001");
@@ -203,6 +203,41 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("getVoiceMessageListeners", async (msgID) => {
+    const {
+      voiceData: { playedBy: playedByIds },
+    } = await MessageSchema.findOne({ _id: msgID });
+
+    const playedByIdsWithoutSeenTime = playedByIds.map((id) =>
+      id?.includes("_") ? id.split("_")[0] : id
+    );
+
+    const playedByUsersData = await UserSchema.find({
+      _id: { $in: playedByIdsWithoutSeenTime },
+    }).lean();
+
+    const findUserSeenTimeWithID = (id) => {
+      let seenTime = null;
+
+      playedByIds.some((str) => {
+        const extractedID = str?.includes("_") ? str.split("_")[0] : str;
+        if (extractedID === id.toString()) {
+          seenTime = str?.includes("_") ? str.split("_")[1] : null;
+          return true;
+        }
+      });
+
+      return seenTime;
+    };
+
+    const userDataWithSeenDate = playedByUsersData.map((data) => ({
+      ...data,
+      seenTime: findUserSeenTimeWithID(data._id.toString()),
+    }));
+
+    socket.emit("getVoiceMessageListeners", userDataWithSeenDate);
+  });
+
   socket.on("getRooms", async (userID) => {
     const userRooms = await RoomSchema.find({
       participants: { $in: userID },
@@ -358,10 +393,28 @@ io.on("connection", (socket) => {
     socket.emit("updateUserData");
   });
 
-  socket.on("ping", () => socket.emit("pong"));
+  socket.on("getRoomMembers", async ({ roomID }) => {
+    try {
+      const roomMembers = await RoomSchema.findOne({ _id: roomID }).populate(
+        "participants"
+      );
+      socket.emit("getRoomMembers", roomMembers.participants);
+    } catch (err) {
+      console.log(err);
+      socket.emit("error", { message: "Unknown error, try later." });
+    }
+  });
 
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((data) => data.socketID !== socket.id);
     io.to([...socket.rooms]).emit("updateOnlineUsers", onlineUsers);
   });
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
