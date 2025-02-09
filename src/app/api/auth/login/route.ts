@@ -8,20 +8,18 @@ export const POST = async (req: Request) => {
   try {
     await connectToDB();
 
-    const { payload, password } = await req.json();
+    const { phone, password } = await req.json();
 
-    const userData = await UserSchema.findOne({
-      $or: [{ username: payload }, { phone: payload.toString() }],
-    });
+    const userData = await UserSchema.findOne({ phone: phone.toString() });
     if (!userData)
       return Response.json(
-        { message: "No user exist with this username or password." },
+        { message: "No user exist with phone." },
         { status: 401 }
       );
 
     if (!(await compare(password, userData.password)))
       return Response.json(
-        { message: "Incorrect username/phone or password" },
+        { message: "Incorrect phone or password" },
         { status: 401 }
       );
 

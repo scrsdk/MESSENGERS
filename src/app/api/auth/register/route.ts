@@ -16,7 +16,7 @@ export const POST = async (req: Request) => {
     const userData = await UserSchema.create({
       name: username?.replace("@", ""),
       lastName: "",
-      username,
+      username: username.toLowerCase(),
       password,
       phone: phone.toString(),
     });
@@ -36,10 +36,10 @@ export const POST = async (req: Request) => {
       maxAge: 60 * 60 * 14,
     });
     return Response.json(userData, { status: 201 });
-  } catch (err: unknown) {
-    console.log(err);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     const existedUsernameOrPhone = Object.keys(
-      err.errorResponse?.keyPattern
+      error.errorResponse?.keyPattern
     ).join("");
 
     if (existedUsernameOrPhone) {

@@ -7,7 +7,13 @@ export const POST = async (req: Request) => {
   try {
     await connectToDB();
 
-    const token = (await cookies()).get("token")?.value ?? req.json();
+    const cookieToken = (await cookies()).get("token")?.value;
+    const bodyToken = await req
+      .json()
+      .then((body) => body.token)
+      .catch(() => null);
+
+    const token = cookieToken ?? bodyToken;
 
     if (!token)
       return Response.json(
@@ -32,9 +38,6 @@ export const POST = async (req: Request) => {
     return Response.json(userData, { status: 200 });
   } catch (err) {
     console.log(err);
-    return Response.json(
-      { message: "Unknown error, try later." },
-      { status: 500 }
-    );
+    return Response.json({ message: "Internal Server Error" }, { status: 500 });
   }
 };
