@@ -1,10 +1,10 @@
 const scrollToMessage = (
   id: string,
   behavior: "smooth" | "auto" = "smooth",
-  block = "center" as ScrollLogicalPosition
+  block = "start" as ScrollLogicalPosition
 ) => {
   const replayTargetElem = document.getElementsByClassName(id!)[0];
-  const pinMessageContainer = document.querySelector("#pinMessagesContainer");
+  // const pinMessageContainer = document.querySelector("#pinMessagesContainer");
 
   replayTargetElem?.scrollIntoView({ block, behavior });
 

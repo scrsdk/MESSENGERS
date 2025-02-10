@@ -4,6 +4,8 @@ const tokenDecoder = (token: string) => {
   try {
     return verify(token, process.env.secretKey as Secret);
   } catch (error) {
+    console.log(error);
+
     return false;
   }
 };

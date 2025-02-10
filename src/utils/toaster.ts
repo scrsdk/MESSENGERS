@@ -1,22 +1,21 @@
+import { ReactNode } from "react";
 import { toast } from "react-toastify";
 
-const toaster = (status: boolean, message: string, duration: number = 2000) => {
+const toaster = (
+  status: boolean,
+  message: string | ReactNode,
+  duration = 2000
+) => {
   toast[status ? "success" : "error"](message, {
-    position: "top-center",
+    position: "bottom-center",
     autoClose: duration,
+    hideProgressBar: true,
+    theme: "dark",
     style: {
-      display: "flex",
-      alignItems: "center",
-      fontFamily: "inherit",
-      backgroundColor: "#19202E",
+      backgroundColor: "#17212b",
       color: "#ffffff",
-      position: "relative",
-      top: "30px",
-      fontSize: "16px",
-      padding: "9px",
-      border: `2px solid #${status ? "60CDFF" : "f31260"}`,
-      borderRadius: "4px",
-      zIndex: "999999",
+      fontSize: "15px",
+      borderRadius: "10px",
     },
   });
 };
