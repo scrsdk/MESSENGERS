@@ -1,16 +1,21 @@
-@import 'tailwindcss';
-
+@import "tailwindcss";
+@plugin "daisyui" {
+  include: button, input, loading, dropdown, skeleton, chat, toggle, modal,
+    checkbox;
+}
 @theme {
-  --color-chat-bg: #0e1621;
-  --color-left-bar-bg: #17212b;
-  --color-dark-gray: #777777;
-  --color-dark-blue: #1566a3;
-  --color-light-blue: #60cdff;
-  --color-main-green: #6ccb5f;
+  --color-chatBg: #0e1621;
+  --color-leftBarBg: #17212b;
+  --color-darkGray: #777777;
+  --color-modalBg: #2f3341;
+  --color-darkBlue: #1566a3;
+  --color-lightBlue: #60cdff;
+  --color-voiceWaves: #60ccbb;
+  --color-mainGreen: #6ccb5f;
 
-  --font-vazir-regular: vazirRegular;
-  --font-vazir-bold: vazirBold;
-  --font-vazir-light: vazirLight;
+  --font-vazirRegular: vazirRegular;
+  --font-vazirBold: vazirBold;
+  --font-vazirLight: vazirLight;
 }
 
 /*
@@ -31,9 +36,16 @@
   }
 }
 
-html,
-body {
+* {
   user-select: none;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  height: 100%;
+  width: 100%;
 }
 
 @font-face {
@@ -67,16 +79,6 @@ body {
   scrollbar-width: none;
 }
 
-.bottomBorderLeft::before {
-  content: "";
-  @apply absolute bg-chatBg rounded-br-2xl z-999 w-2 left-10 inset-y-0;
-}
-
-.bottomBorderRight::before {
-  content: "";
-  @apply absolute bg-chatBg rounded-bl-2xl rounded-tr-xl z-999 w-2 right-0 top-0 -bottom-px;
-}
-
 .z-full {
   z-index: 999;
 }
@@ -90,22 +92,6 @@ body {
   @apply bg-lightBlue/15 p-1 rounded-md transition-all duration-200 absolute inset-0 w-full z-9999999999999;
 }
 
-.loader {
-  border: 4px solid transparent;
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s infinite;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+.chat {
+  --mask-chat: url("data:image/svg+xml,%3csvg width='13' height='13' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill='black' d='M0 11.5004C0 13.0004 2 13.0004 2 13.0004H12H13V0.00036329L12.5 0C12.5 0 11.977 2.09572 11.8581 2.50033C11.6075 3.35237 10.9149 4.22374 9 5.50036C6 7.50036 0 10.0004 0 11.5004Z'/%3e%3c/svg%3e");
 }
