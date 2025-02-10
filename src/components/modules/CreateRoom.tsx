@@ -3,16 +3,18 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { MdDone } from "react-icons/md";
 import { MdAddAPhoto } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, Suspense, useMemo, useState } from "react";
 import Image from "next/image";
 import Room from "@/models/room";
 import useUserStore from "@/store/userStore";
-import useGlobalVariablesStore from "@/store/globalVariablesStore";
+import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";
 import User from "@/models/user";
 import { randomHexGenerate, toaster, uploadFile } from "@/utils";
 import ContactCard from "./ContactCard";
-import { Button } from "@heroui/button";
+import Button from "./ui/Button";
+import Loading from "./ui/Loading";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 type Props = {
   roomType: Room["type"];
@@ -24,7 +26,6 @@ const CreateRoom = ({ roomType, close }: Props) => {
   const userContacts = rooms.filter(
     (room) => room.type === "private" && room.participants.length > 1
   );
-  const onlineUsers = useGlobalVariablesStore((state) => state.onlineUsers);
   const socket = useSockets((state) => state.rooms);
 
   const [isRoomInfoPartShown, setIsRoomInfoPartShown] =
@@ -35,6 +36,8 @@ const CreateRoom = ({ roomType, close }: Props) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [roomName, setRoomName] = useState("");
   const [search, setSearch] = useState("");
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+  const { isRoomDetailsShown, onlineUsers } = useGlobalStore((state) => state);
 
   const filteredUserCards = useMemo(() => {
     return userContacts?.length
@@ -45,7 +48,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
             .includes(search.toLocaleLowerCase())
         )
       : [];
-  }, [search, userContacts?.length]);
+  }, [myID, search, userContacts]);
 
   if (!roomType) return;
 
@@ -62,7 +65,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
       const userTargetIndex = currentSelectedUsers.findIndex(
         (id) => id === userID
       );
-      currentSelectedUsers.splice(userTargetIndex, 1); // splice instead of filter have a better performance here bud
+      currentSelectedUsers.splice(userTargetIndex, 1); // splice instead of filter have a better performance here
       setSelectedUsers(currentSelectedUsers);
       return;
     }
@@ -92,9 +95,18 @@ const CreateRoom = ({ roomType, close }: Props) => {
     e.target.files = null; // reset the input value to default
   };
 
+  // Add emoji to text
+  // const handleEmojiClick = useCallback((e: { emoji: string }) => {
+  //   setRoomName((prev) => prev + e.emoji);
+  // }, []);
+  //TODO پاکش کن
+  const handleEmojiClick = (e: { emoji: string }) => {
+    setRoomName((prev) => prev + e.emoji);
+  };
+
   const createRoom = async () => {
     const name = roomName.trim();
-    if (!name?.length) return toaster(false, "A room name please?");
+    if (!name?.length) return toaster(false, "Please enter room name");
 
     setIsLoading(true);
 
@@ -103,10 +115,11 @@ const CreateRoom = ({ roomType, close }: Props) => {
 
     if (roomImage) {
       try {
-        const uploadedImageUrl = await uploadFile(imageFile as File);
+        const uploadedImageUrl = imageFile && (await uploadFile(imageFile));
         imageUrl = uploadedImageUrl;
       } catch (error) {
-        toaster(false, "Failed to upload image, you can try again bud");
+        console.log(error);
+        toaster(false, "Failed to upload image,try again ");
         setIsLoading(false);
         uploadError = true;
         return;
@@ -144,27 +157,37 @@ const CreateRoom = ({ roomType, close }: Props) => {
   };
 
   return (
-    <section className="fixed inset-y-0 max-w-full md:max-w-[29.6%] left-0 z-9999999 bg-leftBarBg size-full bg-inherit text-white">
-      <div className="flex gap-3 bg-inherit items-center justify-between w-full ch:w-full px-4 py-4">
+    <section
+      className={`fixed inset-y-0 w-full md:block md:w-[40%] lg:w-[35%] ${
+        isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
+      }  left-0 bg-leftBarBg size-full text-white `}
+    >
+      <div className="flex gap-4 bg-inherit items-center w-full ch:w-full px-4 py-3">
         <IoMdArrowRoundBack
           onClick={getBackBtn}
-          className="size-6 -mx-2 cursor-pointer basis-[10%]"
+          className="size-6 cursor-pointer"
         />
 
         {isRoomInfoPartShown ? (
-          <p className="capitalize">New {roomType}</p>
+          <div className="capitalize text-sm ">New {roomType}</div>
         ) : (
-          <p className="capitalize">
-            New {roomType}{" "}
-            {selectedUsers.length
-              ? ` | ${selectedUsers.length} selected`
-              : null}
-          </p>
+          <div className=" flex flex-col justify-center">
+            <div className="capitalize text-sm">New {roomType}</div>
+            <div className="text-xs text-white/60">
+              {selectedUsers.length
+                ? `${selectedUsers.length} ${
+                    roomType === "group" ? "of 200000 selected" : "members"
+                  }`
+                : roomType === "group"
+                ? "up to 200000 members"
+                : "0 members"}
+            </div>
+          </div>
         )}
       </div>
 
       {isRoomInfoPartShown ? (
-        <div className="flex items-center gap-3 w-full px-4 mt-3">
+        <div className="flex items-center gap-3 w-full px-4 mt-2">
           {roomImage ? (
             <Image
               src={roomImage}
@@ -183,7 +206,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
                 onChange={getImgUrl}
               />
               <label htmlFor="imgUpload">
-                <MdAddAPhoto className="flex-center cursor-pointer bg-darkBlue rounded-full size-[60px] p-4 overflow-visible shrink-0 text-center font-bold text-2xl" />
+                <MdAddAPhoto className="flex-center cursor-pointer bg-darkBlue rounded-full size-14 p-3.5" />
               </label>
             </div>
           )}
@@ -196,7 +219,10 @@ const CreateRoom = ({ roomType, close }: Props) => {
               className="w-full basis-[90%] p-2 rounded-sm bg-inherit outline-hidden"
               placeholder={`Enter ${roomType} name`}
             />
-            <BsEmojiSmile className="basis-[10%] cursor-pointer shrink-0 size-5" />
+            <BsEmojiSmile
+              className="cursor-pointer size-5"
+              onClick={() => setIsEmojiOpen(!isEmojiOpen)}
+            />
           </div>
         </div>
       ) : (
@@ -205,12 +231,16 @@ const CreateRoom = ({ roomType, close }: Props) => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-inherit p-1 w-full px-4 outline-hidden"
-            placeholder="Who would you like to add ?"
+            className="bg-inherit p-1 w-full px-4 outline-hidden text-sm mt-1"
+            placeholder={
+              roomType === "group"
+                ? "Who would you like to add?"
+                : "Add people to your channel"
+            }
           />
 
-          <div className="px-3 mt-6">
-            <div className="flex flex-col mt-3 w-full ch:w-full">
+          <div className="px-1">
+            <div className="flex flex-col mt-1 w-full ch:w-full">
               {filteredUserCards?.map((userData) => (
                 <ContactCard
                   key={userData._id}
@@ -227,12 +257,10 @@ const CreateRoom = ({ roomType, close }: Props) => {
       )}
 
       <Button
-        isLoading={isLoading}
         disabled={isLoading}
-        style={{ height: "64px" }}
-        size="sm"
-        className="absolute right-4 md:right-0 xl:right-3 bottom-4 text-white rounded-full bg-darkBlue flex-center z-99999999"
-        onPress={() => {
+        size="lg"
+        className="absolute bottom-2 right-2 size-14 text-white rounded-full bg-darkBlue flex-center"
+        onClick={() => {
           if (isRoomInfoPartShown) {
             createRoom();
           } else {
@@ -240,12 +268,35 @@ const CreateRoom = ({ roomType, close }: Props) => {
           }
         }}
       >
-        {isLoading ? null : isRoomInfoPartShown ? (
+        {isLoading ? (
+          <Loading size="lg" classNames="absolute bg-white" />
+        ) : isRoomInfoPartShown ? (
           <MdDone data-aos="zoom-out" className="size-7" />
         ) : (
-          <FaArrowRight data-aos="zoom-out" className="size-[27px]" />
+          <FaArrowRight data-aos="zoom-out" className="size-7" />
         )}
       </Button>
+      {isEmojiOpen && (
+        <Suspense fallback={null}>
+          <EmojiPicker
+            open={isEmojiOpen}
+            theme={Theme.DARK}
+            height={300}
+            width="100%"
+            style={{
+              position: "absolute",
+              bottom: 0,
+              backgroundColor: "#17212B",
+              borderRadius: "0",
+              transition: "all 75ms",
+            }}
+            previewConfig={{ showPreview: false }}
+            searchDisabled
+            lazyLoadEmojis
+            onEmojiClick={handleEmojiClick}
+          />
+        </Suspense>
+      )}
     </section>
   );
 };

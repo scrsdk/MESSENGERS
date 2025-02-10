@@ -3,8 +3,8 @@ import { MdDone } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
-import { Button } from "@heroui/button";
 import LineSeparator from "@/components/modules/LineSeparator";
+import Loading from "@/components/modules/ui/Loading";
 
 const EditInfo = ({ getBack }: { getBack: () => void }) => {
   const {
@@ -42,12 +42,13 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
       const setter = useUserStore.getState().setter;
 
       setTimeout(() => {
-        setIsLoading(false);
         setter({
           name: updatedName,
           lastName: updatedLastName,
           biography: updatedBiography,
         });
+        setIsLoading(false);
+        getBack();
       }, 500);
     });
   };
@@ -61,27 +62,18 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
           updatedLastName?.trim() !== lastName?.trim() ||
           updatedName?.trim() !== name?.trim()) &&
         (isLoading ? (
-          <Button
-            isLoading={true}
-            data-aos="zoom-right"
-            style={{
-              backgroundColor: "inherit",
-              position: "absolute",
-              right: 0,
-              color: "white",
-            }}
-          />
+          <Loading size="sm" classNames="absolute right-2 bg-white" />
         ) : (
           <MdDone
             data-aos="zoom-right"
             onClick={submitChanges}
-            className="size-6 mx-2 cursor-pointer"
+            className="size-6 absolute right-2 cursor-pointer"
           />
         ))
       }
     >
-      <div className="flex flex-col gap-2 pt-4">
-        <p className="text-darkBlue font-vazirRegular py-1 font-bold text-[16px]">
+      <div className="flex flex-col gap-2 p-4 w-full">
+        <p className="text-darkBlue font-vazirRegular py-1 font-bold text-base">
           Your name
         </p>
 
@@ -108,11 +100,11 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
         />
       </div>
 
-      <p className="h-3 w-full bg-black/70 inset-x-0 my-3 absolute"></p>
+      <p className="h-2 w-full bg-black/70 "></p>
 
-      <div className="flex flex-col gap-2 py-4">
+      <div className="flex flex-col gap-2 px-4 w-full h-full">
         <div className="flex items-center w-full justify-between pt-4">
-          <p className="text-darkBlue font-vazirRegular font-bold text-[16px]">
+          <p className="text-darkBlue font-vazirRegular font-bold text-base">
             Your bio
           </p>
           <p className="text-darkGray">
@@ -134,7 +126,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
         />
       </div>
 
-      <span className="absolute size-full inset-x-0 bg-black/70"></span>
+      {/* <span className="absolute size-full inset-x-0 bg-black/70"></span> */}
     </LeftBarContainer>
   );
 };

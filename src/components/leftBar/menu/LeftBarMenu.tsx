@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useState } from "react";
-import Main from "./LeftBarMenuPages/Main";
-import Settings from "./LeftBarMenuPages/Settings";
-import EditInfo from "./LeftBarMenuPages/EditInfo";
-import EditUsername from "./LeftBarMenuPages/EditUsername";
-import VideoChat from "./LeftBarMenuPages/VideoChat";
+import Main from "./Main";
+import Settings from "./Settings";
+import EditInfo from "./EditInfo";
+import EditUsername from "./EditUsername";
+// import VideoChat from "./LeftBarMenuPages/VideoChat";
 
 interface Props {
   isOpen: boolean;
@@ -59,11 +59,12 @@ const LeftBarMenu = ({ closeMenu, isOpen }: Props) => {
         setActiveRoute(<EditUsername getBack={getBack} />);
         break;
       }
-      case "/video-chat": {
-        setActiveRoute(<VideoChat getBack={getBack} />);
-        break;
-      }
+      // case "/video-chat": {
+      //   setActiveRoute(<VideoChat getBack={getBack} />);
+      //   break;
+      // }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route, isOpen]);
 
   return (
@@ -72,7 +73,7 @@ const LeftBarMenu = ({ closeMenu, isOpen }: Props) => {
         onClick={closeMenu}
         className={`fixed ${
           isOpen ? "w-full" : "w-0 hidden"
-        } h-[100vw] left-0 inset-y-0 z-9999 backdrop-filter bg-black/30`}
+        } h-[100vh] left-0 inset-y-0 z-9999 backdrop-filter bg-black/30`}
       />
 
       {activeRoute}

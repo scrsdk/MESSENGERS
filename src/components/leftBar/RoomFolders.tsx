@@ -47,6 +47,7 @@ const RoomFolders = ({
 
     chatFolderRef.current!.addEventListener("wheel", handleScroll);
     return () =>
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       chatFolderRef.current?.removeEventListener("wheel", handleScroll);
   }, []);
 
@@ -54,7 +55,7 @@ const RoomFolders = ({
     <div
       data-aos="zoom-in"
       ref={chatFolderRef}
-      className="flex items-center noScrollWidth gap-5 overflow-x-auto h-10 text-darkGray ch:py-1 ch:w-fit z-40"
+      className="flex items-end pb-1  scroll-w-none gap-4 overflow-x-auto h-10 text-darkGray "
     >
       {folders.map((data) => (
         <ChatFolders

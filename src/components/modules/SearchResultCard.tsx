@@ -1,6 +1,6 @@
 import Room from "@/models/room";
 import User from "@/models/user";
-import useGlobalVariablesStore from "@/store/globalVariablesStore";
+import useGlobalStore from "@/store/globalStore";
 import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import { scrollToMessage } from "@/utils";
@@ -41,9 +41,7 @@ const SearchResultCard = (
   roomData: Partial<Room & { findBy?: keyof Room }> & Props
 ) => {
   const { avatar, name, _id, myData, findBy = null, query } = roomData!;
-  const { setter, isChatPageLoaded } = useGlobalVariablesStore(
-    (state) => state
-  );
+  const { setter, isChatPageLoaded } = useGlobalStore((state) => state);
   const rooms = useUserStore((state) => state.rooms);
   const roomSocket = useSockets((state) => state.rooms);
 
@@ -55,9 +53,9 @@ const SearchResultCard = (
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom = {
-      admins: [myData._id, _id],
-      avatar,
+    const selectedRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
+      admins: [myData._id, _id!],
+      avatar: avatar!,
       createdAt: Date.now().toString(),
       creator: myData._id,
       link: (Math.random() * 9999999).toString(),
@@ -65,7 +63,7 @@ const SearchResultCard = (
       medias: [],
       messages: [],
       name: myData._id + "-" + _id,
-      participants: [myData, roomData],
+      participants: [myData, roomData] as User[],
       type: "private",
       updatedAt: Date.now().toString(),
     };
@@ -75,7 +73,7 @@ const SearchResultCard = (
       roomHistory?._id || roomData?._id,
       selectedRoom
     );
-    setter({ isRoomDetailsShown: false, selectedRoom: selectedRoom });
+    setter({ isRoomDetailsShown: false, selectedRoom: selectedRoom as Room });
 
     setTimeout(
       () => {
@@ -89,23 +87,23 @@ const SearchResultCard = (
   return (
     <div
       onClick={openChat}
-      className="flex items-center gap-2 cursor-pointer overflow-x-hidden"
+      className="flex items-center gap-2 cursor-pointer overflow-x-hidden border-b border-black/15 hover:bg-white/5 transition-all duration-200"
     >
       {avatar ? (
         <Image
           src={avatar}
-          className="cursor-pointer object-cover size-[45px] rounded-full"
-          width={45}
-          height={45}
+          className="cursor-pointer object-cover size-11 rounded-full shrink-0"
+          width={50}
+          height={50}
           alt="avatar"
         />
       ) : (
-        <div className="flex-center bg-darkBlue rounded-full size-[45px] shrink-0 text-center font-bold text-2xl">
+        <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-vazirBold text-lg">
           {name![0]}
         </div>
       )}
-      <div className="flex flex-col justify-between border-b border-black/40 w-full py-2">
-        <p className="text-[17px] font-vazirBold line-clamp-1 text-ellipsis break-words">
+      <div className="flex flex-col justify-between w-full py-2">
+        <p className="text-base font-vazirBold line-clamp-1 text-ellipsis break-words">
           {findBy == "participants" || findBy == "name"
             ? highlightChars(query, name!)
             : name}

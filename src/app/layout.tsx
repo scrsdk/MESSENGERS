@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
-import { HeroUIProvider } from "@heroui/system";
 export const metadata: Metadata = {
   title: "Telegram messenger",
   description: "FullStack NextJs Telegram messenger with socket.io",
@@ -28,9 +27,11 @@ export default function RootLayout({
         href="./images/apple-touch-icon.png"
       />
       <meta name="apple-mobile-web-app-title" content="Telegram" />
-      <body className="font-vazirRegular bg-leftBarBg ">
+      <link rel="manifest" href="/manifest.json" />
+      <meta name="theme-color" content="#2F3BA2" />
+      <body className="font-vazirRegular bg-leftBarBg h-full">
         <ToastContainer />
-        <HeroUIProvider>{children}</HeroUIProvider>
+        {children}
       </body>
     </html>
   );

@@ -25,26 +25,26 @@ const ContactCard = ({
         (pd) => pd._id !== myID
       ) as User) || ""
     );
-  }, [userData._id]);
+  }, [myID, userData.participants]);
 
   return (
     <div onClick={() => updateSelectedUsers(_id)}>
-      <div className="flex items-center gap-2 relative cursor-pointer">
+      <div className="flex items-center gap-2 relative cursor-pointer hover:bg-white/5 px-1 border-b border-black/15 transition-all duration-200">
         {userData.avatar ? (
           <Image
             src={userData.avatar}
-            className="cursor-pointer object-cover size-[45px] rounded-full"
+            className="cursor-pointer object-cover size-11 rounded-full shrink-0"
             width={45}
             height={45}
             alt="avatar"
           />
         ) : (
-          <div className="flex-center bg-darkBlue rounded-full size-[45px] shrink-0 text-center font-bold text-2xl">
+          <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-bold text-lg ">
             {name![0]}
           </div>
         )}
-        <div className="flex flex-col justify-between border-b border-black/40 w-full py-2">
-          <p className="text-[17px] font-vazirBold line-clamp-1 text-ellipsis">
+        <div className="flex flex-col justify-between  w-full py-2.5 ">
+          <p className="text-base font-vazirBold line-clamp-1 text-ellipsis">
             {name}
           </p>
 
@@ -60,9 +60,9 @@ const ContactCard = ({
         {selectedUsers.includes(_id) && (
           <span
             data-aos="zoom-in"
-            className="absolute flex-center right-3 h-[45%] button-[50%] ch:size-5 -translate-x-[50%] aspect-square rounded-full bg-green-600"
+            className="absolute flex-center right-3 size-6 rounded-full bg-green-700"
           >
-            <MdDone />
+            <MdDone size={18} />
           </span>
         )}
       </div>

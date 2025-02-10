@@ -3,11 +3,10 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "@/store/userStore";
 import Room from "@/models/room";
-import { Button } from "@heroui/button";
 import SearchResultCard from "../modules/SearchResultCard";
 import User from "@/models/user";
 import RoomSkeleton from "../modules/RoomSkeleton";
-import { FaFaceSadTear } from "react-icons/fa6";
+import useGlobalStore from "@/store/globalStore";
 
 interface Props {
   closeSearch: () => void;
@@ -20,7 +19,7 @@ const SearchPage = ({ closeSearch }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchFinished, setSearchFinished] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
-
+  const { isRoomDetailsShown } = useGlobalStore((state) => state);
   const userData = useUserStore((state) => state);
 
   useEffect(() => {
@@ -68,12 +67,14 @@ const SearchPage = ({ closeSearch }: Props) => {
     <section
       data-aos="fade-up"
       onKeyUp={(e) => e.key == "Escape" && closeSearch()}
-      className={`text-white fixed md:max-w-[29.6%] max-w-full w-full h-full inset-0 overflow-auto bg-leftBarBg z-9999 transition-all`}
+      className={`text-white fixed  w-full md:block md:w-[40%] lg:w-[35%] ${
+        isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
+      }  h-full inset-0 overflow-auto bg-leftBarBg z-10 transition-all`}
     >
       <div className="flex sticky top-0 gap-3 bg-inherit items-center justify-between w-full ch:w-full px-2 py-4">
         <IoMdArrowRoundBack
           onClick={closeSearch}
-          className="size-6 -mx-2 cursor-pointer basis-[10%]"
+          className="size-6 cursor-pointer "
         />
 
         <input
@@ -81,7 +82,7 @@ const SearchPage = ({ closeSearch }: Props) => {
           ref={inputRef}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search"
-          className="bg-inherit placeholder:text-white/60 basis-[90%] outline-hidden"
+          className="bg-inherit placeholder:text-white/60 w-full outline-hidden"
           type="text"
         />
       </div>

@@ -1,6 +1,6 @@
 import LineSeparator from "@/components/modules/LineSeparator";
-import MenuItem from "@/components/modules/MenuItem";
-import useGlobalVariablesStore from "@/store/globalVariablesStore";
+import MenuItem from "@/components/leftBar/menu/MenuItem";
+import useGlobalStore from "@/store/globalStore";
 import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import { copyText, toaster } from "@/utils";
@@ -11,6 +11,7 @@ import { FiUserPlus } from "react-icons/fi";
 import { IoCallOutline, IoSettingsOutline } from "react-icons/io5";
 import { LuUsers } from "react-icons/lu";
 import { RiUser3Line } from "react-icons/ri";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
 
 interface Props {
   updateRoute: (route: string) => void;
@@ -23,28 +24,9 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
     (state) => state
   );
   const socket = useSockets((state) => state.rooms);
-  // const setter = useGlobalVariablesStore((state) => state.setter);
-
-  // const showTelegramFeatures = () => {
-  //   setter((prev: any) => ({
-  //     ...prev,
-  //     modalData: {
-  //       ...prev.modalData,
-  //       okText: "",
-  //       isOpen: true,
-  //       title: "Telegram Features",
-  //       bodyText: `
-  //                           1_End-to-End Encrypted Chats: Telegram offers secret chats that use end-to-end encryption, ensuring that only you and the intended recipient can read the messages. This feature enhances privacy and security for sensitive conversations.\n
-
-  //                           2_Channels and Groups: Telegram allows users to create channels for broadcasting messages to a large audience or groups for chatting with friends or communities. Channels can have unlimited subscribers, while groups can accommodate up to 200,000 members.
-  //               `,
-  //     },
-  //   }));
-  //   closeMenu();
-  // };
 
   const copyInviteLink = async () => {
-    await copyText(process.env.NEXT_PUBLIC_BASE_PATH!);
+    await copyText("Coming soon");
     toaster(true, "Invite link copied!");
     closeMenu();
   };
@@ -52,8 +34,14 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
   const openProfile = () => updateRoute("settings");
 
   const createNewGroup = () => {
-    const createRoom = useGlobalVariablesStore.getState().createRoom;
+    const createRoom = useGlobalStore.getState().createRoom;
     createRoom("group");
+    closeMenu();
+  };
+
+  const createNewChannel = () => {
+    const createRoom = useGlobalStore.getState().createRoom;
+    createRoom("channel");
     closeMenu();
   };
 
@@ -68,13 +56,13 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
   return (
     <nav
       className={`fixed ${
-        isOpen ? "left-0" : "-left-[400px]"
-      } max-h-screen h-full overflow-auto duration-200 transition-all inset-y-0 z-9999 bg-leftBarBg text-white w-[80%] max-w-[300px] md:max-w-[230px] lg:max-w-[300px]`}
+        isOpen ? "left-0" : "-left-full"
+      } max-h-screen h-full overflow-auto duration-200 transition-all inset-y-0 z-9999 bg-leftBarBg text-white w-[80%] max-w-80 md:max-w-72 lg:max-w-80`}
     >
-      <div className="flex flex-col pt-4 px-4 gap-3">
+      <div className="flex flex-col pt-4 px-4 gap-4 bg-chatBg pb-2">
         {avatar ? (
           <Image
-            className={`size-[60px] bg-center object-cover rounded-full cursor-pointer`}
+            className={`size-15 bg-center object-cover rounded-full cursor-pointer`}
             width={60}
             onClick={openProfile}
             height={60}
@@ -85,21 +73,18 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         ) : (
           <div
             onClick={openProfile}
-            className="size-[60px] shrink-0 bg-darkBlue rounded-full flex-center text-bold text-center text-white cursor-pointer text-2xl"
+            className="size-15 shrink-0 bg-darkBlue rounded-full flex-center text-bold text-center text-white cursor-pointer text-lg"
           >
             {name?.length && name[0]}
           </div>
         )}
 
         <div>
-          <p className="font-bold font-vazirBold text-[17px]">
-            {name + " " + lastName}
-          </p>
-          <p className="text-darkGray text-[14px]">
+          <p className=" font-vazirBold text-base">{name + " " + lastName}</p>
+          <p className="text-darkGray text-xs pt-1">
             +98{" "}
             {phone
               .toString()
-              .slice(1)
               .split("")
               .map((str, index) => {
                 if (index < 7) {
@@ -112,7 +97,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         </div>
       </div>
 
-      <div className="mt-2 px-4">
+      <div>
         <MenuItem
           icon={<CgProfile />}
           title="My Profile"
@@ -127,12 +112,24 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
           onClick={createNewGroup}
         />
 
-        <MenuItem icon={<RiUser3Line />} title="Contacts" />
+        <MenuItem
+          icon={<HiOutlineSpeakerphone />}
+          title="New Channel"
+          onClick={createNewChannel}
+        />
+
+        <LineSeparator />
+
+        <MenuItem
+          icon={<RiUser3Line />}
+          title="Contacts"
+          onClick={() => toaster(true, "Coming soon..!")}
+        />
 
         <MenuItem
           icon={<IoCallOutline />}
           title="Calls"
-          onClick={() => toaster(true, "Call feature will add soon...!")}
+          onClick={() => toaster(true, "Coming soon..!")}
         />
 
         <MenuItem
@@ -144,7 +141,10 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         <MenuItem
           icon={<IoSettingsOutline />}
           title="Settings"
-          onClick={() => updateRoute("settings")}
+          onClick={() => {
+            updateRoute("settings");
+            closeMenu();
+          }}
         />
 
         <LineSeparator />
@@ -154,12 +154,6 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
           title="Invite Friends"
           onClick={copyInviteLink}
         />
-
-        {/* <MenuItem
-          icon={<GoQuestion />}
-          title="Telegram Features"
-          onClick={showTelegramFeatures}
-        /> */}
       </div>
     </nav>
   );

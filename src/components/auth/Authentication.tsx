@@ -1,10 +1,10 @@
 "use client";
-import Loading from "@/components/modules/Loading";
+import Loading from "@/components/modules/ui/LoadingApp";
 import useUserStore from "@/store/userStore";
 import axios from "axios";
 import { ReactNode, lazy, useEffect, useState } from "react";
 const AuthenticationForm = lazy(
-  () => import("@/components/templates/AuthenticationForm")
+  () => import("@/components/auth/AuthenticationForm")
 );
 const Authentication = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
