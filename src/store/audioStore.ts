@@ -1,35 +1,40 @@
 import Message from "@/models/message";
 import User from "@/models/user";
 import Voice from "@/models/voice";
-import { ElementRef } from "react";
 import { create } from "zustand";
 
+interface DownloadedAudio {
+  _id: string;
+  src?: string;
+  downloaded: boolean;
+  isDownloading: boolean;
+}
 interface Updater {
   updater: (key: keyof User, value: User[keyof User]) => void;
   isPlaying: boolean;
-  audioElem: ElementRef<"audio"> | null;
+  audioElem: HTMLAudioElement | null;
   currentTime: number;
-  voiceData: Voice & Message;
-  downloadedAudios: {
-    _id: string;
-    downloaded: boolean;
-    isDownloading: boolean;
-  }[];
-  setter: any;
+  voiceData: (Voice & Message) | null;
+  downloadedAudios: DownloadedAudio[];
+  setter: (
+    partialState: Partial<Updater> | ((state: Updater) => Partial<Updater>)
+  ) => void;
 }
 
 const useAudio = create<Updater>((set) => ({
   isPlaying: false,
   audioElem: null,
   currentTime: 0,
-  isVoiceDownloaded: false,
   voiceData: {} as Voice & Message,
   downloadedAudios: [],
 
-  updater(key: keyof User, value: User[keyof User]) {
-    set({ [key]: value });
-  },
-  setter: set,
+  updater: (key, value) =>
+    set((state) => ({
+      ...state,
+      [key]: value,
+    })),
+
+  setter: (partialState) => set(partialState),
 }));
 
 export default useAudio;

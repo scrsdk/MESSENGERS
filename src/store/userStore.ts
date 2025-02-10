@@ -1,12 +1,16 @@
 import User from "@/models/user";
 import { create } from "zustand";
 
-interface Updater {
+export interface UserStoreUpdater {
   updater: (key: keyof User, value: User[keyof User]) => void;
-  setter: any;
+  setter: (
+    state:
+      | Partial<User & UserStoreUpdater>
+      | ((prev: User & UserStoreUpdater) => Partial<User & UserStoreUpdater>)
+  ) => void;
 }
 
-const useUserStore = create<User & Updater>((set) => ({
+const useUserStore = create<User & UserStoreUpdater>((set) => ({
   _id: "",
   name: "",
   lastName: "",
