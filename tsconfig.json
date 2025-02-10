@@ -34,7 +34,9 @@
     "src/schemas/roomSchema.js",
     "src/schemas/namespaceSchema.js",
     "src/schemas/messageSchema.js",
-    "src/db.js"
+    "src/db.js",
+    "tailwind.config.ts",
+    "src/utils/file/UploadFile.ts"
   ],
   "exclude": ["node_modules"]
 }

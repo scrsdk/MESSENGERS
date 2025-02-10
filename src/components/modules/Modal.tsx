@@ -1,101 +1,71 @@
-"use client";
-import {
-  Modal as HeroUiModal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "@heroui/modal";
-import useGlobalVariablesStore from "@/store/globalVariablesStore";
-import { Button } from "@heroui/button";
-import { Checkbox } from "@heroui/checkbox";
+import useModalStore from "@/store/modalStore";
+import Button from "./ui/Button";
 
 const Modal = () => {
-  const { modalData, setter } = useGlobalVariablesStore((state) => state);
-
   const {
     title,
+    bodyText,
     isOpen,
     okText,
-    bodyText,
-    isChecked,
     cancelText,
     isCheckedText,
+    isChecked,
+    setter,
     onClose,
     onSubmit,
     resetModal,
-  } = modalData;
-
-  const toggleIsCheckedValue = () => {
-    setter({
-      modalData: {
-        ...modalData,
-        isChecked: !isChecked,
-      },
-    });
-  };
+  } = useModalStore((state) => state);
 
   return (
-    <HeroUiModal
-      isOpen={isOpen}
-      placement="center"
-      classNames={{
-        wrapper: "z-99999",
-        backdrop: "z-99999",
-      }}
-      className="mx-5 md:mx-0 bg-[#232735] text-white"
-      onClose={() => {
-        resetModal!();
-        onClose!();
-      }}
-    >
-      <ModalContent>
-        <>
-          <ModalHeader>{title}</ModalHeader>
+    <dialog id="modal" className={`modal  ${isOpen && "modal-open"} `}>
+      <div className="modal-box bg-modalBg text-white">
+        <h3 className="font-vazirBold text-lg">{title}</h3>
+        <p className="pt-2 font-vazirRegular">{bodyText}</p>
 
-          <ModalBody>
-            {bodyText}
-
-            {Boolean(isCheckedText?.length) && (
-              <Checkbox
-                isSelected={isChecked}
-                onValueChange={toggleIsCheckedValue}
-                className="ch:text-white"
-                classNames={{ label: "text-[15px]" }}
-              >
-                {isCheckedText}
-              </Checkbox>
-            )}
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              color="danger"
-              variant="light"
-              className="text-[16px]"
-              onPress={() => {
-                resetModal!();
-                onClose!();
+        {Boolean(isCheckedText?.length) && (
+          <label
+            htmlFor="checkbox"
+            className="cursor-pointer flex items-center gap-2 mt-4"
+          >
+            <input
+              id="checkbox"
+              type="checkbox"
+              checked={isChecked}
+              onChange={() => {
+                setter({ isChecked: !isChecked });
               }}
-            >
-              {cancelText}
-            </Button>
+              className="checkbox checkbox-xs checkbox-info mb-1 "
+            />
+            <span className="text-sm">{isCheckedText}</span>
+          </label>
+        )}
 
-            <Button
-              color="primary"
-              variant="light"
-              className="text-[16px]"
-              onPress={() => {
-                onSubmit();
-                resetModal!();
-              }}
-            >
-              {okText}
-            </Button>
-          </ModalFooter>
-        </>
-      </ModalContent>
-    </HeroUiModal>
+        <div className="modal-action">
+          <Button
+            size="sm"
+            variant="ghost"
+            color="neutral"
+            onClick={() => {
+              onClose!();
+              resetModal!();
+            }}
+          >
+            {cancelText}
+          </Button>
+
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              onSubmit();
+              resetModal!();
+            }}
+          >
+            {okText}
+          </Button>
+        </div>
+      </div>
+    </dialog>
   );
 };
 

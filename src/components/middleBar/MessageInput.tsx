@@ -1,0 +1,361 @@
+import { BsEmojiSmile } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
+import { Theme } from "emoji-picker-react";
+import {
+  ChangeEvent,
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { MdAttachFile, MdModeEditOutline, MdOutlineDone } from "react-icons/md";
+import { BsFillReplyFill } from "react-icons/bs";
+import VoiceMessageRecorder from "./VoiceMessageRecorder";
+import Message from "@/models/message";
+import useGlobalStore from "@/store/globalStore";
+import useUserStore from "@/store/userStore";
+import useSockets from "@/store/useSockets";
+import { RiSendPlaneFill } from "react-icons/ri";
+import { FaRegKeyboard } from "react-icons/fa6";
+
+const EmojiPicker = lazy(() => import("emoji-picker-react"));
+
+interface Props {
+  replayData?: Partial<Message>;
+  editData?: Partial<Message>;
+  closeReplay: () => void;
+  closeEdit: () => void;
+}
+
+const MessageInput = ({
+  replayData,
+  editData,
+  closeReplay,
+  closeEdit,
+}: Props) => {
+  const [text, setText] = useState("");
+  const typingTimer = useRef<NodeJS.Timeout | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const inputBoxRef = useRef<HTMLDivElement | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+
+  const selectedRoom = useGlobalStore((state) => state?.selectedRoom);
+  const userRooms = useUserStore((state) => state.rooms);
+  const { rooms } = useSockets((state) => state);
+  const myData = useUserStore((state) => state);
+  const roomId = selectedRoom?._id;
+
+  //Helper function to reset the height of TextArea
+  const resetTextAreaHeight = () => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "22px";
+    }
+  };
+
+  // Clean up after sending or editing a message
+  const cleanUpAfterSendingMsg = useCallback(() => {
+    resetTextAreaHeight();
+    closeReplay();
+    closeEdit();
+    setText("");
+    if (roomId) localStorage.removeItem(roomId);
+  }, [closeReplay, closeEdit, roomId]);
+
+  // Send new message
+  const sendMessage = useCallback(() => {
+    if (!roomId) return;
+    const isExistingRoom = userRooms.some((room) => room._id === roomId);
+
+    const payload = {
+      roomID: roomId,
+      message: text,
+      sender: myData,
+      replayData: replayData
+        ? {
+            targetID: replayData._id,
+            replayedTo: {
+              message: replayData.message,
+              msgID: replayData._id,
+              username: replayData.sender?.name,
+            },
+          }
+        : null,
+    };
+
+    if (isExistingRoom) {
+      rooms?.emit("newMessage", payload);
+    } else {
+      rooms?.emit("createRoom", {
+        newRoomData: selectedRoom,
+        message: { sender: myData, message: text },
+      });
+    }
+    cleanUpAfterSendingMsg();
+  }, [
+    roomId,
+    userRooms,
+    text,
+    myData,
+    replayData,
+    selectedRoom,
+    rooms,
+    cleanUpAfterSendingMsg,
+  ]);
+
+  // Edit existing message
+  const editMessage = useCallback(() => {
+    if (text.trim() === editData?.message?.trim()) {
+      closeEdit();
+      return;
+    }
+    rooms?.emit("editMessage", {
+      msgID: editData?._id,
+      editedMsg: text,
+      roomID: roomId,
+    });
+    cleanUpAfterSendingMsg();
+  }, [text, editData, rooms, roomId, cleanUpAfterSendingMsg, closeEdit]);
+
+  // Auto-resize TextArea
+  const resizeTextArea = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "0px";
+      inputRef.current.style.height = `${Math.min(
+        inputRef.current.scrollHeight,
+        100
+      )}px`;
+      inputRef.current.style.overflow =
+        inputRef.current.scrollHeight > inputRef.current.offsetHeight
+          ? "auto"
+          : "hidden";
+    }
+  }, []);
+
+  // Text Change Handler
+  const handleTextChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      const newText = e.target.value;
+      setText(newText);
+      resizeTextArea();
+      handleIsTyping();
+    },
+    //TODO پاکش کن
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [resizeTextArea]
+  );
+
+  //Send the "typing" event and stop it after 1500 milliseconds
+  const handleIsTyping = useCallback(() => {
+    if (typingTimer.current) {
+      clearTimeout(typingTimer.current);
+    }
+    rooms?.emit("typing", { roomID: roomId, sender: myData });
+    typingTimer.current = setTimeout(() => {
+      rooms?.emit("stop-typing", { roomID: roomId, sender: myData });
+    }, 1500);
+  }, [rooms, roomId, myData]);
+
+  // Add emoji to text
+  const handleEmojiClick = useCallback((e: { emoji: string }) => {
+    setText((prev) => prev + e.emoji);
+  }, []);
+
+  //Updating text in edit mode
+  useEffect(() => {
+    if (editData?.message) {
+      setText(editData.message.trim());
+    }
+  }, [editData?.message]);
+
+  //Focus on TextArea in Reply or Edit mode
+  useEffect(() => {
+    if (replayData?._id || editData?._id) {
+      inputRef.current?.focus();
+    }
+  }, [replayData?._id, editData?._id]);
+
+  //On mount, load draft from localStorage and focus on TextArea
+  useEffect(() => {
+    resizeTextArea();
+    inputRef.current?.focus();
+    if (roomId) {
+      const storedDraft = localStorage.getItem(roomId) || "";
+      setText(storedDraft);
+    } else {
+      setText("");
+    }
+  }, [roomId, resizeTextArea]);
+
+  //Synchronize text value with localStorage
+  useEffect(() => {
+    if (roomId) {
+      if (text) {
+        localStorage.setItem(roomId, text);
+      } else {
+        localStorage.removeItem(roomId);
+      }
+    }
+  }, [text, roomId]);
+
+  // Setting the ability to send messages in rooms
+  const canSendMessage =
+    selectedRoom?.type !== "channel" ||
+    selectedRoom.admins.includes(myData._id);
+
+  // Send a message by pressing Enter (if Shift is not held down)
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && text.trim().length) {
+      e.preventDefault();
+      if (editData) {
+        editMessage();
+      } else {
+        sendMessage();
+      }
+    }
+  };
+
+  const handleCloseReplyEdit = () => {
+    setText("");
+    closeReplay();
+    closeEdit();
+  };
+
+  return (
+    <div className="sticky bottom-0 w-full flex flex-col justify-center bg-leftBarBg z-20">
+      <div
+        className={`${
+          replayData?._id || editData?._id
+            ? "opacity-100 h-12 py-1"
+            : "opacity-0 h-0"
+        } flex justify-between border-b border-chatBg duration-initial transition-all items-center gap-3 px-2 line-clamp-1 overflow-ellipsis absolute bg-leftBarBg w-full z-20`}
+        style={{
+          bottom: isEmojiOpen
+            ? (inputBoxRef.current?.clientHeight || 0) + 300
+            : inputBoxRef.current?.clientHeight,
+        }}
+      >
+        <div className="flex items-center gap-4 line-clamp-1 overflow-ellipsis">
+          {editData ? (
+            <MdModeEditOutline className="size-6 text-lightBlue" />
+          ) : (
+            <BsFillReplyFill className="size-6 text-lightBlue" />
+          )}
+          <div className="flex flex-col text-left">
+            <h4 className="text-lightBlue break-words overflow-ellipsis line-clamp-1 text-sm">
+              {replayData
+                ? `Reply to ${replayData.sender?.name}`
+                : editData?.voiceData
+                ? "Edit Caption"
+                : "Edit Message"}
+            </h4>
+            <p className="line-clamp-1 text-xs text-white/60 break-words overflow-ellipsis">
+              {replayData?.voiceData
+                ? "Voice message"
+                : replayData?.message ?? editData?.message}
+            </p>
+          </div>
+        </div>
+        <IoMdClose
+          onClick={handleCloseReplyEdit}
+          className="size-7 transition-all cursor-pointer active:bg-red-500/[80%] active:rounded-full p-1"
+        />
+      </div>
+
+      <div
+        className="flex items-center justify-between relative min-h-12 w-full md:px-2 px-3 gap-4 bg-leftBarBg duration-75 transition-all"
+        ref={inputBoxRef}
+      >
+        {canSendMessage ? (
+          <>
+            {isEmojiOpen ? (
+              <FaRegKeyboard
+                onClick={() => setIsEmojiOpen(false)}
+                className="cursor-pointer size-6 pr-0.5"
+              />
+            ) : (
+              <BsEmojiSmile
+                onClick={() => setIsEmojiOpen(true)}
+                className="cursor-pointer size-6 pr-0.5"
+              />
+            )}
+            <textarea
+              dir="auto"
+              value={text}
+              onChange={handleTextChange}
+              onClick={() => setIsEmojiOpen(false)}
+              onKeyUp={handleKeyUp}
+              ref={inputRef}
+              className="bg-transparent w-full resize-none outline-none scroll-w-none"
+              placeholder="Message"
+            />
+            {!editData && !text.trim() && (
+              <MdAttachFile
+                data-aos="zoom-in"
+                className="size-7 cursor-pointer w-fit rotate-[215deg]"
+              />
+            )}
+            {editData?._id ? (
+              <button
+                className={`p-1 cursor-pointer text-white bg-lightBlue flex-center rounded-full ${
+                  !text.trim() ? "opacity-30" : "opacity-100"
+                }`}
+                onClick={editMessage}
+                disabled={!text.trim()}
+              >
+                <MdOutlineDone data-aos="zoom-in" size={20} />
+              </button>
+            ) : (
+              <>
+                {text.trim().length ? (
+                  <RiSendPlaneFill
+                    data-aos="zoom-in"
+                    onClick={sendMessage}
+                    className="size-7 cursor-pointer text-lightBlue mr-2 rotate-45"
+                  />
+                ) : (
+                  <VoiceMessageRecorder
+                    replayData={replayData}
+                    closeEdit={closeEdit}
+                    closeReplay={closeReplay}
+                  />
+                )}
+              </>
+            )}
+          </>
+        ) : (
+          <div
+            onClick={() => setIsMuted((prev) => !prev)}
+            className="absolute cursor-pointer flex items-center justify-center pt-3 text-center"
+          >
+            {isMuted ? "Unmute" : "Mute"}
+          </div>
+        )}
+      </div>
+
+      {isEmojiOpen && (
+        <Suspense fallback={null}>
+          <EmojiPicker
+            open={isEmojiOpen}
+            theme={Theme.DARK}
+            height={300}
+            width="100%"
+            style={{
+              backgroundColor: "#17212B",
+              borderRadius: "0",
+              transition: "all 75ms",
+            }}
+            previewConfig={{ showPreview: false }}
+            searchDisabled
+            lazyLoadEmojis
+            onEmojiClick={handleEmojiClick}
+          />
+        </Suspense>
+      )}
+    </div>
+  );
+};
+
+export default MessageInput;
