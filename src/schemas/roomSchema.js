@@ -6,7 +6,7 @@ const schema = new Schema(
     avatar: { type: String || null },
     type: {
       type: String,
-      enum: ["group", "private", "chanel"],
+      enum: ["group", "private", "channel"],
       required: true,
     },
     admins: [{ type: Schema.ObjectId, ref: "User", required: true }],

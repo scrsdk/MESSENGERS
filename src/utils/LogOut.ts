@@ -1,6 +1,6 @@
 import useUserStore from "@/store/userStore";
 import axios from "axios";
-import toaster from "./toaster";
+import toaster from "./Toaster";
 
 const logout = async () => {
   try {
@@ -9,7 +9,9 @@ const logout = async () => {
     const setter = useUserStore.getState().setter;
     setter({ isLogin: false });
   } catch (error) {
-    toaster(false, "Network issues bud!");
+    console.log(error);
+
+    toaster(false, "Network issues!");
   }
 };
 

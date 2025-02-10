@@ -1,4 +1,4 @@
-import useGlobalVariablesStore from "@/store/globalVariablesStore";
+import useModalStore from "@/store/modalStore";
 
 const openModal = (props: {
   title?: string;
@@ -7,14 +7,12 @@ const openModal = (props: {
   onSubmit?: () => void;
   onClose?: () => void;
 }) => {
-  const setter = useGlobalVariablesStore.getState().setter;
+  const setter = useModalStore.getState().setter;
 
-  setter((prev: any) => ({
-    modalData: {
-      ...prev.modalData,
-      isOpen: true,
-      ...props,
-    },
+  setter((prev) => ({
+    ...prev,
+    isOpen: true,
+    ...props,
   }));
 };
 

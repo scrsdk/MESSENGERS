@@ -7,14 +7,15 @@ export default interface Room {
   _id: string;
   name: string;
   avatar: string;
-  participants: string[] | User[];
+  participants: (string | User)[];
   admins: string[];
   type: "group" | "private" | "channel";
   creator: string;
   messages: Message[];
+  lastMsgData: Message | null;
   locations: Location[];
   medias: Media[];
-  notSeenCount?: number;
+  notSeenCount: number;
   link: string;
   createdAt: string;
   updatedAt: string;
