@@ -1,38 +1,34 @@
 import Message from "@/models/message";
-import { Dispatch, SetStateAction, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 interface useScrollMessageProps {
   messages: Message[] | undefined;
   myID: string;
   isLastMsgInView: boolean;
-  setIsProgrammaticScroll: Dispatch<SetStateAction<boolean>>;
 }
 const useScrollMessage = ({
-  setIsProgrammaticScroll,
   messages,
   myID,
   isLastMsgInView,
 }: useScrollMessageProps) => {
   const lastMsgRef = useRef<HTMLDivElement | null>(null);
+  const prevMessagesLength = useRef(messages?.length ?? 0);
 
   const manageScroll = useCallback(() => {
-    const isFromMe =
-      messages?.length && messages[messages.length - 1]?.sender?._id === myID;
-    if (isFromMe || isLastMsgInView) {
-      setIsProgrammaticScroll(true);
-      lastMsgRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+    if (!messages) return;
+    if (messages.length > prevMessagesLength.current) {
+      const isFromMe =
+        messages?.length && messages[messages.length - 1]?.sender?._id === myID;
+
+      if (isFromMe || isLastMsgInView) {
+        lastMsgRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     }
-    const programmaticScroll = setTimeout(() => {
-      setIsProgrammaticScroll(false);
-    }, 1500);
-    return () => {
-      clearTimeout(programmaticScroll);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+    prevMessagesLength.current = messages.length;
+  }, [isLastMsgInView, messages, myID]);
 
   return { lastMsgRef, manageScroll };
 };
