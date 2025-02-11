@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { TbMessage } from "react-icons/tb";
 import { IoCopyOutline } from "react-icons/io5";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toaster } from "@/utils";
 import RoomCard from "../modules/RoomCard";
 import { copyText as copyFn } from "@/utils";
@@ -19,7 +19,7 @@ const RoomDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [groupMembers, setGroupMembers] = useState<User[]>([]);
-  const roomDetailsRef = useRef<HTMLDivElement | null>(null);
+
   const {
     setter,
     isRoomDetailsShown,
@@ -52,7 +52,7 @@ const RoomDetails = () => {
   } = useMemo(() => {
     return type === "private"
       ? participants?.find((data: Room) => data?._id !== myID) ||
-          participants?.find((data: Room) => data?._id == myID) ||
+          participants?.find((data: Room) => data?._id === myID) ||
           selectedRoomData
       : selectedRoomData || "";
   }, [myID, participants, selectedRoomData, type]);
@@ -93,7 +93,6 @@ const RoomDetails = () => {
   const openChat = () => {
     const isInRoom = selectedRoom?._id === roomID;
     if (isInRoom) return setter({ isRoomDetailsShown: false });
-
     const roomHistory = rooms.find(
       (data) =>
         data.name === myID + "-" + _id ||
@@ -101,27 +100,29 @@ const RoomDetails = () => {
         data._id == roomID
     );
 
-    // const roomSelected: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
-    //   admins: [myData._id, _id],
-    //   avatar,
-    //   createdAt: Date.now().toString(),
-    //   creator: myData._id,
-    //   link: (Math.random() * 9999999).toString(),
-    //   locations: [],
-    //   medias: [],
-    //   messages: [],
-    //   name: myData._id + "-" + _id,
-    //   participants: [myData, selectedRoomData] as (string | User)[],
-    //   type: "private",
-    //   updatedAt: Date.now().toString(),
-    // };
-
+    const roomSelected: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+      admins: [myData._id, _id],
+      avatar,
+      createdAt: Date.now().toString(),
+      creator: myData._id,
+      link: (Math.random() * 9999999).toString(),
+      locations: [],
+      medias: [],
+      messages: [],
+      name: myData._id + "-" + _id,
+      participants: [myData, selectedRoomData] as (string | User)[],
+      type: "private",
+      updatedAt: Date.now().toString(),
+      _id,
+    };
     if (roomHistory) {
       roomSocket?.emit("joining", roomHistory._id);
     } else {
       setter({
         selectedRoom:
-          type === "private" ? selectedRoom : (mockSelectedRoomData as Room),
+          type === "private"
+            ? (roomSelected as Room)
+            : (mockSelectedRoomData as Room),
         mockSelectedRoomData: null,
       });
     }
@@ -153,27 +154,9 @@ const RoomDetails = () => {
     [onlineUsers]
   );
 
-  useEffect(() => {
-    const handleOutside = (event: Event) => {
-      if (
-        !roomDetailsRef.current?.contains(event.target as Node) &&
-        isRoomDetailsShown
-      ) {
-        setter({ isRoomDetailsShown: false });
-      }
-    };
-
-    document.addEventListener("click", handleOutside);
-
-    return () => {
-      document.removeEventListener("click", handleOutside);
-    };
-  }, [isRoomDetailsShown, setter]);
-
   return (
     <div
-      ref={roomDetailsRef}
-      className={`flex-col fixed xl:static h-dvh w-full xl:w-[25%] md:w-[35%] transition-all duration-300 bg-leftBarBg text-white z-full ${
+      className={`flex-col fixed xl:static h-dvh w-full xl:w-[25%] md:w-[35%] transition-all duration-300 bg-leftBarBg text-white z-9999 ${
         isRoomDetailsShown ? "xl:flex right-0" : "xl:hidden -right-full "
       }`}
     >
@@ -224,7 +207,7 @@ const RoomDetails = () => {
           </div>
         </div>
 
-        {type == "private" && (
+        {type === "private" && roomID !== myID && (
           <span
             onClick={openChat}
             className="absolute right-3 -bottom-6 size-12 rounded-full cursor-pointer bg-darkBlue flex-center"
@@ -295,7 +278,7 @@ const RoomDetails = () => {
           ) : (
             <div className="mt-3 space-y-2 ">
               <p className="text-lightBlue px-3">Members</p>
-              <div className="flex flex-col mt-3 w-full ch:w-full overflow-y-scroll scroll-w-none">
+              <div className="flex flex-col mt-3 w-full overflow-y-scroll scroll-w-none">
                 {groupMembers?.length
                   ? groupMembers.map((member) => (
                       <RoomCard

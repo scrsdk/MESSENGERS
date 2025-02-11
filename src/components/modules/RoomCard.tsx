@@ -24,7 +24,9 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
   const roomSocket = useSockets((state) => state.rooms);
 
   const showProfile = () => {
-    setter({ mockSelectedRoomData: roomData as Room });
+    setter({
+      mockSelectedRoomData: roomData as Room,
+    });
   };
 
   const openChat = () => {
@@ -35,7 +37,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
+    const selectedRoom: Omit<Room, "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
       avatar: avatar!,
       createdAt: Date.now().toString(),
@@ -48,6 +50,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
       participants: [myData, roomData] as string[] | User[],
       type: "private",
       updatedAt: Date.now().toString(),
+      _id: _id!,
     };
 
     roomSocket?.emit(
