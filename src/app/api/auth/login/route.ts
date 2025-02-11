@@ -26,10 +26,11 @@ export const POST = async (req: Request) => {
     const token = tokenGenerator(userData.phone, 7);
 
     (await cookies()).set("token", token, {
-      httpOnly: false,
+      httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24 * 15,
       sameSite: "none",
+      secure: true,
     });
     return Response.json(userData, { status: 200 });
   } catch (err) {
