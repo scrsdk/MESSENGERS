@@ -14,8 +14,6 @@ const s3Client = new S3Client({
 
 export const GET = async (req: Request) => {
   try {
-    const res = new Response();
-    res.headers.set("Cache-Control", "no-store");
     const { searchParams } = new URL(req.url);
     const fileName = searchParams.get("fileName");
 
@@ -25,6 +23,9 @@ export const GET = async (req: Request) => {
         { status: 400 }
       );
     }
+
+    const allCookies = (await cookies()).getAll();
+    console.log("All Cookies:", allCookies);
 
     const cookieToken = (await cookies()).get("token")?.value;
     if (!cookieToken)
