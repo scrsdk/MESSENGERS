@@ -123,13 +123,19 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         <MenuItem
           icon={<RiUser3Line />}
           title="Contacts"
-          onClick={() => toaster(true, "Coming soon..!")}
+          onClick={() => {
+            closeMenu();
+            toaster(true, "Coming soon..!");
+          }}
         />
 
         <MenuItem
           icon={<IoCallOutline />}
           title="Calls"
-          onClick={() => toaster(true, "Coming soon..!")}
+          onClick={() => {
+            closeMenu();
+            toaster(true, "Coming soon..!");
+          }}
         />
 
         <MenuItem
