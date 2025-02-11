@@ -14,6 +14,8 @@ const s3Client = new S3Client({
 
 export const GET = async (req: Request) => {
   try {
+    const res = new Response();
+    res.headers.set("Cache-Control", "no-store");
     const { searchParams } = new URL(req.url);
     const fileName = searchParams.get("fileName");
 
@@ -43,7 +45,6 @@ export const GET = async (req: Request) => {
 
     return new Response(Body as ReadableStream, {
       headers: {
-        "Content-Type": "audio/ogg",
         "Content-Disposition": `attachment; filename="${fileName}"`,
       },
     });
