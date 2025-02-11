@@ -11,7 +11,6 @@ export const POST = async (req: Request) => {
     const { userID, payload: purePayload } = query;
 
     const payload = purePayload;
-    console.log(payload);
 
     let result;
 
