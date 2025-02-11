@@ -68,6 +68,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
   }, [msgData, onClose]);
 
   const deleteMessage = useCallback(() => {
+    setIsDropDownOpen(false);
     modalSetter((prev) => ({
       ...prev,
       isOpen: true,
@@ -76,6 +77,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
       isCheckedText: "Also delete for others",
       onSubmit: async () => {
         const currentIsChecked = useModalStore.getState().isChecked;
+        console.log("currentIsChecked", currentIsChecked);
 
         if (msgData?.voiceData?.src && currentIsChecked) {
           await deleteFile(msgData.voiceData.src);
