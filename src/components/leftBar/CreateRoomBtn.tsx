@@ -7,7 +7,7 @@ import DropDown from "../modules/ui/DropDown";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { HiMiniUserGroup } from "react-icons/hi2";
 
-const CreateRoom = lazy(() => import("@/components/modules/CreateRoom"));
+const CreateRoom = lazy(() => import("@/components/leftBar/CreateRoom"));
 
 const CreateRoomBtn = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);

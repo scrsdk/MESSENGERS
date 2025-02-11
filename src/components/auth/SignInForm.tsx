@@ -39,7 +39,7 @@ const SignInForm = () => {
   return (
     <div
       data-aos="zoom-out"
-      className="flex w-full flex-col mt-10 space-y-6 ch:text-xl"
+      className="flex w-full flex-col mt-10 space-y-6 "
       onKeyUp={(e) => e.key == "Enter" && handleSubmit(submitForm)()}
     >
       <label

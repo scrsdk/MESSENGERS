@@ -11,9 +11,9 @@ import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";
 import User from "@/models/user";
 import { randomHexGenerate, toaster, uploadFile } from "@/utils";
-import ContactCard from "./ContactCard";
-import Button from "./ui/Button";
-import Loading from "./ui/Loading";
+import ContactCard from "../modules/ContactCard";
+import Button from "../modules/ui/Button";
+import Loading from "../modules/ui/Loading";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 
 type Props = {
@@ -160,9 +160,9 @@ const CreateRoom = ({ roomType, close }: Props) => {
     <section
       className={`fixed inset-y-0 w-full md:block md:w-[40%] lg:w-[35%] ${
         isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
-      }  left-0 bg-leftBarBg size-full text-white `}
+      }  left-0 bg-leftBarBg size-full text-white z-50`}
     >
-      <div className="flex gap-4 bg-inherit items-center w-full ch:w-full px-4 py-3">
+      <div className="flex gap-4 bg-inherit items-center w-full px-4 py-3">
         <IoMdArrowRoundBack
           onClick={getBackBtn}
           className="size-6 cursor-pointer"
@@ -240,7 +240,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
           />
 
           <div className="px-1">
-            <div className="flex flex-col mt-1 w-full ch:w-full">
+            <div className="flex flex-col mt-1 w-full">
               {filteredUserCards?.map((userData) => (
                 <ContactCard
                   key={userData._id}

@@ -7,7 +7,7 @@ const toaster = (
   duration = 2000
 ) => {
   toast[status ? "success" : "error"](message, {
-    position: "bottom-center",
+    position: "top-right",
     autoClose: duration,
     hideProgressBar: true,
     theme: "dark",

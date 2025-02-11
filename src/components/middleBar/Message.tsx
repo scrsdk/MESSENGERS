@@ -300,7 +300,7 @@ const Message = (msgData: MessageModel & Props) => {
 
       <div
         ref={messageRef}
-        className={`chat transition-all items-end duration-100 w-full ch:overflow-hidden ${
+        className={`chat transition-all items-end duration-100 w-full  ${
           isFromMe ? "chat-end" : "chat-start"
         } ${isMounted ? "" : "opacity-0 scale-0"}`}
       >

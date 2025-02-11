@@ -9,7 +9,7 @@ const ChatFolders = ({ name, count, isActive, onClick }: Props) => {
   return (
     <div
       onClick={onClick}
-      className="flex items-center justify-center gap-1 relative cursor-pointer ch:transition-all ch:duration-300 w-full"
+      className="flex items-center justify-center gap-1 relative cursor-pointer transition-all duration-300 w-full"
     >
       <div className={`${isActive && "text-lightBlue"} capitalize inline`}>
         {name}

@@ -157,9 +157,9 @@ const LeftBar = () => {
         data-aos-duration="400"
         data-aos="fade-right"
         id="leftBar-container"
-        className="flex-1 bg-leftBarBg h-full relative scroll-w-none overflow-y-auto"
+        className="flex-1 bg-leftBarBg h-full relative scroll-w-none overflow-y-auto "
       >
-        <div className="w-full sticky top-0 bg-leftBarBg border-b border-white/5 h-20 overflow-hidden">
+        <div className="w-full sticky top-0 bg-leftBarBg border-b border-white/5 h-20 overflow-hidden z-40">
           <div className="flex items-center justify-between gap-6 mx-3">
             <div className="flex items-center flex-1 gap-5 mt-3 w-full text-white">
               <RxHamburgerMenu
@@ -178,7 +178,7 @@ const LeftBar = () => {
           <RoomFolders updateFilterBy={setFilterBy} />
         </div>
 
-        <div className="flex flex-col overflow-y-auto overflow-x-hidden h-[calc(100vh-5rem)] scroll-w-none w-full">
+        <div className="flex flex-col overflow-y-auto overflow-x-hidden h-[calc(100vh-5rem)] scroll-w-none w-full z-10">
           {isPageLoaded ? (
             sortedRooms.length ? (
               sortedRooms.map((data) => <ChatCard {...data} key={data?._id} />)

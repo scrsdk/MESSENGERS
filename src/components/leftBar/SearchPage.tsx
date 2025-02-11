@@ -69,9 +69,9 @@ const SearchPage = ({ closeSearch }: Props) => {
       onKeyUp={(e) => e.key == "Escape" && closeSearch()}
       className={`text-white fixed  w-full md:block md:w-[40%] lg:w-[35%] ${
         isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
-      }  h-full inset-0 overflow-auto bg-leftBarBg z-10 transition-all`}
+      }  h-full inset-0 overflow-auto bg-leftBarBg z-50 transition-all`}
     >
-      <div className="flex sticky top-0 gap-3 bg-inherit items-center justify-between w-full ch:w-full px-2 py-4">
+      <div className="flex sticky top-0 gap-3 bg-inherit items-center justify-between w-full  px-2 py-4">
         <IoMdArrowRoundBack
           onClick={closeSearch}
           className="size-6 cursor-pointer "
@@ -90,7 +90,7 @@ const SearchPage = ({ closeSearch }: Props) => {
       <div className="px-3 mt-6 bg-inherit">
         {isLoading && <RoomSkeleton />}
 
-        <div className="flex flex-col w-full ch:w-full">
+        <div className="flex flex-col w-full ">
           {searchResult?.length ? (
             <span className="text-darkGray text-sm">
               {searchResult.length} result

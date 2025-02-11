@@ -40,6 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-service-worker.js
-manifest.json
 src/components/leftBar/menu/VideoChat.tsx

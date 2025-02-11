@@ -199,8 +199,8 @@ const ChatContent = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 ch:p-3 justify-end">
-          <div className="size-11 ch:size-full relative rounded-full flex-center">
+        <div className="flex items-center gap-2 justify-end">
+          <div className="size-11 relative rounded-full flex-center">
             <PiDotsThreeVerticalBold onClick={openChatSetting} />
             {showRoomOptions && (
               <div className="absolute top-1/2 w-min inset-x-0">
@@ -248,6 +248,12 @@ const ChatContent = () => {
         />
       ) : (
         <JoinToRoom roomData={selectedRoom!} roomSocket={rooms} userID={myID} />
+      )}
+      {isRoomDetailsShown && (
+        <span
+          onClick={() => setter({ isRoomDetailsShown: false })}
+          className="inset-0 xl:static absolute transition-all duration-200 "
+        ></span>
       )}
     </div>
   );
