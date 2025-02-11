@@ -33,7 +33,9 @@ export const POST = async (req: Request) => {
 
     (await cookies()).set("token", token, {
       httpOnly: false,
-      maxAge: 60 * 60 * 14,
+      maxAge: 60 * 60 * 24 * 15,
+      sameSite: "none",
+      path: "/",
     });
     return Response.json(userData, { status: 201 });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

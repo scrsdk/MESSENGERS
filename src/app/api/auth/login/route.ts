@@ -28,7 +28,8 @@ export const POST = async (req: Request) => {
     (await cookies()).set("token", token, {
       httpOnly: false,
       path: "/",
-      maxAge: 60 * 60 * 24 * 6,
+      maxAge: 60 * 60 * 24 * 15,
+      sameSite: "none",
     });
     return Response.json(userData, { status: 200 });
   } catch (err) {
