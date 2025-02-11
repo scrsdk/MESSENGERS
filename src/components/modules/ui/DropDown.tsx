@@ -1,4 +1,3 @@
-import useModalStore from "@/store/modalStore";
 import { CSSProperties, ReactNode, useEffect, useRef } from "react";
 export interface DropDownItemProps {
   onClick: () => void;
@@ -26,13 +25,12 @@ const DropDown = ({
 }: DropDownProps) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
-  const { msgData } = useModalStore((state) => state);
+
   useEffect(() => {
     const handleOutside = (event: Event) => {
       if (
         !dropdownRef.current?.contains(event.target as Node) &&
-        !buttonRef.current?.contains(event.target as Node) &&
-        !msgData
+        !buttonRef.current?.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
@@ -45,7 +43,7 @@ const DropDown = ({
       document.removeEventListener("click", handleOutside);
       document.removeEventListener("scroll", handleOutside, true);
     };
-  }, [msgData, setIsOpen]);
+  }, [setIsOpen]);
 
   return (
     <div className={`dropdown ${isOpen && "dropdown-open"}`} ref={dropdownRef}>
