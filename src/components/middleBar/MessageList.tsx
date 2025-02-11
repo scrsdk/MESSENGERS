@@ -12,8 +12,6 @@ interface MessageListProps {
   messages: MessageModel[];
   myID: string;
   type: string;
-  activeDate: string | null;
-  dateRefs: React.RefObject<Record<string, HTMLDivElement | null>>;
   lastMsgRef: React.RefObject<HTMLDivElement | null>;
   setEditData: React.Dispatch<React.SetStateAction<MessageModel | null>>;
   setReplayData: React.Dispatch<React.SetStateAction<string | null>>;
@@ -24,8 +22,6 @@ const MessageList = ({
   messages,
   myID,
   type,
-  activeDate,
-  dateRefs,
   lastMsgRef,
   setEditData,
   setReplayData,
@@ -69,16 +65,14 @@ const MessageList = ({
               isPv={type === "private"}
               stickyDate={stickyDate}
               nextMessage={messages[index + 1] || null}
-              activeDate={activeDate}
-              dateRefs={dateRefs}
               {...data}
             />
           </div>
         );
       })
     ) : (
-      <div data-aos="fade-left" className="flex-center size-full pb-[40vh]">
-        <p className="rounded-full w-fit text-sm py-1 px-3 text-center bg-white/[18%]">
+      <div className="flex-center size-full pb-[40vh]">
+        <p className="rounded-full w-fit text-sm py-1 px-3 text-center bg-gray-800/80">
           Send a message to start the chat
         </p>
       </div>
@@ -87,8 +81,6 @@ const MessageList = ({
     messages,
     myID,
     type,
-    activeDate,
-    dateRefs,
     lastMsgRef,
     setEditData,
     setReplayData,

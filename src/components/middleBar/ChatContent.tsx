@@ -226,8 +226,6 @@ const ChatContent = () => {
         }
       >
         <ChatMessage
-          replayData={Boolean(replayDataMsg)}
-          editData={Boolean(editData)}
           setTypings={setTypings}
           pinnedMessages={pinnedMessages}
           setEditData={setEditData}

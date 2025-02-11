@@ -10,14 +10,7 @@ import { FaPause, FaArrowDown } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { TiPin } from "react-icons/ti";
 import Image from "next/image";
-import {
-  RefObject,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useCallback,
-} from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import MessageActions from "./MessageActions";
 import MessageModel from "@/models/message";
 import Voice from "@/models/voice";
@@ -37,8 +30,6 @@ interface Props {
   voiceData?: Voice | null;
   stickyDate: string | null;
   nextMessage: MessageModel;
-  activeDate: string | null;
-  dateRefs: RefObject<Record<string, HTMLDivElement | null>>;
 }
 
 const Message = (msgData: MessageModel & Props) => {
@@ -57,11 +48,9 @@ const Message = (msgData: MessageModel & Props) => {
     pin,
     isPv = false,
     nextMessage,
-    dateRefs,
     voiceData: voiceDataProp,
     stickyDate,
   } = msgData;
-
   //Calculate whether the message is the last message from the current sender.
   const isLastMessageFromUser = useMemo(
     () => !nextMessage || nextMessage.sender._id !== sender._id,
@@ -293,7 +282,10 @@ const Message = (msgData: MessageModel & Props) => {
   return (
     <>
       {stickyDate && (
-        <div className="static top-20 text-xs  bg-gray-800/80 w-fit mx-auto text-center rounded-2xl py-1 my-2 px-3 z-10">
+        <div
+          className="static top-20 text-xs bg-gray-800/80 w-fit mx-auto text-center rounded-2xl py-1 my-2 px-3 z-10"
+          data-date={stickyDates}
+        >
           {stickyDate}
         </div>
       )}
@@ -328,12 +320,6 @@ const Message = (msgData: MessageModel & Props) => {
         )}
 
         <div
-          ref={(el) => {
-            if (el) {
-              dateRefs.current[String(createdAt)] = el;
-            }
-          }}
-          data-date={stickyDates}
           id="messageBox"
           onClick={updateModalMsgData}
           onContextMenu={updateModalMsgData}
@@ -386,10 +372,10 @@ const Message = (msgData: MessageModel & Props) => {
                     isFromMe ? "bg-white" : "bg-green-500"
                   } left-0 inset-y-0 w-[3px] h-full`}
                 ></span>
-                <p className="font-vazirBold text-xs break-words text-start line-clamp-1 overflow-ellipsis">
+                <p className="font-vazirBold text-xs break-words text-start line-clamp-1 text-ellipsis">
                   {replayedTo.username}
                 </p>
-                <p className="font-thin break-words line-clamp-1 overflow-ellipsis text-left text-xs">
+                <p className="font-thin break-words line-clamp-1 text-ellipsis text-left text-xs">
                   {replayedTo.message || "Voice Message"}
                 </p>
               </div>

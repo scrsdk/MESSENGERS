@@ -20,8 +20,6 @@ import useRoomEvents from "@/hook/chatMessage/useRoomEvents";
 import MessageList from "./MessageList";
 
 interface ChatMessageProps {
-  replayData: boolean;
-  editData: boolean;
   setTypings: React.Dispatch<React.SetStateAction<string[]>>;
   setEditData: React.Dispatch<React.SetStateAction<MessageModel | null>>;
   setReplayData: React.Dispatch<React.SetStateAction<string | null>>;
@@ -39,10 +37,9 @@ const ChatMessage = ({
   isLoaded,
   setIsLoaded,
   _id,
-  replayData,
-  editData,
 }: ChatMessageProps) => {
   const [isLastMsgInView, setIsLastMsgInView] = useState(false);
+  const [floatingDate, setFloatingDate] = useState(null);
   const { rooms } = useSockets((state) => state);
   const { selectedRoom, setter } = useGlobalStore((state) => state) || {};
   const { _id: roomID, messages, type } = selectedRoom!;
@@ -56,18 +53,10 @@ const ChatMessage = ({
 
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
   const lastScrollPos = useRef(0);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const ringAudioRef = useRef<HTMLAudioElement>(null);
-  const dateRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const activeDate = useRef<string | null>(null);
-  const isScrolling = useRef(false);
 
-  const [isProgrammaticScroll, setIsProgrammaticScroll] = useState(false);
   const { canShow } = useScrollChange(messageContainerRef?.current);
-
-  const activeDateElement = document.querySelector(
-    `[data-date='${activeDate.current}']`
-  );
 
   const playRingSound = useCallback(() => {
     if (ringAudioRef.current) {
@@ -91,10 +80,12 @@ const ChatMessage = ({
 
   useEffect(() => {
     const track = roomMessageTrack?.find((track) => track.roomId === _id);
-    if (track && messageContainerRef.current) {
-      messageContainerRef.current.scrollTop = track.scrollPos;
-    }
-  }, [_id, roomMessageTrack]);
+    setTimeout(() => {
+      if (track && messageContainerRef.current) {
+        messageContainerRef.current.scrollTop = track.scrollPos;
+      }
+    }, 100);
+  }, [messages, _id, roomMessageTrack]);
 
   const checkIsLastMsgInView = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
@@ -111,17 +102,10 @@ const ChatMessage = ({
   );
 
   const { lastMsgRef, manageScroll } = useScrollMessage({
-    setIsProgrammaticScroll,
     messages: selectedRoom?.messages,
     myID,
     isLastMsgInView,
   });
-
-  useEffect(() => {
-    if (replayData || editData) {
-      manageScroll();
-    }
-  }, [replayData, editData, manageScroll]);
 
   useEffect(() => {
     manageScroll();
@@ -194,66 +178,6 @@ const ChatMessage = ({
     return count;
   }, [messages, myID]);
 
-  const handleScroll = useCallback(() => {
-    isScrolling.current = true;
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-    scrollTimeoutRef.current = setTimeout(() => {
-      isScrolling.current = false;
-    }, 1500);
-  }, []);
-
-  useEffect(() => {
-    const parentElement = messageContainerRef.current;
-    if (parentElement) {
-      parentElement.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (parentElement) {
-        parentElement.removeEventListener("scroll", handleScroll);
-      }
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, [handleScroll]);
-
-  useEffect(() => {
-    const currentChatRefs = Object.fromEntries(
-      Object.entries(dateRefs.current).filter(([date]) =>
-        messages.some((msg) => msg.createdAt === date)
-      )
-    );
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleDates = entries
-          .map((entry) => ({
-            date: entry.target.getAttribute("data-date"),
-            top: entry.target.getBoundingClientRect().top,
-            isIntersecting: entry.isIntersecting,
-          }))
-          .filter((item) => item.isIntersecting && item.top >= 0)
-          .sort((a, b) => a.top - b.top);
-        if (visibleDates.length > 0) {
-          const topDate = visibleDates[0].date;
-          if (activeDate.current !== topDate) {
-            activeDate.current = topDate;
-          }
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px 0% 0px" }
-    );
-    Object.values(currentChatRefs).forEach((el) => {
-      if (el) observer.observe(el);
-    });
-    return () => {
-      Object.values(currentChatRefs).forEach((el) => {
-        if (el) observer.unobserve(el);
-      });
-    };
-  }, [activeDate, messages, roomID, dateRefs]);
-
   const scrollToBottom = useCallback(() => {
     lastMsgRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -261,43 +185,68 @@ const ChatMessage = ({
     });
   }, [lastMsgRef]);
 
+  // Handle floating date
+  useEffect(() => {
+    const container = messageContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+      const containerTop = container.getBoundingClientRect().top;
+      const stickyEls = container.querySelectorAll("[data-date]");
+      let currentDate = null;
+      // We check the date elements from top to bottom (or in the order they are placed in the DOM)
+      stickyEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        // If the element reaches (or passes) the top of the container, currentDate is updated.
+        if (rect.top - containerTop <= 0) {
+          currentDate = el.getAttribute("data-date");
+        }
+      });
+      setFloatingDate(currentDate);
+
+      scrollTimeout.current = setTimeout(() => {
+        setFloatingDate(null);
+      }, 2000);
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div
       onScroll={checkIsLastMsgInView}
       ref={messageContainerRef}
       id="chatContainer"
-      className={`mt-auto px-0.5 overflow-x-hidden overflow-y-auto scroll-w-none ${
+      className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none ${
         pinnedMessages?.length ? "pt-12" : ""
-      } ${replayData || editData ? "pb-13" : "pb-1"} ${
-        messages.length <= 5 && "pt-52"
-      }`}
+      }  ${messages.length <= 5 && "pt-52"}`}
     >
-      {activeDate.current && (
-        <div
-          onClick={() =>
-            activeDateElement?.scrollIntoView({
+      <div
+        onClick={() => {
+          const target = messageContainerRef.current?.querySelector(
+            `[data-date="${floatingDate}"]`
+          );
+          if (target) {
+            target.scrollIntoView({
               behavior: "smooth",
               block: "start",
-            })
+            });
           }
-          className={`absolute ${
-            pinnedMessages.length ? "top-28" : "top-[4rem]"
-          } left-1/2 text-xs bg-gray-800 w-fit mx-auto text-center rounded-2xl py-1 my-2 px-3 cursor-pointer -translate-x-1/2 text-white z-10 transition-all duration-300 ${
-            isScrolling.current && !isProgrammaticScroll
-              ? "transform translate-y-0"
-              : "transform -translate-y-10"
-          }`}
-        >
-          {activeDate.current}
-        </div>
-      )}
+        }}
+        className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-10 transform  ${
+          floatingDate ? "translate-y-1" : "-translate-y-5 !p-0"
+        }`}
+      >
+        {floatingDate}
+      </div>
 
       <MessageList
         messages={messages}
         myID={myID}
         type={type}
-        activeDate={activeDate.current}
-        dateRefs={dateRefs}
         lastMsgRef={lastMsgRef}
         setEditData={setEditData}
         setReplayData={setReplayData}

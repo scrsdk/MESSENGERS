@@ -259,12 +259,12 @@ const ChatCard = ({
             {draftMessage ? (
               <span className="text-red-400 flex gap-1 ">
                 Draft:
-                <div className=" text-darkGray overflow-hidden overflow-ellipsis">
+                <div className=" text-darkGray overflow-hidden text-ellipsis">
                   {draftMessage}
                 </div>
               </span>
             ) : (
-              <div className="overflow-hidden overflow-ellipsis w-full ">
+              <div className="overflow-hidden text-ellipsis w-full ">
                 {cardMessage}
               </div>
             )}
