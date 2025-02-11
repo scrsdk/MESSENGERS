@@ -13,7 +13,7 @@ interface Props {
 
 const highlightChars = (query: string, name: string) => {
   const lowerCaseQuery = query.toLowerCase();
-  const lowerCaseName = name!.toLowerCase();
+  const lowerCaseName = name.toLowerCase();
 
   const isQueryIncludesInName = lowerCaseName.includes(lowerCaseQuery);
   const startToHighlightIndex = lowerCaseName.indexOf(lowerCaseQuery);
@@ -22,7 +22,7 @@ const highlightChars = (query: string, name: string) => {
   return isQueryIncludesInName ? (
     name?.split("").map((char, index) => {
       const isInHighlightRange =
-        index >= startToHighlightIndex! && index <= endToHighlightIndex!;
+        index >= startToHighlightIndex && index <= endToHighlightIndex;
       return (
         <span
           key={index}
@@ -40,7 +40,7 @@ const highlightChars = (query: string, name: string) => {
 const SearchResultCard = (
   roomData: Partial<Room & { findBy?: keyof Room }> & Props
 ) => {
-  const { avatar, name, _id, myData, findBy = null, query } = roomData!;
+  const { avatar, name, _id, myData, findBy = null, query } = roomData;
   const { setter, isChatPageLoaded } = useGlobalStore((state) => state);
   const rooms = useUserStore((state) => state.rooms);
   const roomSocket = useSockets((state) => state.rooms);
@@ -53,9 +53,9 @@ const SearchResultCard = (
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+    const selectedRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
-      avatar: avatar!,
+      avatar: avatar ? avatar : "",
       createdAt: Date.now().toString(),
       creator: myData._id,
       link: (Math.random() * 9999999).toString(),
@@ -66,8 +66,10 @@ const SearchResultCard = (
       participants: [myData, roomData] as User[],
       type: "private",
       updatedAt: Date.now().toString(),
-      _id: myData._id,
     };
+    console.log("roomHistory?._id", roomHistory?._id);
+    console.log("roomData?._id", roomData?._id);
+    console.log("_id", _id);
 
     roomSocket?.emit(
       "joining",
@@ -100,13 +102,13 @@ const SearchResultCard = (
         />
       ) : (
         <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-vazirBold text-lg">
-          {name![0]}
+          {name ? name[0] : ""}
         </div>
       )}
       <div className="flex flex-col justify-between w-full py-2">
         <p className="text-base font-vazirBold line-clamp-1 text-ellipsis break-words">
           {findBy == "participants" || findBy == "name"
-            ? highlightChars(query, name!)
+            ? highlightChars(query, name ? name : "")
             : name}
         </p>
 
