@@ -28,7 +28,7 @@ export default function RootLayout({
       />
       <meta name="apple-mobile-web-app-title" content="Telegram" />
       <link rel="manifest" href="/manifest.json" />
-      <meta name="theme-color" content="#2F3BA2" />
+      <meta name="theme-color" content="#232735" />
       <body className="font-vazirRegular bg-leftBarBg h-full">
         <ToastContainer />
         {children}
