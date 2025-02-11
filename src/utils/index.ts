@@ -15,6 +15,7 @@ import formatDate from "./FormatDate";
 import downloadFile from "./file/DownloadFile";
 import uploadFile from "./file/UploadFile";
 import deleteFile from "./file/DeleteFile";
+import convertToWebP from "./file/ConvertToWebP";
 import registerSW from "./RegisterSW";
 
 export {
@@ -35,5 +36,6 @@ export {
   downloadFile,
   uploadFile,
   deleteFile,
+  convertToWebP,
   registerSW,
 };

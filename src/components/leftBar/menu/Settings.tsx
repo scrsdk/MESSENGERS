@@ -14,7 +14,14 @@ import { MdLanguage } from "react-icons/md";
 import Image from "next/image";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { deleteFile, logout, openModal, toaster, uploadFile } from "@/utils";
+import {
+  convertToWebP,
+  deleteFile,
+  logout,
+  openModal,
+  toaster,
+  uploadFile,
+} from "@/utils";
 import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import DropDown from "@/components/modules/ui/DropDown";
@@ -74,8 +81,8 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       setIsLoading(true);
 
       const socket = useSockets.getState().rooms;
-      const uploadedImageUrl =
-        uploadedImageFile && (await uploadFile(uploadedImageFile));
+      const webPImage = await convertToWebP(uploadedImageFile!);
+      const uploadedImageUrl = await uploadFile(webPImage);
 
       socket?.emit("updateUserData", {
         userID: _id,
