@@ -51,9 +51,24 @@ const MessageInput = ({
   //Helper function to reset the height of TextArea
   const resetTextAreaHeight = () => {
     if (inputRef.current) {
-      inputRef.current.style.height = "22px";
+      inputRef.current.style.height = "24px";
     }
   };
+
+  // Auto-resize TextArea
+  const resizeTextArea = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "24px";
+      inputRef.current.style.height = `${Math.min(
+        inputRef.current.scrollHeight,
+        100
+      )}px`;
+      inputRef.current.style.overflow =
+        inputRef.current.scrollHeight > inputRef.current.offsetHeight
+          ? "auto"
+          : "hidden";
+    }
+  }, []);
 
   // Clean up after sending or editing a message
   const cleanUpAfterSendingMsg = useCallback(() => {
@@ -61,6 +76,7 @@ const MessageInput = ({
     closeReplay();
     closeEdit();
     setText("");
+    inputRef.current?.focus();
     if (roomId) localStorage.removeItem(roomId);
   }, [closeReplay, closeEdit, roomId]);
 
@@ -119,34 +135,6 @@ const MessageInput = ({
     cleanUpAfterSendingMsg();
   }, [text, editData, rooms, roomId, cleanUpAfterSendingMsg, closeEdit]);
 
-  // Auto-resize TextArea
-  const resizeTextArea = useCallback(() => {
-    if (inputRef.current) {
-      inputRef.current.style.height = "0px";
-      inputRef.current.style.height = `${Math.min(
-        inputRef.current.scrollHeight,
-        100
-      )}px`;
-      inputRef.current.style.overflow =
-        inputRef.current.scrollHeight > inputRef.current.offsetHeight
-          ? "auto"
-          : "hidden";
-    }
-  }, []);
-
-  // Text Change Handler
-  const handleTextChange = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => {
-      const newText = e.target.value;
-      setText(newText);
-      resizeTextArea();
-      handleIsTyping();
-    },
-    //TODO پاکش کن
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [resizeTextArea]
-  );
-
   //Send the "typing" event and stop it after 1500 milliseconds
   const handleIsTyping = useCallback(() => {
     if (typingTimer.current) {
@@ -157,6 +145,17 @@ const MessageInput = ({
       rooms?.emit("stop-typing", { roomID: roomId, sender: myData });
     }, 1500);
   }, [rooms, roomId, myData]);
+
+  // Text Change Handler
+  const handleTextChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      const newText = e.target.value;
+      setText(newText);
+      resizeTextArea();
+      handleIsTyping();
+    },
+    [handleIsTyping, resizeTextArea]
+  );
 
   // Add emoji to text
   const handleEmojiClick = useCallback((e: { emoji: string }) => {
@@ -173,14 +172,15 @@ const MessageInput = ({
   //Focus on TextArea in Reply or Edit mode
   useEffect(() => {
     if (replayData?._id || editData?._id) {
-      inputRef.current?.focus();
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   }, [replayData?._id, editData?._id]);
 
   //On mount, load draft from localStorage and focus on TextArea
   useEffect(() => {
     resizeTextArea();
-    inputRef.current?.focus();
     if (roomId) {
       const storedDraft = localStorage.getItem(roomId) || "";
       setText(storedDraft);
