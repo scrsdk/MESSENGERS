@@ -24,9 +24,6 @@ export const GET = async (req: Request) => {
       );
     }
 
-    const allCookies = (await cookies()).getAll();
-    console.log("All Cookies:", allCookies);
-
     const cookieToken = (await cookies()).get("token")?.value;
     if (!cookieToken)
       return Response.json({ message: "Unauthorized" }, { status: 401 });
