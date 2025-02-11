@@ -298,7 +298,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
         dropDownItems={dropDownItems}
         setIsOpen={onClose}
         isOpen={Boolean(msgData && isDropDownOpen)}
-        classNames={`h-fit transition-all duration-300 ${
+        classNames={`h-fit text-white transition-all duration-300 ${
           isCollapsed ? "w-52" : "w-40"
         } ${isFromMe ? "right-[65%]" : "left-[65%]"}`}
         style={{ top: `${-40 + dropDownPosition.top}px` }}

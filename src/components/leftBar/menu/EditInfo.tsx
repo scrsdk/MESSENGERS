@@ -72,7 +72,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
         ))
       }
     >
-      <div className="flex flex-col gap-2 p-4 w-full">
+      <div className="flex flex-col gap-2 p-4 w-full text-white">
         <p className="text-darkBlue font-vazirRegular py-1 font-bold text-base">
           Your name
         </p>

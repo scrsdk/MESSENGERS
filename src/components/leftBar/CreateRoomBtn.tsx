@@ -49,7 +49,7 @@ const CreateRoomBtn = () => {
   }, [setter, handleCreateRoom]);
 
   return (
-    <div className={`absolute right-3 bottom-3 z-10`}>
+    <div className={`absolute right-3 bottom-3 z-10 text-white`}>
       <DropDown
         dropDownItems={dropDownItems}
         classNames="bottom-16 right-0 w-40"

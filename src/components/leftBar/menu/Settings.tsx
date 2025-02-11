@@ -189,7 +189,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       }
     >
       <Modal />
-      <div className="relative">
+      <div className="relative text-white">
         <div className="absolute px-4 inset-x-0 w-full">
           <div className="flex items-center gap-3 my-3">
             {
@@ -320,14 +320,16 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
           <LineSeparator />
 
-          <div className="relative flex items-center">
+          <span className="relative flex items-center">
             <MenuItem
               icon={<MdLanguage />}
-              title="Languages"
+              title="Language"
               onClick={() => {}}
             />
-            <span className="text-darkBlue absolute right-4">English</span>
-          </div>
+            <span className="text-darkBlue absolute right-4 text-sm">
+              English
+            </span>
+          </span>
         </div>
 
         <p className="h-2 w-full bg-black/70  absolute"></p>

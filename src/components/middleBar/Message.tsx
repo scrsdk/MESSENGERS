@@ -413,7 +413,9 @@ const Message = (msgData: MessageModel & Props) => {
                 </div>
               </div>
             )}
-            <p dir="auto">{message}</p>
+            <p dir="auto" className="text-white">
+              {message}
+            </p>
           </div>
 
           <span

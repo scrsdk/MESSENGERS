@@ -45,7 +45,7 @@ const SignInForm = () => {
       <label
         className={`input ${
           !!errors?.phone ? "input-error" : "input-info"
-        } w-full  focus-within:outline-none mb-2 rounded-xl`}
+        } w-full  focus-within:outline-none mb-2 rounded-xl bg-inherit`}
       >
         <svg
           className="h-[1em] opacity-50"
@@ -84,7 +84,7 @@ const SignInForm = () => {
       <label
         className={`input ${
           !!errors?.password ? "input-error" : "input-info"
-        } w-full  focus-within:outline-none mb-2 rounded-xl`}
+        } w-full  focus-within:outline-none mb-2 rounded-xl bg-inherit`}
       >
         <svg
           className="h-[1em] opacity-50"

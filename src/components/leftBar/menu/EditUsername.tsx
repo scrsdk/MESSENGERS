@@ -88,7 +88,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
         ))
       }
     >
-      <div className="flex flex-col gap-2 pb-4 w-full  px-4">
+      <div className="flex flex-col gap-2 pb-4 w-full  px-4 text-white">
         <p className="text-darkBlue font-vazirRegular pt-1  font-bold text-base">
           Set username
         </p>
