@@ -11,16 +11,15 @@ const Modal = () => {
     isCheckedText,
     isChecked,
     setter,
-    onClose,
     onSubmit,
     resetModal,
   } = useModalStore((state) => state);
 
   return (
-    <dialog id="modal" className={`modal  ${isOpen && "modal-open"} `}>
-      <div className="modal-box bg-modalBg text-white">
-        <h3 className="font-vazirBold text-lg">{title}</h3>
-        <p className="pt-2 font-vazirRegular">{bodyText}</p>
+    <dialog id="modal" className={`modal  ${isOpen && "modal-open"} z-9999`}>
+      <div className="modal-box bg-modalBg text-white  z-9999">
+        <h3 className="font-vazirBold text-base">{title}</h3>
+        <p className="pt-2 w-full font-vazirRegular text-sm ">{bodyText}</p>
 
         {Boolean(isCheckedText?.length) && (
           <label
@@ -34,7 +33,7 @@ const Modal = () => {
               onChange={() => {
                 setter({ isChecked: !isChecked });
               }}
-              className="checkbox checkbox-xs checkbox-info mb-1 "
+              className="checkbox checkbox-xs rounded-sm checkbox-info mb-1 "
             />
             <span className="text-sm">{isCheckedText}</span>
           </label>
@@ -46,7 +45,6 @@ const Modal = () => {
             variant="ghost"
             color="neutral"
             onClick={() => {
-              onClose!();
               resetModal!();
             }}
           >

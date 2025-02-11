@@ -11,7 +11,6 @@ const defaultModalData = {
   isChecked: false,
   msgData: null,
   onSubmit: () => {},
-  onClose: () => {},
 };
 
 interface Props {
@@ -33,7 +32,6 @@ interface Props {
   okText?: string;
   cancelText?: string;
   onSubmit: () => void;
-  onClose?: () => void;
   resetModal?: () => void;
 }
 

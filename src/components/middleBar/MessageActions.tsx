@@ -10,7 +10,14 @@ import {
 import { IoArrowBackOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LuPin } from "react-icons/lu";
-import { RefObject, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  RefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import useSockets from "@/store/useSockets";
 import useUserStore from "@/store/userStore";
 import User from "@/models/user";
@@ -34,6 +41,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     PlayedByUsersData[]
   >([]);
   const [dropDownPosition, setDropDownPosition] = useState({ top: 0 });
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const {
     setter: modalSetter,
@@ -50,6 +58,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
   }, [msgData?.roomID]);
 
   const onClose = useCallback(() => {
+    setIsDropDownOpen(false);
     modalSetter((prev) => ({ ...prev, msgData: null }));
   }, [modalSetter]);
 
@@ -59,7 +68,6 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
   }, [msgData, onClose]);
 
   const deleteMessage = useCallback(() => {
-    onClose();
     modalSetter((prev) => ({
       ...prev,
       isOpen: true,
@@ -78,9 +86,10 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
           msgID: msgData?._id,
           roomID: msgData?.roomID,
         });
+        onClose();
       },
     }));
-    //TODO پاکش کن
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [msgData, isChecked, roomSocket]);
 
@@ -124,7 +133,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     };
   }, [roomSocket, msgData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const chatContainer = document.getElementById("chatContainer");
     const messageRefRect = messageRef.current?.getBoundingClientRect();
     const chatContainerRect = chatContainer?.getBoundingClientRect();
@@ -275,13 +284,18 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     ]
   );
 
+  useEffect(() => {
+    if (Boolean(msgData)) {
+      setIsDropDownOpen(true);
+    }
+  }, [msgData]);
   return (
     <>
       <DropDown
         button={<></>}
         dropDownItems={dropDownItems}
         setIsOpen={onClose}
-        isOpen={Boolean(msgData)}
+        isOpen={Boolean(msgData && isDropDownOpen)}
         classNames={`h-fit transition-all duration-300 ${
           isCollapsed ? "w-52" : "w-40"
         } ${isFromMe ? "right-[65%]" : "left-[65%]"}`}
