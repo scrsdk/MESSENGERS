@@ -27,7 +27,7 @@ const SearchPage = ({ closeSearch }: Props) => {
   }, []);
 
   useEffect(() => {
-    clearTimeout(timer.current!);
+    if (timer.current) clearTimeout(timer.current);
 
     const trimmedQuery = searchQuery.trim();
 
@@ -69,7 +69,7 @@ const SearchPage = ({ closeSearch }: Props) => {
       onKeyUp={(e) => e.key == "Escape" && closeSearch()}
       className={`text-white fixed  w-full md:block md:w-[40%] lg:w-[35%] ${
         isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
-      }  h-full inset-0 overflow-auto bg-leftBarBg z-50 transition-all`}
+      }  h-full inset-0 overflow-auto bg-leftBarBg transition-all z-40`}
     >
       <div className="flex sticky top-0 gap-3 bg-inherit items-center justify-between w-full  px-2 py-4">
         <IoMdArrowRoundBack

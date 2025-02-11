@@ -100,7 +100,7 @@ const RoomDetails = () => {
         data._id == roomID
     );
 
-    const roomSelected: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+    const roomSelected: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id],
       avatar,
       createdAt: Date.now().toString(),
@@ -113,7 +113,6 @@ const RoomDetails = () => {
       participants: [myData, selectedRoomData] as (string | User)[],
       type: "private",
       updatedAt: Date.now().toString(),
-      _id,
     };
     if (roomHistory) {
       roomSocket?.emit("joining", roomHistory._id);
@@ -185,7 +184,7 @@ const RoomDetails = () => {
           )}
 
           <div className="flex justify-center flex-col gap-1">
-            <h3 className="font-bold text-[16px] font-vazirBold text-xl line-clamp-1 overflow-ellipsis">
+            <h3 className="font-bold text-[16px] font-vazirBold text-xl line-clamp-1 text-ellipsis">
               {name}
             </h3>
 

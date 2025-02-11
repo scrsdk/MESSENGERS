@@ -37,7 +37,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+    const selectedRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
       avatar: avatar!,
       createdAt: Date.now().toString(),
@@ -50,7 +50,6 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
       participants: [myData, roomData] as string[] | User[],
       type: "private",
       updatedAt: Date.now().toString(),
-      _id: _id!,
     };
 
     roomSocket?.emit(
@@ -81,7 +80,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
         </div>
       )}
       <div className="flex flex-col justify-between  w-full py-2">
-        <p className="text-base font-vazirBold line-clamp-1 overflow-ellipsis">
+        <p className="text-base font-vazirBold line-clamp-1 text-ellipsis">
           {name}
         </p>
 

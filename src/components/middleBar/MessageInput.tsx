@@ -230,28 +230,23 @@ const MessageInput = ({
           replayData?._id || editData?._id
             ? "opacity-100 h-12 py-1"
             : "opacity-0 h-0"
-        } flex justify-between border-b border-chatBg duration-initial transition-all items-center gap-3 px-2 line-clamp-1 overflow-ellipsis absolute bg-leftBarBg w-full z-20`}
-        style={{
-          bottom: isEmojiOpen
-            ? (inputBoxRef.current?.clientHeight || 0) + 300
-            : inputBoxRef.current?.clientHeight,
-        }}
+        } flex justify-between border-b border-chatBg duration-initial transition-all items-center gap-3 px-2 line-clamp-1 text-ellipsis  bg-leftBarBg w-full z-20`}
       >
-        <div className="flex items-center gap-4 line-clamp-1 overflow-ellipsis">
+        <div className="flex items-center gap-4 line-clamp-1 text-ellipsis">
           {editData ? (
             <MdModeEditOutline className="size-6 text-lightBlue" />
           ) : (
             <BsFillReplyFill className="size-6 text-lightBlue" />
           )}
           <div className="flex flex-col text-left">
-            <h4 className="text-lightBlue break-words overflow-ellipsis line-clamp-1 text-sm">
+            <h4 className="text-lightBlue break-words text-ellipsis line-clamp-1 text-sm">
               {replayData
                 ? `Reply to ${replayData.sender?.name}`
                 : editData?.voiceData
                 ? "Edit Caption"
                 : "Edit Message"}
             </h4>
-            <p className="line-clamp-1 text-xs text-white/60 break-words overflow-ellipsis">
+            <p className="line-clamp-1 text-xs text-white/60 break-words text-ellipsis">
               {replayData?.voiceData
                 ? "Voice message"
                 : replayData?.message ?? editData?.message}
@@ -273,12 +268,12 @@ const MessageInput = ({
             {isEmojiOpen ? (
               <FaRegKeyboard
                 onClick={() => setIsEmojiOpen(false)}
-                className="cursor-pointer size-6 pr-0.5"
+                className="cursor-pointer size-6 mr-0.5"
               />
             ) : (
               <BsEmojiSmile
                 onClick={() => setIsEmojiOpen(true)}
-                className="cursor-pointer size-6 pr-0.5"
+                className="cursor-pointer size-6 mr-0.5"
               />
             )}
             <textarea
@@ -336,11 +331,11 @@ const MessageInput = ({
       </div>
 
       {isEmojiOpen && (
-        <Suspense fallback={null}>
+        <Suspense>
           <EmojiPicker
             open={isEmojiOpen}
             theme={Theme.DARK}
-            height={300}
+            height={270}
             width="100%"
             style={{
               backgroundColor: "#17212B",
