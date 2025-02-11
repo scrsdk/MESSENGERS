@@ -10,6 +10,7 @@ const deleteFile = async (fileUrl: string) => {
     const response = await axios.delete("/api/file/delete", {
       data: { fileName },
       headers: { "Content-Type": "application/json" },
+      withCredentials: true,
     });
 
     if (response.status !== 200) throw new Error(response.data.message);

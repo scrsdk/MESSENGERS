@@ -2,7 +2,6 @@ import toaster from "../Toaster";
 
 const downloadFile = async (fileUrl: string) => {
   try {
-    console.log(fileUrl);
     const response = await fetch(fileUrl);
 
     if (!response.ok) throw new Error("Failed to download file");
