@@ -82,7 +82,9 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
       const socket = useSockets.getState().rooms;
       const webPImage = await convertToWebP(uploadedImageFile!);
-      const uploadedImageUrl = await uploadFile(webPImage);
+      const uploadedImageUrl = await uploadFile(
+        webPImage ? webPImage : uploadedImageFile!
+      );
 
       socket?.emit("updateUserData", {
         userID: _id,
