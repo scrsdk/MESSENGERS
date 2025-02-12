@@ -53,7 +53,7 @@ const SearchResultCard = (
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
+    const selectedRoom: Omit<Room, "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
       avatar: avatar ? avatar : "",
       createdAt: Date.now().toString(),
@@ -66,10 +66,8 @@ const SearchResultCard = (
       participants: [myData, roomData] as User[],
       type: "private",
       updatedAt: Date.now().toString(),
+      _id: _id ?? myData._id,
     };
-    console.log("roomHistory?._id", roomHistory?._id);
-    console.log("roomData?._id", roomData?._id);
-    console.log("_id", _id);
 
     roomSocket?.emit(
       "joining",
