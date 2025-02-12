@@ -133,7 +133,7 @@ const ChatContent = () => {
       {/* Chat Header */}
       <div
         id="chatContentHeader"
-        className="flex items-center justify-between h-17 p-2 sticky top-0 border-b border-white/5 bg-leftBarBg"
+        className="flex items-center justify-between h-17 p-2 fixed w-full top-0 border-b border-white/5 bg-leftBarBg"
         style={{ zIndex: "20" }}
       >
         <div className="flex items-center gap-5">
