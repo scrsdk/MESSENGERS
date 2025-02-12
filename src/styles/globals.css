@@ -6,10 +6,10 @@
 @theme {
   --color-chatBg: #0e1621;
   --color-leftBarBg: #17212b;
-  --color-darkGray: #777777;
-  --color-modalBg: #2f3341;
-  --color-darkBlue: #1566a3;
-  --color-lightBlue: #60cdff;
+  --color-darkGray: #8c8c8c;
+  --color-modalBg: #333333;
+  --color-darkBlue: #0088cc;
+  --color-lightBlue: #179cde;
   --color-voiceWaves: #60ccbb;
   --color-mainGreen: #6ccb5f;
 
@@ -61,6 +61,12 @@ body {
 @font-face {
   font-family: "vazirLight";
   src: url("../../public/fonts/Vazirmatn-Light.woff2");
+}
+.chatBackground {
+  background-color: #0e1621;
+  background-image: url("/shapes/space.svg");
+  background-size: 250px;
+  background-blend-mode: multiply;
 }
 
 .flex-center {

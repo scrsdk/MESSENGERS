@@ -14,7 +14,7 @@ import React, {
 import { BiSearch } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
 
-import ChatCard from "../modules/ChatCard";
+import ChatCard from "./ChatCard";
 import RoomSkeleton from "../modules/RoomSkeleton";
 import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
@@ -39,9 +39,18 @@ const LeftBar = () => {
   const { selectedRoom, setter, isRoomDetailsShown } = useGlobalStore(
     (state) => state
   );
+  const interactUser = useRef(false);
+
+  useEffect(() => {
+    document.addEventListener("click", () => (interactUser.current = true));
+
+    return () => {
+      document.addEventListener("click", () => (interactUser.current = true));
+    };
+  }, []);
 
   const playRingSound = useCallback(() => {
-    if (ringAudioRef.current) {
+    if (ringAudioRef.current && interactUser.current) {
       ringAudioRef.current.currentTime = 0;
       ringAudioRef.current.play();
     }
@@ -182,7 +191,7 @@ const LeftBar = () => {
         </div>
 
         <div
-          className="flex flex-col overflow-y-auto overflow-x-hidden h-[calc(100vh-5rem)] scroll-w-none w-full"
+          className="flex flex-col overflow-y-auto overflow-x-hidden scroll-w-none w-full"
           style={{ zIndex: 0 }}
         >
           {isPageLoaded ? (

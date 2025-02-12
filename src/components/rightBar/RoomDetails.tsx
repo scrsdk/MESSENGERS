@@ -100,7 +100,7 @@ const RoomDetails = () => {
         data._id == roomID
     );
 
-    const roomSelected: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
+    const roomSelected: Omit<Room, "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id],
       avatar,
       createdAt: Date.now().toString(),
@@ -113,6 +113,7 @@ const RoomDetails = () => {
       participants: [myData, selectedRoomData] as (string | User)[],
       type: "private",
       updatedAt: Date.now().toString(),
+      _id,
     };
     if (roomHistory) {
       roomSocket?.emit("joining", roomHistory._id);
@@ -159,7 +160,7 @@ const RoomDetails = () => {
         isRoomDetailsShown ? "xl:flex right-0" : "xl:hidden -right-full "
       }`}
     >
-      <div className="bg-chatBg p-3 relative">
+      <div className="bg-chatBg p-3 relative chatBackground">
         <div className="flex items-center justify-between w-full ">
           <IoClose
             onClick={closeRoomDetails}
@@ -172,9 +173,9 @@ const RoomDetails = () => {
           {avatar ? (
             <Image
               src={avatar}
-              className="cursor-pointer object-cover size-[60px] rounded-full"
-              width={60}
-              height={60}
+              className="cursor-pointer object-cover size-12 rounded-full"
+              width={48}
+              height={48}
               alt="avatar"
             />
           ) : (
@@ -184,11 +185,11 @@ const RoomDetails = () => {
           )}
 
           <div className="flex justify-center flex-col gap-1">
-            <h3 className="font-bold text-[16px] font-vazirBold text-xl line-clamp-1 text-ellipsis">
+            <h3 className="font-vazirBold text-base line-clamp-1 text-ellipsis">
               {name}
             </h3>
 
-            <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
+            <div className="text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
               {type == "private" ? (
                 onlineUsers.some((data) => {
                   if (data.userID == _id) return true;
@@ -199,7 +200,9 @@ const RoomDetails = () => {
                 )
               ) : (
                 `${participants?.length} members ${
-                  onlineUsersCount ? ", " + onlineUsersCount + " online" : ""
+                  type !== "channel" && onlineUsersCount
+                    ? ", " + onlineUsersCount + " online"
+                    : ""
                 }`
               )}
             </div>
@@ -268,7 +271,7 @@ const RoomDetails = () => {
         </div>
       </div>
 
-      {type !== "private" && (
+      {type === "group" && (
         <div className="border-t border-black/40  mt-6">
           {isLoading ? (
             <div className="flex-center mt-10">

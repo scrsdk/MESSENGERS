@@ -190,8 +190,8 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     >
       <Modal />
       <div className="relative text-white">
-        <div className="absolute px-4 inset-x-0 w-full">
-          <div className="flex items-center gap-3 my-3">
+        <div className="absolute px-4 inset-x-0 w-full ">
+          <div className="flex items-center gap-3 my-3 ">
             {
               <div
                 className={`flex-center relative size-14 ${

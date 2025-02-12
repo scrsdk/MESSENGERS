@@ -126,7 +126,10 @@ const ChatContent = () => {
   }, [rooms, handlePinMessage]);
 
   return (
-    <div data-aos="fade-right" className="relative h-dvh flex flex-col">
+    <div
+      data-aos="fade-right"
+      className="relative h-dvh flex flex-col chatBackground"
+    >
       {/* Chat Header */}
       <div
         id="chatContentHeader"
@@ -167,7 +170,8 @@ const ChatContent = () => {
               </h3>
 
               <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
-                {typings.length &&
+                {selectedRoom?.type !== "channel" &&
+                typings.length &&
                 typings.filter((tl) => tl !== myName).length ? (
                   <div className="text-lightBlue whitespace-normal line-clamp-1">
                     {typings.join(", ") +
@@ -188,7 +192,7 @@ const ChatContent = () => {
                     ) : (
                       participants.length +
                       " members " +
-                      (onlineMembersCount
+                      (selectedRoom?.type !== "channel" && onlineMembersCount
                         ? ", " + onlineMembersCount + " online"
                         : "")
                     )}

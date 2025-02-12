@@ -59,7 +59,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         isOpen ? "left-0" : "-left-full"
       } max-h-screen h-full overflow-auto duration-200 transition-all inset-y-0 z-9999 bg-leftBarBg text-white w-[80%] max-w-80 md:max-w-72 lg:max-w-80`}
     >
-      <div className="flex flex-col pt-4 px-4 gap-4 bg-chatBg pb-2">
+      <div className="flex flex-col pt-4 px-4 gap-4 bg-chatBg chatBackground pb-2">
         {avatar ? (
           <Image
             className={`size-15 bg-center object-cover rounded-full cursor-pointer`}
