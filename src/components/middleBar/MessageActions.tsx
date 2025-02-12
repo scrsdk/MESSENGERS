@@ -48,9 +48,10 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     msgData,
     isChecked,
   } = useModalStore((state) => state);
-  const { setter } = useGlobalStore((state) => state);
+  const { setter, selectedRoom } = useGlobalStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
   const myID = useUserStore((state) => state._id);
+  const isUserChannel = selectedRoom?.type === "channel" && !isFromMe;
 
   const roomData = useMemo(() => {
     const rooms = useUserStore.getState()?.rooms;
@@ -77,7 +78,6 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
       isCheckedText: "Also delete for others",
       onSubmit: async () => {
         const currentIsChecked = useModalStore.getState().isChecked;
-        console.log("currentIsChecked", currentIsChecked);
 
         if (msgData?.voiceData?.src && currentIsChecked) {
           await deleteFile(msgData.voiceData.src);
@@ -140,7 +140,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     const messageRefRect = messageRef.current?.getBoundingClientRect();
     const chatContainerRect = chatContainer?.getBoundingClientRect();
 
-    if (messageRefRect && chatContainerRect) {
+    if (messageRefRect && chatContainerRect && !isUserChannel) {
       const newPosition =
         messageRefRect.bottom + 100 > chatContainerRect.bottom
           ? {
@@ -163,57 +163,58 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
 
       setDropDownPosition(newPosition);
     }
-  }, [messageRef, msgData?.voiceData?.playedBy?.length]);
+  }, [messageRef, msgData?.voiceData?.playedBy?.length, isUserChannel]);
 
   const dropDownItems = useMemo(
     () =>
       [
-        msgData?.voiceData?.playedBy?.length && {
-          title: isCollapsed ? (
-            "Back"
-          ) : (
-            <div className="flex relative justify-between items-center w-full ">
-              <span>Played by</span>
-              {playedByUsersData?.length > 0 && (
-                <span>
-                  {playedByUsersData.slice(0, 2).map((user, index) =>
-                    user.avatar ? (
-                      <Image
-                        key={user._id}
-                        width={24}
-                        height={24}
-                        loading="lazy"
-                        style={{
-                          position: "absolute",
-                          right: index === 1 ? "10px" : "0",
-                          top: 0,
-                          zIndex: index,
-                        }}
-                        className="object-cover size-6 rounded-full"
-                        src={user?.avatar}
-                        alt="user avatar"
-                      />
-                    ) : (
-                      <div
-                        className="flex-center text-md bg-blue-400 rounded-full p-1 pt-2 size-6"
-                        key={user._id}
-                      >
-                        {user.name[0]}
-                      </div>
-                    )
-                  )}
-                </span>
-              )}
-            </div>
-          ),
-          icon: isCollapsed ? (
-            <IoArrowBackOutline className="size-5  text-gray-400 mb-1" />
-          ) : (
-            <MdOutlinePlayCircle className="size-5  text-gray-400 mb-1" />
-          ),
-          onClick: () => setIsCollapsed((prev) => !prev),
-          itemClassNames: "border-b-3 border-chatBg",
-        },
+        msgData?.voiceData?.playedBy?.length &&
+          !isUserChannel && {
+            title: isCollapsed ? (
+              "Back"
+            ) : (
+              <div className="flex relative justify-between items-center w-full ">
+                <span>Played by</span>
+                {playedByUsersData?.length > 0 && (
+                  <span>
+                    {playedByUsersData.slice(0, 2).map((user, index) =>
+                      user.avatar ? (
+                        <Image
+                          key={user._id}
+                          width={24}
+                          height={24}
+                          loading="lazy"
+                          style={{
+                            position: "absolute",
+                            right: index === 1 ? "10px" : "0",
+                            top: 0,
+                            zIndex: index,
+                          }}
+                          className="object-cover size-6 rounded-full"
+                          src={user?.avatar}
+                          alt="user avatar"
+                        />
+                      ) : (
+                        <div
+                          className="flex-center text-md bg-blue-400 rounded-full p-1 pt-2 size-6"
+                          key={user._id}
+                        >
+                          {user.name[0]}
+                        </div>
+                      )
+                    )}
+                  </span>
+                )}
+              </div>
+            ),
+            icon: isCollapsed ? (
+              <IoArrowBackOutline className="size-5  text-gray-400 mb-1" />
+            ) : (
+              <MdOutlinePlayCircle className="size-5  text-gray-400 mb-1" />
+            ),
+            onClick: () => setIsCollapsed((prev) => !prev),
+            itemClassNames: "border-b-3 border-chatBg",
+          },
         ...(!isCollapsed
           ? [
               roomData?.type !== "channel" && {
@@ -283,6 +284,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
       deleteMessage,
       actionHandler,
       openProfile,
+      isUserChannel,
     ]
   );
 
@@ -301,7 +303,7 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
         classNames={`h-fit text-white transition-all duration-300 ${
           isCollapsed ? "w-52" : "w-40"
         } ${isFromMe ? "right-[65%]" : "left-[65%]"}`}
-        style={{ top: `${-40 + dropDownPosition.top}px` }}
+        style={{ top: `${!isUserChannel && -40 + dropDownPosition.top}px` }}
       />
       <Modal />
     </>

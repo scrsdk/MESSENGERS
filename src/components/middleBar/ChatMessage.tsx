@@ -85,12 +85,12 @@ const ChatMessage = ({
         messageContainerRef.current.scrollTop = track.scrollPos;
       }
     }, 100);
-  }, [messages, _id, roomMessageTrack]);
+  }, [_id, roomMessageTrack]);
 
   const checkIsLastMsgInView = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
       lastScrollPos.current = e.currentTarget.scrollTop;
-      const threshold = 5;
+      const threshold = 10;
       const isInView =
         e.currentTarget.scrollHeight -
           e.currentTarget.scrollTop -
@@ -220,7 +220,7 @@ const ChatMessage = ({
       onScroll={checkIsLastMsgInView}
       ref={messageContainerRef}
       id="chatContainer"
-      className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none ${
+      className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none  ${
         pinnedMessages?.length ? "pt-12" : ""
       }  ${messages.length <= 5 && "pt-52"}`}
     >

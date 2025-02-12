@@ -37,7 +37,7 @@ const JoinToRoom = ({ roomData, roomSocket, userID }: Props) => {
     <Button
       disabled={isLoading}
       onClick={joinRoom}
-      className="bg-darkBlue min-h-10 w-full text-base cursor-pointer"
+      className="bg-darkBlue min-h-12 w-full text-base cursor-pointer"
     >
       {!isLoading ? "Join" : <Loading classNames="text-white" />}
     </Button>

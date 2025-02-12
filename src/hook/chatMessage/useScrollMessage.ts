@@ -16,6 +16,7 @@ const useScrollMessage = ({
 
   const manageScroll = useCallback(() => {
     if (!messages) return;
+
     if (messages.length > prevMessagesLength.current) {
       const isFromMe =
         messages?.length && messages[messages.length - 1]?.sender?._id === myID;

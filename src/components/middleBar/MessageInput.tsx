@@ -323,7 +323,7 @@ const MessageInput = ({
         ) : (
           <div
             onClick={() => setIsMuted((prev) => !prev)}
-            className="absolute cursor-pointer flex items-center justify-center pt-3 text-center"
+            className="absolute cursor-pointer flex items-center justify-center pt-3 text-center w-full mb-1"
           >
             {isMuted ? "Unmute" : "Mute"}
           </div>

@@ -7,7 +7,7 @@ import {
 } from "@/utils";
 import { FaPlay } from "react-icons/fa";
 import { FaPause, FaArrowDown } from "react-icons/fa6";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoEye } from "react-icons/io5";
 import { TiPin } from "react-icons/ti";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
@@ -51,30 +51,46 @@ const Message = (msgData: MessageModel & Props) => {
     voiceData: voiceDataProp,
     stickyDate,
   } = msgData;
-  //Calculate whether the message is the last message from the current sender.
-  const isLastMessageFromUser = useMemo(
-    () => !nextMessage || nextMessage.sender._id !== sender._id,
-    [nextMessage, sender]
-  );
+
+  const [isMounted, setIsMounted] = useState(false);
+  const [voiceCurrentTime, setVoiceCurrentTime] = useState(0);
+
+  const messageRef = useRef<HTMLDivElement | null>(null);
+  const animationRef = useRef<number | null>(null);
 
   const { rooms } = useSockets((state) => state);
   const { setter: modalSetter, msgData: modalMsgData } = useModalStore(
     (state) => state
   );
-  const { setter } = useGlobalStore((state) => state);
-
-  const messageRef = useRef<HTMLDivElement | null>(null);
-
-  //Check if the message was sent from me
-  const isFromMe = useMemo(() => sender?._id === myId, [sender, myId]);
-
+  const { setter, selectedRoom } = useGlobalStore((state) => state);
   const isInViewport = useOnScreen(messageRef);
+
+  //Calculate whether the message is the last message from the current sender.
+  const isLastMessageFromUser = useMemo(
+    () => !nextMessage || nextMessage.sender._id !== sender._id,
+    [nextMessage, sender]
+  );
+  // Check if the message was sent from me
+  const isFromMe = useMemo(() => sender?._id === myId, [sender, myId]);
+  const isChannel = useMemo(() => {
+    return selectedRoom?.type === "channel";
+  }, [selectedRoom?.type]);
+  const isMeJoined = useMemo(
+    () =>
+      selectedRoom?.participants.find((user) => user === myId) ||
+      selectedRoom?.admins.includes(myId) ||
+      selectedRoom?.creator === myId,
+    [
+      myId,
+      selectedRoom?.admins,
+      selectedRoom?.creator,
+      selectedRoom?.participants,
+    ]
+  );
+  const canMessageAction = isMeJoined && modalMsgData?._id === _id;
+
   const messageTime = useMemo(() => getTimeFromDate(createdAt), [createdAt]);
   const stickyDates = useMemo(() => dateString(createdAt), [createdAt]);
-
-  const [isMounted, setIsMounted] = useState(false);
-  const [voiceCurrentTime, setVoiceCurrentTime] = useState(0);
-  const animationRef = useRef<number | null>(null);
 
   // Get voice info
   const {
@@ -297,7 +313,7 @@ const Message = (msgData: MessageModel & Props) => {
         } ${isMounted ? "" : "opacity-0 scale-0"}`}
       >
         {/* Show sender avatar in received messages */}
-        {!isFromMe && !isPv && isLastMessageFromUser && (
+        {!isFromMe && !isPv && isLastMessageFromUser && !isChannel && (
           <div onClick={openProfile} className="cursor-pointer ml-1">
             {sender.avatar ? (
               <div className="chat-image avatar">
@@ -329,20 +345,22 @@ const Message = (msgData: MessageModel & Props) => {
                 ? `${
                     !isLastMessageFromUser ? "rounded-br-md col-start-1" : ""
                   } ${
-                    modalMsgData?._id === _id ? "bg-darkBlue/70" : "bg-darkBlue"
+                    canMessageAction ? "bg-darkBlue/60" : "bg-darkBlue"
                   } rounded-bl-xl rounded-br-lg px-1`
                 : `${
-                    modalMsgData?._id === _id ? "bg-white/5" : "bg-white/10"
+                    canMessageAction ? "bg-gray-800/60" : "bg-gray-800"
                   } pr-1 rounded-br-xl pl-1`
             }
             ${
               !isLastMessageFromUser &&
               !isFromMe &&
-              `${!isPv ? "ml-9" : "ml-0"} rounded-bl-md col-start-2`
+              `${
+                !isPv && !isChannel ? `ml-9` : "ml-0"
+              } rounded-bl-md col-start-2`
             }
             ${isLastMessageFromUser ? "chat-bubble" : ""}`}
         >
-          {modalMsgData?._id === _id && (
+          {canMessageAction && (
             <MessageActions isFromMe={isFromMe} messageRef={messageRef} />
           )}
           {!isFromMe && !isPv && (
@@ -419,10 +437,16 @@ const Message = (msgData: MessageModel & Props) => {
           </div>
 
           <span
-            className={`flex items-end justify-end gap-1 absolute bottom-0 right-1 w-full text-sm ${
+            className={`flex items-end justify-end gap-1.5 absolute bottom-0 right-1 w-full text-sm ${
               isFromMe ? "text-[#B7D9F3]" : "text-darkGray"
             } text-right`}
           >
+            {isChannel && (
+              <div className="flex items-end text-[10px]">
+                <IoEye size={14} className="mb-[1.2px] mr-[2px]" />
+                {seen.length > 0 ? seen.length : ""}
+              </div>
+            )}
             {msgData?.pinnedAt && <TiPin className="size-4" />}
             <p
               className={`whitespace-nowrap text-[10px] ${!isFromMe && "pr-1"}`}
@@ -430,19 +454,20 @@ const Message = (msgData: MessageModel & Props) => {
               {isEdited && "edited "} {messageTime}
             </p>
             {isFromMe &&
+              !isChannel &&
               (seen.length ? (
                 <Image
                   src="/shapes/seen.svg"
                   width={15}
                   height={15}
-                  className="size-[15px] mb-0.5 duration-500"
+                  className="size-4 mb-0.5 duration-500"
                   alt="seen"
                 />
               ) : (
                 <IoMdCheckmark
                   width={15}
                   height={15}
-                  className="size-[15px] mb-0.5 rounded-full bg-center duration-500"
+                  className="size-4 mb-0.5 rounded-full bg-center duration-500"
                 />
               ))}
           </span>
