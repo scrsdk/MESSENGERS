@@ -138,9 +138,18 @@ io.on("connection", (socket) => {
   socket.on("deleteMsg", async ({ forAll, msgID, roomID }) => {
     if (forAll) {
       io.to(roomID).emit("deleteMsg", msgID);
+      const userID = onlineUsers.find((ud) => ud.socketID == socket.id)?.userID;
 
       await MessageSchema.findOneAndDelete({ _id: msgID });
-      io.to(roomID).emit("updateLastMsgData", { msgData: null, roomID });
+
+      const lastMsg = await MessageSchema.findOne({
+        roomID: roomID,
+        hideFor: { $nin: [userID] },
+      }).sort({ createdAt: -1 });
+
+      if (lastMsg) {
+        io.to(roomID).emit("updateLastMsgData", { msgData: lastMsg, roomID });
+      }
 
       await RoomSchema.findOneAndUpdate(
         { _id: roomID },
@@ -159,6 +168,15 @@ io.on("connection", (socket) => {
           }
         );
       }
+
+      const lastMsg = await MessageSchema.findOne({
+        roomID: roomID,
+        hideFor: { $nin: [userID] },
+      }).sort({ createdAt: -1 });
+
+      if (lastMsg) {
+        socket.emit("updateLastMsgData", { msgData: lastMsg, roomID });
+      }
     }
   });
 
@@ -168,10 +186,19 @@ io.on("connection", (socket) => {
       { _id: msgID },
       { message: editedMsg, isEdited: true }
     ).lean();
-    io.to(roomID).emit("updateLastMsgData", {
-      roomID,
-      msgData: { ...updatedMsgData, message: editedMsg },
-    });
+
+    if (!updatedMsgData) return;
+
+    const lastMsg = await MessageSchema.findOne({ roomID })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    if (lastMsg && lastMsg._id.toString() === msgID) {
+      io.to(roomID).emit("updateLastMsgData", {
+        roomID,
+        msgData: { ...updatedMsgData, message: editedMsg },
+      });
+    }
   });
 
   socket.on("seenMsg", async (seenData) => {
