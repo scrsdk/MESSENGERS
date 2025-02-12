@@ -198,7 +198,7 @@ const ChatCard = ({
     >
       {roomID === myID ? (
         <div
-          className={`size-11 bg-cyan-700  rounded-full flex-center text-white text-2xl`}
+          className={`size-11 bg-cyan-700 shrink-0 rounded-full flex-center text-white text-2xl`}
         >
           <FiBookmark />
         </div>

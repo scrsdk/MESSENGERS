@@ -1,6 +1,6 @@
 import useUserStore from "@/store/userStore";
 import { useEffect, useRef, useState } from "react";
-import ChatFolders from "../modules/ChatFolders";
+import ChatFolders from "./ChatFolders";
 
 const folders = ["all", "private", "group", "channel", "bot"];
 

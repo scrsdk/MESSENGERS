@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";
-import ScrollToBottom from "../templates/ScrollToBottom";
+import ScrollToBottom from "../modules/ScrollToBottom";
 import { IoIosArrowDown } from "react-icons/io";
 import useScrollChange from "@/hook/useScrollChange";
 import MessageModel from "@/models/message";

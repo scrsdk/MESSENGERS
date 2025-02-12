@@ -5,7 +5,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toaster } from "@/utils";
-import RoomCard from "../modules/RoomCard";
+import RoomCard from "../leftBar/RoomCard";
 import { copyText as copyFn } from "@/utils";
 import User from "@/models/user";
 import useGlobalStore from "@/store/globalStore";

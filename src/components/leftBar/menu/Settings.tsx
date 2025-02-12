@@ -26,8 +26,8 @@ import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import DropDown from "@/components/modules/ui/DropDown";
 import LineSeparator from "@/components/modules/LineSeparator";
-import Modal from "@/components/modules/Modal";
 import Loading from "@/components/modules/ui/Loading";
+import Modal from "@/components/modules/ui/Modal";
 
 interface Props {
   getBack: () => void;

@@ -21,7 +21,7 @@ import {
 import useSockets from "@/store/useSockets";
 import useUserStore from "@/store/userStore";
 import User from "@/models/user";
-import Modal from "../modules/Modal";
+import Modal from "../modules/ui/Modal";
 import DropDown from "../modules/ui/DropDown";
 import useModalStore from "@/store/modalStore";
 import useGlobalStore from "@/store/globalStore";

@@ -12,7 +12,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import MessageSender from "./MessageInput";
-import JoinToRoom from "../templates/JoinToRoom";
+import JoinToRoom from "./JoinToRoom";
 import useUserStore from "@/store/userStore";
 import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";

@@ -267,7 +267,10 @@ const MessageInput = ({
           <>
             {isEmojiOpen ? (
               <FaRegKeyboard
-                onClick={() => setIsEmojiOpen(false)}
+                onClick={() => {
+                  setIsEmojiOpen(false);
+                  inputRef.current?.focus();
+                }}
                 className="cursor-pointer size-6 mr-0.5"
               />
             ) : (
@@ -335,7 +338,7 @@ const MessageInput = ({
           <EmojiPicker
             open={isEmojiOpen}
             theme={Theme.DARK}
-            height={270}
+            height={260}
             width="100%"
             style={{
               backgroundColor: "#17212B",

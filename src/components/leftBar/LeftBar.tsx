@@ -15,7 +15,7 @@ import { BiSearch } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 import ChatCard from "./ChatCard";
-import RoomSkeleton from "../modules/RoomSkeleton";
+import RoomSkeleton from "../modules/ui/RoomSkeleton";
 import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
 import { registerSW } from "@/utils";
@@ -25,7 +25,7 @@ import NotificationPermission from "@/hook/NotificationPermission";
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
 const SearchPage = lazy(() => import("@/components/leftBar/SearchPage"));
-const Modal = lazy(() => import("../modules/Modal"));
+const Modal = lazy(() => import("../modules/ui/Modal"));
 
 const LeftBar = () => {
   const [filterBy, setFilterBy] = useState("all");
