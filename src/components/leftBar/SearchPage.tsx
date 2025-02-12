@@ -3,9 +3,9 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "@/store/userStore";
 import Room from "@/models/room";
-import SearchResultCard from "../modules/SearchResultCard";
+import SearchResultCard from "./SearchResultCard";
 import User from "@/models/user";
-import RoomSkeleton from "../modules/RoomSkeleton";
+import RoomSkeleton from "../modules/ui/RoomSkeleton";
 import useGlobalStore from "@/store/globalStore";
 
 interface Props {
