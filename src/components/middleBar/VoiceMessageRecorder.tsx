@@ -33,6 +33,110 @@ const VoiceMessageRecorder = ({
     stream.getTracks().forEach((track) => track.stop());
   }, []);
 
+  const cancelRecording = useCallback(() => {
+    try {
+      if (mediaRecorderRef.current) {
+        const stream = mediaRecorderRef.current.stream;
+        if (stream) stopStream(stream);
+        mediaRecorderRef.current = null;
+      }
+    } catch (error) {
+      console.error("Error canceling recording:", error);
+    } finally {
+      setIsRecording(false);
+      isCancelledRef.current = true;
+      setIsLoading(false);
+      setTimer(0);
+    }
+  }, [stopStream]);
+
+  useEffect(() => {
+    if (!isRecording || isLoading) return setTimer(0);
+
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        timerRef.current = prev + 1;
+        return prev + 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRecording, isLoading]);
+
+  const formattedReplayData = useCallback(
+    () =>
+      replayData
+        ? {
+            targetID: replayData._id,
+            replayedTo: {
+              message: replayData.message,
+              msgID: replayData._id,
+              username: replayData.sender?.name,
+            },
+          }
+        : null,
+    [replayData]
+  );
+
+  const stopRecording = useCallback(() => {
+    try {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+        const stream = mediaRecorderRef.current.stream;
+        if (stream) stopStream(stream);
+        mediaRecorderRef.current = null;
+      }
+    } catch (error) {
+      console.error("Error stopping recording:", error);
+    } finally {
+      setIsRecording(false);
+      setIsLoading(false);
+      setTimer(0);
+    }
+  }, [stopStream]);
+
+  const sendVoiceMessage = useCallback(
+    (voiceSrc: string, voiceDuration: number) => {
+      const socket = useSockets.getState().rooms;
+      const myData = useUserStore.getState();
+      const selectedRoom = useGlobalStore.getState().selectedRoom;
+
+      const voiceData = {
+        src: voiceSrc,
+        duration: voiceDuration,
+        playedBy: [],
+      };
+
+      socket?.emit("newMessage", {
+        roomID: selectedRoom?._id,
+        message: "",
+        sender: myData,
+        replayData: formattedReplayData,
+        voiceData,
+      });
+
+      socket?.on("newMessage", stopRecording);
+      closeEdit();
+      closeReplay();
+    },
+    [closeEdit, closeReplay, formattedReplayData, stopRecording]
+  );
+  const uploadVoice = useCallback(
+    async (voiceFile: File) => {
+      setIsLoading(true);
+      try {
+        const downloadUrl = await uploadFile(voiceFile);
+
+        sendVoiceMessage(downloadUrl, timerRef.current);
+      } catch (error) {
+        console.error("Upload failed:", error);
+        toaster(false, "Upload failed! Please try again.");
+        stopRecording();
+      }
+    },
+    [sendVoiceMessage, stopRecording]
+  );
+
   const startRecording = useCallback(async () => {
     if (!navigator.mediaDevices) {
       return toaster(false, "Your browser does not support voice recording!");
@@ -80,112 +184,7 @@ const VoiceMessageRecorder = ({
         "Microphone access denied! Please allow microphone permissions."
       );
     }
-    //TODO پاکش کن
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const stopRecording = useCallback(() => {
-    try {
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stop();
-        const stream = mediaRecorderRef.current.stream;
-        if (stream) stopStream(stream);
-        mediaRecorderRef.current = null;
-      }
-    } catch (error) {
-      console.error("Error stopping recording:", error);
-    } finally {
-      setIsRecording(false);
-      setIsLoading(false);
-      setTimer(0);
-    }
-  }, [stopStream]);
-
-  const cancelRecording = useCallback(() => {
-    try {
-      if (mediaRecorderRef.current) {
-        const stream = mediaRecorderRef.current.stream;
-        if (stream) stopStream(stream);
-        mediaRecorderRef.current = null;
-      }
-    } catch (error) {
-      console.error("Error canceling recording:", error);
-    } finally {
-      setIsRecording(false);
-      isCancelledRef.current = true;
-      setIsLoading(false);
-      setTimer(0);
-    }
-  }, [stopStream]);
-
-  useEffect(() => {
-    if (!isRecording || isLoading) return setTimer(0);
-
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        timerRef.current = prev + 1;
-        return prev + 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isRecording, isLoading]);
-
-  //TODO پاکش کن
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const formattedReplayData = replayData
-    ? {
-        targetID: replayData._id,
-        replayedTo: {
-          message: replayData.message,
-          msgID: replayData._id,
-          username: replayData.sender?.name,
-        },
-      }
-    : null;
-
-  const sendVoiceMessage = useCallback(
-    (voiceSrc: string, voiceDuration: number) => {
-      const socket = useSockets.getState().rooms;
-      const myData = useUserStore.getState();
-      const selectedRoom = useGlobalStore.getState().selectedRoom;
-
-      const voiceData = {
-        src: voiceSrc,
-        duration: voiceDuration,
-        playedBy: [],
-      };
-
-      socket?.emit("newMessage", {
-        roomID: selectedRoom?._id,
-        message: "",
-        sender: myData,
-        replayData: formattedReplayData,
-        voiceData,
-      });
-
-      socket?.on("newMessage", stopRecording);
-      closeEdit();
-      closeReplay();
-    },
-    [closeEdit, closeReplay, formattedReplayData, stopRecording]
-  );
-
-  const uploadVoice = useCallback(
-    async (voiceFile: File) => {
-      setIsLoading(true);
-      try {
-        const downloadUrl = await uploadFile(voiceFile);
-
-        sendVoiceMessage(downloadUrl, timerRef.current);
-      } catch (error) {
-        console.error("Upload failed:", error);
-        toaster(false, "Upload failed! Please try again.");
-        stopRecording();
-      }
-    },
-    [sendVoiceMessage, stopRecording]
-  );
+  }, [uploadVoice]);
 
   return (
     <div className="max-w-fit size-6 z-10">

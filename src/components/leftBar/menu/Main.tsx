@@ -12,6 +12,7 @@ import { IoCallOutline, IoSettingsOutline } from "react-icons/io5";
 import { LuUsers } from "react-icons/lu";
 import { RiUser3Line } from "react-icons/ri";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
+import { MdOutlineLockClock } from "react-icons/md";
 
 interface Props {
   updateRoute: (route: string) => void;
@@ -120,23 +121,33 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
 
         <LineSeparator />
 
-        <MenuItem
-          icon={<RiUser3Line />}
-          title="Contacts"
-          onClick={() => {
-            closeMenu();
-            toaster(true, "Coming soon..!");
-          }}
-        />
+        <div className="flex item-center relative">
+          <MenuItem
+            icon={<RiUser3Line />}
+            title="Contacts"
+            onClick={() => {
+              closeMenu();
+            }}
+          />
+          <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+            <MdOutlineLockClock fill="teal" size={15} />
+            <span>Coming Soon!</span>
+          </span>
+        </div>
 
-        <MenuItem
-          icon={<IoCallOutline />}
-          title="Calls"
-          onClick={() => {
-            closeMenu();
-            toaster(true, "Coming soon..!");
-          }}
-        />
+        <div className="flex item-center relative">
+          <MenuItem
+            icon={<IoCallOutline />}
+            title="Calls"
+            onClick={() => {
+              closeMenu();
+            }}
+          />
+          <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+            <MdOutlineLockClock fill="teal" size={15} />
+            <span>Coming Soon!</span>
+          </span>
+        </div>
 
         <MenuItem
           icon={<CiBookmark />}

@@ -1,7 +1,6 @@
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdDone } from "react-icons/md";
-import { MdAddAPhoto } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { ChangeEvent, Suspense, useMemo, useState } from "react";
 import Image from "next/image";
@@ -15,6 +14,7 @@ import ContactCard from "../modules/ContactCard";
 import Button from "../modules/ui/Button";
 import Loading from "../modules/ui/Loading";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import { TbCameraPlus } from "react-icons/tb";
 
 type Props = {
   roomType: Room["type"];
@@ -206,7 +206,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
                 onChange={getImgUrl}
               />
               <label htmlFor="imgUpload">
-                <MdAddAPhoto className="flex-center cursor-pointer bg-darkBlue rounded-full size-14 p-3.5" />
+                <TbCameraPlus className="flex-center cursor-pointer bg-darkBlue rounded-full size-14 p-3.5" />
               </label>
             </div>
           )}

@@ -112,9 +112,9 @@ const Message = (msgData: MessageModel & Props) => {
           if (i < activeWaveIndex) {
             elem.style.background = "white";
           } else if (i === activeWaveIndex) {
-            elem.style.background = `linear-gradient(to right, white ${partialFill}%, #68abed ${partialFill}%)`;
+            elem.style.background = `linear-gradient(to right, white ${partialFill}%, #4bbfff ${partialFill}%)`;
           } else {
-            elem.style.background = "#68abed";
+            elem.style.background = "#4bbfff";
           }
         }
       }
@@ -124,7 +124,7 @@ const Message = (msgData: MessageModel & Props) => {
       for (let i = 0; i < 25; i++) {
         const elem = document.getElementById(`${_id}${i}`);
         if (elem) {
-          elem.style.background = "#68abed";
+          elem.style.background = "#4bbfff";
         }
       }
     };
@@ -169,7 +169,14 @@ const Message = (msgData: MessageModel & Props) => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, voiceData, audioElem, _id, resetWaves, waveUpdater]);
+  }, [
+    _id,
+    audioElem,
+    resetWaves,
+    voiceData?._id,
+    voiceData?.duration,
+    waveUpdater,
+  ]);
 
   // Handler for playing/pausing audio
   const togglePlayVoice = useCallback(() => {

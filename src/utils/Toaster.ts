@@ -4,18 +4,23 @@ import { toast } from "react-toastify";
 const toaster = (
   status: boolean,
   message: string | ReactNode,
-  duration = 2000
+  duration = 3000
 ) => {
   toast[status ? "success" : "error"](message, {
-    position: "top-right",
+    position: "top-center",
     autoClose: duration,
     hideProgressBar: true,
     theme: "dark",
+    closeButton: false,
     style: {
+      textAlign: "left",
+      width: "fit-content",
+      top: "45px",
       backgroundColor: "#17212b",
       color: "#ffffff",
       fontSize: "15px",
       borderRadius: "10px",
+      opacity: "0.95",
     },
   });
 };

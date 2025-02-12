@@ -1,6 +1,6 @@
-import LeftBar from "../leftBar/LeftBar";
-import MiddleBar from "../middleBar/MiddleBar";
-import RightBar from "../rightBar/RightBar";
+import LeftBar from "./leftBar/LeftBar";
+import MiddleBar from "./middleBar/MiddleBar";
+import RightBar from "./rightBar/RightBar";
 
 const MainPage = () => {
   return (

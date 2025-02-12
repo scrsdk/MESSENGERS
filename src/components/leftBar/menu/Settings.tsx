@@ -1,15 +1,16 @@
-import { MdAddAPhoto, MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineLockClock } from "react-icons/md";
 import LeftBarContainer from "./LeftBarContainer";
-import { BsChat } from "react-icons/bs";
-import { CiLock } from "react-icons/ci";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GoBell, GoPencil } from "react-icons/go";
-import { IoChatbubbleEllipsesOutline, IoLogOutOutline } from "react-icons/io5";
+import {
+  IoChatbubbleEllipsesOutline,
+  IoLogOutOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
 
 import { TbCameraPlus } from "react-icons/tb";
 import { GoShieldCheck } from "react-icons/go";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { CiBatteryCharging } from "react-icons/ci";
 import { MdLanguage } from "react-icons/md";
 import Image from "next/image";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
@@ -28,6 +29,8 @@ import DropDown from "@/components/modules/ui/DropDown";
 import LineSeparator from "@/components/modules/LineSeparator";
 import Loading from "@/components/modules/ui/Loading";
 import Modal from "@/components/modules/ui/Modal";
+import { CgLock } from "react-icons/cg";
+import { FaRegFolderClosed } from "react-icons/fa6";
 
 interface Props {
   getBack: () => void;
@@ -50,7 +53,6 @@ const Settings = ({ getBack, updateRoute }: Props) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const avatarElem = () => {
     const inputElem = document.createElement("input");
 
@@ -228,13 +230,13 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           </div>
 
           <span className="absolute right-5 top-12 size-14 rounded-full cursor-pointer bg-darkBlue flex-center">
-            <MdAddAPhoto className="size-6" onClick={avatarElem} />
+            <TbCameraPlus className="size-6" onClick={avatarElem} />
           </span>
         </div>
 
         <div className="h-20"></div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-4">
           <p className="text-darkBlue font-vazirBold py-2 px-4 font-bold text-sm">
             Account
           </p>
@@ -288,35 +290,59 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             Settings
           </p>
 
-          <MenuItem
-            icon={<BsChat />}
-            title="Chat Settings"
-            onClick={() => {}}
-          />
+          <div className="flex item-center relative">
+            <MenuItem
+              icon={<IoSettingsOutline />}
+              title="General Settings"
+              onClick={() => {}}
+            />
+            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+              <MdOutlineLockClock fill="teal" size={15} />
+              <span>Coming Soon!</span>
+            </span>
+          </div>
 
           <LineSeparator />
 
-          <MenuItem
-            icon={<CiLock />}
-            title="Privacy and Security"
-            onClick={() => {}}
-          />
+          <div className="flex item-center relative">
+            <MenuItem
+              icon={<GoBell />}
+              title="Notifications"
+              onClick={() => {}}
+            />
+            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+              <MdOutlineLockClock fill="teal" size={15} />
+              <span>Coming Soon!</span>
+            </span>
+          </div>
 
           <LineSeparator />
 
-          <MenuItem
-            icon={<GoBell />}
-            title="Notifications and Sounds"
-            onClick={() => {}}
-          />
+          <div className="flex item-center relative">
+            <MenuItem
+              icon={<CgLock />}
+              title="Privacy and Security"
+              onClick={() => {}}
+            />
+            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+              <MdOutlineLockClock fill="teal" size={15} />
+              <span>Coming Soon!</span>
+            </span>
+          </div>
 
           <LineSeparator />
 
-          <MenuItem
-            icon={<CiBatteryCharging />}
-            title="Power Saving"
-            onClick={() => {}}
-          />
+          <div className="flex item-center relative">
+            <MenuItem
+              icon={<FaRegFolderClosed />}
+              title="Chat Folders"
+              onClick={() => {}}
+            />
+            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+              <MdOutlineLockClock fill="teal" size={15} />
+              <span>Coming Soon!</span>
+            </span>
+          </div>
 
           <LineSeparator />
 
@@ -350,7 +376,9 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           <MenuItem
             icon={<AiOutlineQuestionCircle />}
             title="Telegram FAQ"
-            onClick={() => {}}
+            onClick={() =>
+              window.open("https://telegram.org/faq?setln=en", "_blank")
+            }
           />
 
           <LineSeparator />
@@ -358,11 +386,13 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           <MenuItem
             icon={<GoShieldCheck />}
             title="Privacy Policy"
-            onClick={() => {}}
+            onClick={() =>
+              window.open("https://telegram.org/privacy/de?setln=en", "_blank")
+            }
           />
         </div>
 
-        <div className="w-full  pt-3 px-4 text-center bg-black/70">
+        <div className="w-full  py-5 px-4 text-center bg-black/70">
           Created with 💙 by{" "}
           <a
             target="_blank"
