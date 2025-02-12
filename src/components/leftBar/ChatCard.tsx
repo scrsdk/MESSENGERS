@@ -130,11 +130,7 @@ const ChatCard = ({
       msgData: Message;
       roomID: string;
     }) => {
-      if (
-        updatedRoomID === _id &&
-        new Date(msgData?.createdAt).getTime() >
-          new Date(lastMsgData?.createdAt).getTime()
-      ) {
+      if (updatedRoomID === _id) {
         setLastMsgData(msgData);
       }
     };
@@ -172,7 +168,6 @@ const ChatCard = ({
       rooms?.off("seenMsg", handleSeenMsg);
       rooms?.off("newMessage", handleNewMessage);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id, myID, rooms, selectedRoom?._id]);
 
   useEffect(() => {
