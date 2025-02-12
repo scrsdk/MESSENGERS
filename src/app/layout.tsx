@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
+import AosAnimation from "@/components/modules/ui/AosAnimation";
 export const metadata: Metadata = {
   title: "Telegram messenger",
   description: "FullStack NextJs Telegram messenger with socket.io",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <meta name="theme-color" content="#232735" />
       <body className="font-vazirRegular bg-leftBarBg h-full">
         <ToastContainer />
+        <AosAnimation />
         {children}
       </body>
     </html>
