@@ -19,6 +19,7 @@ import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaRegKeyboard } from "react-icons/fa6";
+import { scrollToMessage, toaster } from "@/utils";
 
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
@@ -229,23 +230,31 @@ const MessageInput = ({
           replayData?._id || editData?._id
             ? "opacity-100 h-12 py-1"
             : "opacity-0 h-0"
-        } flex justify-between border-b border-chatBg duration-initial transition-all items-center gap-3 px-2 line-clamp-1 text-ellipsis  bg-leftBarBg w-full z-20`}
+        } flex justify-between border-b border-chatBg duration-initial transition-all items-center gap-3 px-2 line-clamp-1 text-ellipsis  bg-leftBarBg w-full z-20 cursor-pointer`}
+        onClick={() => {
+          if (replayData?._id) {
+            scrollToMessage(replayData?._id, "smooth", "center");
+          }
+          if (editData?._id) {
+            scrollToMessage(editData?._id, "smooth", "center");
+          }
+        }}
       >
-        <div className="flex items-center gap-4 line-clamp-1 text-ellipsis">
+        <div className="flex items-center gap-3 line-clamp-1 text-ellipsis">
           {editData ? (
-            <MdModeEditOutline className="size-6 text-lightBlue" />
+            <MdModeEditOutline className="size-6 text-lightBlue min-w-fit" />
           ) : (
-            <BsFillReplyFill className="size-6 text-lightBlue" />
+            <BsFillReplyFill className="size-6 text-lightBlue min-w-fit" />
           )}
           <div className="flex flex-col text-left">
-            <h4 className="text-lightBlue break-words text-ellipsis line-clamp-1 text-sm">
+            <h4 className="text-lightBlue line-clamp-1 text-sm">
               {replayData
                 ? `Reply to ${replayData.sender?.name}`
                 : editData?.voiceData
                 ? "Edit Caption"
                 : "Edit Message"}
             </h4>
-            <p className="line-clamp-1 text-xs text-white/60 break-words text-ellipsis">
+            <p className="line-clamp-1 text-xs text-white/60">
               {replayData?.voiceData
                 ? "Voice message"
                 : replayData?.message ?? editData?.message}
@@ -253,13 +262,16 @@ const MessageInput = ({
           </div>
         </div>
         <IoMdClose
-          onClick={handleCloseReplyEdit}
-          className="size-7 transition-all cursor-pointer active:bg-red-500/[80%] active:rounded-full p-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCloseReplyEdit();
+          }}
+          className="size-7 min-w-fit transition-all cursor-pointer active:bg-red-500/[80%] active:rounded-full p-1"
         />
       </div>
 
       <div
-        className="flex items-center justify-between relative min-h-12 w-full md:px-2 px-3 gap-4 bg-leftBarBg duration-75 transition-all"
+        className="flex items-center justify-between relative min-h-12 w-full md:px-2 px-3 gap-3 bg-leftBarBg duration-75 transition-all"
         ref={inputBoxRef}
       >
         {canSendMessage ? (
@@ -282,6 +294,7 @@ const MessageInput = ({
               dir="auto"
               value={text}
               onChange={handleTextChange}
+              onContextMenu={(e) => e.stopPropagation()}
               onClick={() => setIsEmojiOpen(false)}
               onKeyUp={handleKeyUp}
               ref={inputRef}
@@ -292,6 +305,12 @@ const MessageInput = ({
               <MdAttachFile
                 data-aos="zoom-in"
                 className="size-7 cursor-pointer w-fit rotate-[215deg]"
+                onClick={() =>
+                  toaster(
+                    "info",
+                    "File upload feature is coming soon! Stay tuned for updates. 🚀"
+                  )
+                }
               />
             )}
             {editData?._id ? (
