@@ -5,6 +5,8 @@ import React, {
   useRef,
   useState,
   memo,
+  Suspense,
+  lazy,
 } from "react";
 import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";
@@ -17,7 +19,11 @@ import useScrollMessage from "@/hook/chatMessage/useScrollMessage";
 import useMessages from "@/hook/chatMessage/useMessages";
 import useTyping from "@/hook/chatMessage/useTyping";
 import useRoomEvents from "@/hook/chatMessage/useRoomEvents";
-import MessageList from "./MessageList";
+import Loading from "../modules/ui/Loading";
+const PinnedMessages = lazy(
+  () => import("@/components/middleBar/PinnedMessages")
+);
+const MessageList = lazy(() => import("./MessageList"));
 
 interface ChatMessageProps {
   setTypings: React.Dispatch<React.SetStateAction<string[]>>;
@@ -216,67 +222,76 @@ const ChatMessage = ({
   }, []);
 
   return (
-    <div
-      onScroll={checkIsLastMsgInView}
-      ref={messageContainerRef}
-      id="chatContainer"
-      className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none  ${
-        pinnedMessages?.length ? "pt-28" : "pt-16"
-      }  ${messages.length <= 5 && "pt-52"}`}
-    >
+    <>
+      <Suspense>
+        <PinnedMessages key={roomID} pinnedMessages={pinnedMessages} />
+      </Suspense>
+
       <div
-        onClick={() => {
-          const target = messageContainerRef.current?.querySelector(
-            `[data-date="${floatingDate}"]`
-          );
-          if (target) {
-            target.scrollIntoView({
+        onScroll={checkIsLastMsgInView}
+        ref={messageContainerRef}
+        id="chatContainer"
+        className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none`}
+      >
+        <div
+          onClick={() => {
+            const target = messageContainerRef.current?.querySelector(
+              `[data-date="${floatingDate}"]`
+            );
+            if (target) {
+              target.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          }}
+          className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-10 transform  ${
+            floatingDate ? "translate-y-1.5" : "-translate-y-5 !p-0"
+          }`}
+        >
+          {floatingDate}
+        </div>
+
+        <Suspense fallback={<Loading size="xl" />}>
+          <MessageList
+            messages={messages}
+            myID={myID}
+            type={type}
+            lastMsgRef={lastMsgRef}
+            setEditData={setEditData}
+            setReplayData={setReplayData}
+            pinMessage={pinMessage}
+          />
+        </Suspense>
+
+        <ScrollToBottom
+          count={notSeenMessages}
+          scrollToBottom={scrollToBottom}
+        />
+
+        <div
+          onClick={() =>
+            messageContainerRef.current?.scrollTo({
+              top: messageContainerRef.current.scrollHeight,
               behavior: "smooth",
-              block: "start",
-            });
+            })
           }
-        }}
-        className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-10 transform  ${
-          floatingDate ? "translate-y-1.5" : "-translate-y-5 !p-0"
-        }`}
-      >
-        {floatingDate}
+          className={`${
+            !notSeenMessages && canShow && !isLastMsgInView
+              ? "right-1.5"
+              : "-right-12"
+          } transition-all duration-300 size-10 absolute bottom-25 bg-[#2E323F] cursor-pointer rounded-full flex items-center justify-center`}
+        >
+          <IoIosArrowDown className="size-5 text-white" />
+        </div>
+        <audio
+          ref={ringAudioRef}
+          className="hidden invisible opacity-0"
+          src="/files/sfx.mp3"
+          controls={false}
+        ></audio>
       </div>
-
-      <MessageList
-        messages={messages}
-        myID={myID}
-        type={type}
-        lastMsgRef={lastMsgRef}
-        setEditData={setEditData}
-        setReplayData={setReplayData}
-        pinMessage={pinMessage}
-      />
-
-      <ScrollToBottom count={notSeenMessages} scrollToBottom={scrollToBottom} />
-
-      <div
-        onClick={() =>
-          messageContainerRef.current?.scrollTo({
-            top: messageContainerRef.current.scrollHeight,
-            behavior: "smooth",
-          })
-        }
-        className={`${
-          !notSeenMessages && canShow && !isLastMsgInView
-            ? "right-1.5"
-            : "-right-12"
-        } transition-all duration-300 size-10 absolute bottom-25 bg-[#2E323F] cursor-pointer rounded-full flex items-center justify-center`}
-      >
-        <IoIosArrowDown className="size-5 text-white" />
-      </div>
-      <audio
-        ref={ringAudioRef}
-        className="hidden invisible opacity-0"
-        src="/files/sfx.mp3"
-        controls={false}
-      ></audio>
-    </div>
+    </>
   );
 };
 

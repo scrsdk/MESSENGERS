@@ -98,6 +98,10 @@ const LeftBar = () => {
     registerSW();
     NotificationPermission();
     const handleContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target?.tagName === "TEXTAREA" || target?.tagName === "INPUT") {
+        return;
+      }
       e.preventDefault();
     };
     document.addEventListener("contextmenu", handleContextMenu);

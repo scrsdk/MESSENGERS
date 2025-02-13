@@ -13,6 +13,8 @@ import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import Loading from "../modules/ui/Loading";
 import Room from "@/models/room";
+import DropDown from "../modules/ui/DropDown";
+import { MdOutlineLockClock } from "react-icons/md";
 
 const RoomDetails = () => {
   const [isCopied, setIsCopied] = useState(false);
@@ -28,6 +30,8 @@ const RoomDetails = () => {
     mockSelectedRoomData,
     onlineUsers,
   } = useGlobalStore((state) => state) || {};
+  const [showRoomDetailsOptions, setShowRoomDetailsOptions] = useState(false);
+
   const myData = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
 
@@ -71,7 +75,7 @@ const RoomDetails = () => {
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        toaster(false, error);
+        toaster("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -161,12 +165,33 @@ const RoomDetails = () => {
       }`}
     >
       <div className="bg-chatBg p-3 relative chatBackground">
-        <div className="flex items-center justify-between w-full ">
+        <div className="flex items-center justify-between w-full py-1 ">
           <IoClose
             onClick={closeRoomDetails}
             className="size-5 cursor-pointer"
           />
-          <PiDotsThreeVerticalBold className="size-5 cursor-pointer" />
+          <div className="flex items-center gap-2 justify-end">
+            <DropDown
+              button={
+                <PiDotsThreeVerticalBold
+                  onClick={() => setShowRoomDetailsOptions(true)}
+                  size={20}
+                  className="cursor-pointer mr-2"
+                />
+              }
+              dropDownItems={[
+                {
+                  title: "Coming Soon!",
+                  icon: <MdOutlineLockClock fill="teal" className="size-4" />,
+                  onClick: () => {},
+                },
+              ]}
+              isOpen={showRoomDetailsOptions}
+              setIsOpen={setShowRoomDetailsOptions}
+              classNames="z-50 top-0 right-0 w-36"
+              style={{ zIndex: 9999 }}
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-3 my-3">

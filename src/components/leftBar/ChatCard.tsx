@@ -195,7 +195,7 @@ const ChatCard = ({
   return (
     <div
       onClick={joinToRoom}
-      className={`w-full flex items-center gap-3 p-2.5  relative h-[4.5rem] border-b border-black/15 hover:bg-white/5 cursor-pointer transition-all duration-200 ${
+      className={`w-full flex items-center gap-3 p-2.5 relative h-[4.5rem] border-b border-black/15 hover:bg-white/5 cursor-pointer transition-all duration-200 ${
         isActive && "bg-white/5"
       }`}
     >
@@ -228,9 +228,9 @@ const ChatCard = ({
         ></span>
       )}
 
-      <div className="flex flex-col  gap-1 text-darkGray text-sm w-[70%]">
+      <div className="flex flex-col gap-1 text-darkGray text-sm w-[75%]">
         <div className="flex items-center">
-          <div className="text-white flex items-start gap-0.5 text-base font-vazirBold line-clamp-1">
+          <div className="text-white flex items-start gap-0.5 text-base font-vazirBold line-clamp-1 truncate">
             {type === "group" && <HiMiniUserGroup className="mt-[0.17rem]" />}
             {type === "channel" && <HiSpeakerphone className="mt-[0.17rem]" />}
             {roomID === myID ? "Saved messages" : name + " " + lastName}
@@ -257,14 +257,10 @@ const ChatCard = ({
             {draftMessage ? (
               <span className="text-red-400 flex gap-1 ">
                 Draft:
-                <div className=" text-darkGray overflow-hidden text-ellipsis">
-                  {draftMessage}
-                </div>
+                <div className=" text-darkGray truncate">{draftMessage}</div>
               </span>
             ) : (
-              <div className="overflow-hidden text-ellipsis w-full ">
-                {cardMessage}
-              </div>
+              <div className="truncate w-full ">{cardMessage}</div>
             )}
           </div>
 

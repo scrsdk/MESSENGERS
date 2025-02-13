@@ -20,10 +20,9 @@ import MessageModel from "@/models/message";
 import { FiBookmark } from "react-icons/fi";
 import Loading from "../modules/ui/Loading";
 import User from "@/models/user";
+import DropDown from "../modules/ui/DropDown";
+import { MdOutlineLockClock } from "react-icons/md";
 
-const PinnedMessages = lazy(
-  () => import("@/components/middleBar/PinnedMessages")
-);
 const ChatMessage = lazy(() => import("./ChatMessage"));
 
 export interface msgDate {
@@ -42,8 +41,7 @@ const ChatContent = () => {
   const [showRoomOptions, setShowRoomOptions] = useState(false);
   const [replayData, setReplayData] = useState<string | null>(null);
   const [editData, setEditData] = useState<MessageModel | null>(null);
-
-  const { _id: roomID, messages, type, participants } = selectedRoom!;
+  const { messages, type, participants } = selectedRoom!;
 
   // Avatar, name and _id information from room or user information (in private mode)
   const {
@@ -97,11 +95,6 @@ const ChatContent = () => {
     setter({ selectedRoom: null, isRoomDetailsShown: false });
   }, [setter]);
 
-  // Open room settings (options drop-down)
-  const openChatSetting = useCallback(() => {
-    setShowRoomOptions(true);
-  }, []);
-
   // Event handler for receiving pinned message
   const handlePinMessage = useCallback(
     (msgId: string) => {
@@ -131,12 +124,12 @@ const ChatContent = () => {
   return (
     <div
       data-aos="fade-right"
-      className="relative h-dvh flex flex-col chatBackground"
+      className="relative h-dvh flex flex-col chatBackground w-full"
     >
       {/* Chat Header */}
       <div
         id="chatContentHeader"
-        className="flex items-center justify-between h-17 p-2 fixed w-full top-0 border-b border-white/5 bg-leftBarBg"
+        className="sticky top-0 flex items-center justify-between h-17 p-2  w-full border-b border-white/5 bg-leftBarBg"
         style={{ zIndex: "20" }}
       >
         <div className="flex items-center gap-5">
@@ -172,7 +165,7 @@ const ChatContent = () => {
                 {_id === myID ? "Saved messages" : name + " " + lastName}
               </h3>
 
-              <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
+              <div className="font-bold text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
                 {selectedRoom?.type !== "channel" &&
                 typings.length &&
                 typings.filter((tl) => tl !== myName).length ? (
@@ -207,21 +200,27 @@ const ChatContent = () => {
         </div>
 
         <div className="flex items-center gap-2 justify-end">
-          <div className="size-11 relative rounded-full flex-center">
-            <PiDotsThreeVerticalBold onClick={openChatSetting} />
-            {showRoomOptions && (
-              <div className="absolute top-1/2 w-min inset-x-0">
-                {/* Settings dropdown coming soon */}
-              </div>
-            )}
-          </div>
+          <DropDown
+            button={
+              <PiDotsThreeVerticalBold
+                onClick={() => setShowRoomOptions(true)}
+                size={20}
+                className="cursor-pointer mr-2"
+              />
+            }
+            dropDownItems={[
+              {
+                title: "Coming Soon!",
+                icon: <MdOutlineLockClock fill="teal" className="size-4" />,
+                onClick: () => {},
+              },
+            ]}
+            isOpen={showRoomOptions}
+            setIsOpen={setShowRoomOptions}
+            classNames="z-50 top-0 right-0 w-36"
+            style={{ zIndex: 9999 }}
+          />
         </div>
-
-        {pinnedMessages.length > 0 && (
-          <Suspense>
-            <PinnedMessages key={roomID} pinnedMessages={pinnedMessages} />
-          </Suspense>
-        )}
       </div>
 
       {/* Chat Message */}
