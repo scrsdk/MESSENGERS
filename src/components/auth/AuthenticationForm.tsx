@@ -4,17 +4,22 @@ import { useState } from "react";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import Button from "../modules/ui/Button";
-import Image from "next/image";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const AuthenticationForm = () => {
   const [isLogging, setIsLogging] = useState(true);
 
   return (
     <section className="bg-leftBarBg flex-center size-full h-dvh">
-      <div className="flex items-center transition-all duration-300  flex-col max-w-[360px] w-full py-16 text-white">
-        <Image src="/images/telegram.svg" alt="logo" width={160} height={160} />
-
-        <h1 className="font-bold font-vazirBold text-4xl mt-7">
+      <div className="flex-center transition-all duration-300  flex-col max-w-[360px] w-full text-white">
+        {/* <Image src="/images/telegram.svg" alt="logo" width={160} height={160} /> */}
+        <Player
+          src={"/animations/telegram.json"}
+          className="player size-70"
+          loop
+          autoplay
+        />
+        <h1 className="font-bold font-vazirBold text-4xl">
           Sign {isLogging ? "in" : "up"} to Telegram
         </h1>
 
