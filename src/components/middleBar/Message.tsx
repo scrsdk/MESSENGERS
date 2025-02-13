@@ -234,16 +234,20 @@ const Message = (msgData: MessageModel & Props) => {
   }, [setter, sender]);
 
   //Update modal data (for editing, replying, and pinning)
-  const updateModalMsgData = useCallback(() => {
-    if (msgData._id === modalMsgData?._id) return;
-    modalSetter((prev) => ({
-      ...prev,
-      msgData,
-      edit,
-      reply: () => addReplay(_id),
-      pin,
-    }));
-  }, [msgData, modalMsgData, modalSetter, addReplay, _id, edit, pin]);
+  const updateModalMsgData = useCallback(
+    (e: React.MouseEvent) => {
+      if (msgData._id === modalMsgData?._id) return;
+      modalSetter((prev) => ({
+        ...prev,
+        clickPosition: { x: e.clientX, y: e.clientY },
+        msgData,
+        edit,
+        reply: () => addReplay(_id),
+        pin,
+      }));
+    },
+    [msgData, modalMsgData, modalSetter, addReplay, _id, edit, pin]
+  );
 
   //Send message view event if message is in viewport
   useEffect(() => {
@@ -367,9 +371,6 @@ const Message = (msgData: MessageModel & Props) => {
             }
             ${isLastMessageFromUser ? "chat-bubble" : ""}`}
         >
-          {canMessageAction && (
-            <MessageActions isFromMe={isFromMe} messageRef={messageRef} />
-          )}
           {!isFromMe && !isPv && (
             <p
               dir="auto"
@@ -481,6 +482,7 @@ const Message = (msgData: MessageModel & Props) => {
               ))}
           </span>
         </div>
+        {canMessageAction && <MessageActions isFromMe={isFromMe} />}
       </div>
     </>
   );

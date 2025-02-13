@@ -11,6 +11,7 @@ const defaultModalData = {
   isChecked: false,
   msgData: null,
   onSubmit: () => {},
+  clickPosition: { x: 0, y: 0 },
 };
 
 interface Props {
@@ -33,6 +34,7 @@ interface Props {
   cancelText?: string;
   onSubmit: () => void;
   resetModal?: () => void;
+  clickPosition: { x: number; y: number };
 }
 
 interface Updater {

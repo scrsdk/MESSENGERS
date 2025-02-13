@@ -11,7 +11,6 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LuPin } from "react-icons/lu";
 import {
-  RefObject,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -30,17 +29,16 @@ import Message from "@/models/message";
 
 interface MessageActionsProps {
   isFromMe: boolean;
-  messageRef: RefObject<HTMLDivElement | null>;
 }
 
 type PlayedByUsersData = User & { seenTime: string };
 
-const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
+const MessageActions = ({ isFromMe }: MessageActionsProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [playedByUsersData, setPlayedByUsersData] = useState<
     PlayedByUsersData[]
   >([]);
-  const [dropDownPosition, setDropDownPosition] = useState({ top: 0 });
+  const [dropDownPosition, setDropDownPosition] = useState({ x: 0, y: 0 });
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const {
@@ -135,36 +133,6 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     };
   }, [roomSocket, msgData]);
 
-  useLayoutEffect(() => {
-    const chatContainer = document.getElementById("chatContainer");
-    const messageRefRect = messageRef.current?.getBoundingClientRect();
-    const chatContainerRect = chatContainer?.getBoundingClientRect();
-
-    if (messageRefRect && chatContainerRect && !isUserChannel) {
-      const newPosition =
-        messageRefRect.bottom + 100 > chatContainerRect.bottom
-          ? {
-              top:
-                msgData?.voiceData?.playedBy?.length &&
-                msgData?.voiceData?.playedBy?.length > 0
-                  ? -140
-                  : -130,
-            }
-          : messageRefRect.top < 100 &&
-            messageRefRect.top + 75 > chatContainerRect.top
-          ? {
-              top:
-                msgData?.voiceData?.playedBy?.length &&
-                msgData?.voiceData?.playedBy?.length > 0
-                  ? 85
-                  : 65,
-            }
-          : { top: 0 };
-
-      setDropDownPosition(newPosition);
-    }
-  }, [messageRef, msgData?.voiceData?.playedBy?.length, isUserChannel]);
-
   const dropDownItems = useMemo(
     () =>
       [
@@ -190,14 +158,20 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
                             top: 0,
                             zIndex: index,
                           }}
-                          className="object-cover size-6 rounded-full"
+                          className="object-cover size-6 rounded-full shrink-0"
                           src={user?.avatar}
-                          alt="user avatar"
+                          alt="avatar"
                         />
                       ) : (
                         <div
-                          className="flex-center text-md bg-blue-400 rounded-full p-1 pt-2 size-6"
+                          className="flex-center border border-gray-800 shrink-0 text-md bg-blue-400 rounded-full p-1 pt-2 size-6"
                           key={user._id}
+                          style={{
+                            position: "absolute",
+                            right: index === 1 ? "10px" : "0",
+                            top: 0,
+                            zIndex: index,
+                          }}
                         >
                           {user.name[0]}
                         </div>
@@ -288,6 +262,48 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
     ]
   );
 
+  useLayoutEffect(() => {
+    const calculatePosition = () => {
+      const { clickPosition } = useModalStore.getState();
+      if (!clickPosition) return;
+
+      const viewport = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+
+      const menuSize = {
+        width: isCollapsed ? 260 : 200,
+        // height: dropDownItems.length * 40 + 20, //Approximate height of each item 40px
+        height: isCollapsed ? 6 * 40 + 20 : dropDownItems.length * 40 + 20,
+      };
+
+      const adjustedPosition = { ...clickPosition };
+
+      //Horizontal position adjustment
+      if (clickPosition.x + menuSize.width > viewport.width) {
+        adjustedPosition.x = viewport.width - menuSize.width - 10;
+      }
+
+      // Vertical position adjustment
+      if (clickPosition.y + menuSize.height > viewport.height) {
+        adjustedPosition.y = clickPosition.y - menuSize.height - 10;
+      } else {
+        adjustedPosition.y += 10;
+      }
+
+      setDropDownPosition(adjustedPosition);
+    };
+
+    calculatePosition();
+
+    window.addEventListener("resize", calculatePosition);
+
+    return () => {
+      window.removeEventListener("resize", calculatePosition);
+    };
+  }, [isCollapsed, dropDownItems.length]);
+
   useEffect(() => {
     if (Boolean(msgData)) {
       setIsDropDownOpen(true);
@@ -302,8 +318,13 @@ const MessageActions = ({ isFromMe, messageRef }: MessageActionsProps) => {
         isOpen={Boolean(msgData && isDropDownOpen)}
         classNames={`h-fit text-white transition-all duration-300 ${
           isCollapsed ? "w-52" : "w-40"
-        } ${isFromMe ? "right-[65%]" : "left-[65%]"}`}
-        style={{ top: `${!isUserChannel && -40 + dropDownPosition.top}px` }}
+        } `}
+        style={{
+          position: "fixed",
+          left: `${dropDownPosition.x}px`,
+          top: `${dropDownPosition.y}px`,
+          zIndex: 9999,
+        }}
       />
       <Modal />
     </>

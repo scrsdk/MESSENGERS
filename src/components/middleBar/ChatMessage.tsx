@@ -221,7 +221,7 @@ const ChatMessage = ({
       ref={messageContainerRef}
       id="chatContainer"
       className={`mt-auto px-0.5 pb-1 overflow-x-hidden overflow-y-auto scroll-w-none  ${
-        pinnedMessages?.length ? "pt-12" : ""
+        pinnedMessages?.length ? "pt-28" : "pt-16"
       }  ${messages.length <= 5 && "pt-52"}`}
     >
       <div
@@ -237,7 +237,7 @@ const ChatMessage = ({
           }
         }}
         className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-10 transform  ${
-          floatingDate ? "translate-y-1" : "-translate-y-5 !p-0"
+          floatingDate ? "translate-y-1.5" : "-translate-y-5 !p-0"
         }`}
       >
         {floatingDate}
