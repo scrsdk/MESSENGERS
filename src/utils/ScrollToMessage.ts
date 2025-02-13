@@ -4,7 +4,6 @@ const scrollToMessage = (
   block = "start" as ScrollLogicalPosition
 ) => {
   const replayTargetElem = document.getElementsByClassName(id!)[0];
-  // const pinMessageContainer = document.querySelector("#pinMessagesContainer");
   if (!replayTargetElem) {
     console.log(`Element with class '${id}' not found`);
     return;
@@ -23,15 +22,6 @@ const scrollToMessage = (
 
   const scrollToElem = () => {
     replayTargetElem.classList.add("active");
-
-    // if (0) {
-    //     return; // for now
-    //     // if the pin message container is available, we should scroll the message more to get the move the message from under the container.
-    //     const msgPosition = checkElementPosition(replayTargetElem)
-    //     const extraScrollAmount = pinMessageContainer.clientHeight * (msgPosition == 'bottom' ? 1 : -1)
-    //     window.scrollBy({ top: extraScrollAmount })
-    // }
-
     setTimeout(() => replayTargetElem.classList.remove("active"), 1000);
   };
 

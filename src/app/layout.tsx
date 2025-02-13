@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import AosAnimation from "@/components/modules/ui/AosAnimation";
+
 export const metadata: Metadata = {
   title: "Telegram messenger",
   description: "FullStack NextJs Telegram messenger with socket.io",
@@ -22,11 +23,11 @@ export default function RootLayout({
       />
       <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
       <link rel="shortcut icon" href="./images/favicon.ico" />
-      <link
+      {/* <link
         rel="apple-touch-icon"
         sizes="180x180"
         href="./images/apple-touch-icon.png"
-      />
+      /> */}
       <meta name="apple-mobile-web-app-title" content="Telegram" />
       <link rel="manifest" href="/manifest.json" />
       <meta name="theme-color" content="#232735" />

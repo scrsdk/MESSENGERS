@@ -3,7 +3,6 @@ import Main from "./Main";
 import Settings from "./Settings";
 import EditInfo from "./EditInfo";
 import EditUsername from "./EditUsername";
-// import VideoChat from "./LeftBarMenuPages/VideoChat";
 
 interface Props {
   isOpen: boolean;
@@ -59,10 +58,6 @@ const LeftBarMenu = ({ closeMenu, isOpen }: Props) => {
         setActiveRoute(<EditUsername getBack={getBack} />);
         break;
       }
-      // case "/video-chat": {
-      //   setActiveRoute(<VideoChat getBack={getBack} />);
-      //   break;
-      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route, isOpen]);
