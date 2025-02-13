@@ -375,7 +375,9 @@ const Message = (msgData: MessageModel & Props) => {
               dir="auto"
               className="w-full text-xs font-vazirBold pt-2 pl-1 text-[#00e4a0]"
             >
-              {sender.name}
+              {isChannel
+                ? selectedRoom?.name
+                : sender.name + " " + sender.lastName}
             </p>
           )}
 

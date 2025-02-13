@@ -22,6 +22,7 @@ interface User {
   _id: string;
   avatar?: string;
   name?: string;
+  lastName?: string;
 }
 
 const gradients = [
@@ -80,6 +81,7 @@ const ChatCard = ({
   const {
     avatar,
     name,
+    lastName = "",
     _id: roomID,
   } = useMemo(() => {
     if (type === "private") {
@@ -90,6 +92,7 @@ const ChatCard = ({
       if (participant) {
         return {
           name: participant.name,
+          lastName: participant?.lastName,
           avatar: participant.avatar,
           _id: participant._id,
         };
@@ -230,7 +233,7 @@ const ChatCard = ({
           <div className="text-white flex items-start gap-0.5 text-base font-vazirBold line-clamp-1">
             {type === "group" && <HiMiniUserGroup className="mt-[0.17rem]" />}
             {type === "channel" && <HiSpeakerphone className="mt-[0.17rem]" />}
-            {roomID === myID ? "Saved messages" : name}
+            {roomID === myID ? "Saved messages" : name + " " + lastName}
           </div>
           <div className="flex gap-1 items-center absolute right-3">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

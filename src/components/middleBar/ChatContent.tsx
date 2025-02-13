@@ -19,6 +19,7 @@ import useSockets from "@/store/useSockets";
 import MessageModel from "@/models/message";
 import { FiBookmark } from "react-icons/fi";
 import Loading from "../modules/ui/Loading";
+import User from "@/models/user";
 
 const PinnedMessages = lazy(
   () => import("@/components/middleBar/PinnedMessages")
@@ -48,6 +49,7 @@ const ChatContent = () => {
   const {
     avatar = "",
     name = "",
+    lastName = "",
     _id,
   } = useMemo(() => {
     const roomOrUser =
@@ -65,10 +67,11 @@ const ChatContent = () => {
       return {
         avatar: roomOrUser.avatar || "",
         name: roomOrUser.name || "",
+        lastName: (roomOrUser as User).lastName || "",
         _id: roomOrUser._id || "",
       };
     }
-    return { avatar: "", name: "", _id: "" };
+    return { avatar: "", name: "", _id: "", lastName: "" };
   }, [myID, participants, selectedRoom, type]);
 
   // Calculate the replay message based on replayData (which is the message ID)
@@ -147,15 +150,15 @@ const ChatContent = () => {
             className="flex items-start cursor-pointer gap-3"
           >
             {_id === myID ? (
-              <div className="size-11 bg-cyan-700 rounded-full flex-center text-white text-2xl">
+              <div className="size-11 bg-cyan-700 rounded-full shrink-0 flex-center text-white text-2xl">
                 <FiBookmark />
               </div>
             ) : avatar ? (
               <Image
                 src={avatar}
-                width={50}
-                height={50}
-                className="size-11 mt-auto object-center object-cover rounded-full"
+                width={44}
+                height={44}
+                className="size-11 mt-auto object-center shrink-0 object-cover rounded-full"
                 alt="avatar"
               />
             ) : (
@@ -166,7 +169,7 @@ const ChatContent = () => {
 
             <div className="flex justify-center flex-col gap-1">
               <h3 className="font-bold text-[16px] font-vazirBold">
-                {_id === myID ? "Saved messages" : name}
+                {_id === myID ? "Saved messages" : name + " " + lastName}
               </h3>
 
               <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">

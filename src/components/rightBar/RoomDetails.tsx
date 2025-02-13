@@ -44,7 +44,8 @@ const RoomDetails = () => {
 
   const {
     avatar = "",
-    name,
+    name = "",
+    lastName = "",
     username,
     link,
     _id,
@@ -100,7 +101,7 @@ const RoomDetails = () => {
         data._id == roomID
     );
 
-    const roomSelected: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+    const roomSelected: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id],
       avatar,
       createdAt: Date.now().toString(),
@@ -113,7 +114,6 @@ const RoomDetails = () => {
       participants: [myData, selectedRoomData] as (string | User)[],
       type: "private",
       updatedAt: Date.now().toString(),
-      _id,
     };
     if (roomHistory) {
       roomSocket?.emit("joining", roomHistory._id);
@@ -179,14 +179,14 @@ const RoomDetails = () => {
               alt="avatar"
             />
           ) : (
-            <div className="flex-center bg-darkBlue rounded-full size-14 shrink-0 text-center font-vazirBold text-xl">
+            <div className="flex-center bg-darkBlue rounded-full size-12 shrink-0 text-center font-vazirBold text-xl">
               {name?.length && name![0]}
             </div>
           )}
 
           <div className="flex justify-center flex-col gap-1">
             <h3 className="font-vazirBold text-base line-clamp-1 text-ellipsis">
-              {name}
+              {name + " " + lastName}
             </h3>
 
             <div className="text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">

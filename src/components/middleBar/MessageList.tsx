@@ -47,7 +47,7 @@ const MessageList = ({
 
         return (
           <div
-            className={`${data._id}`}
+            className={`${data._id} highLightedMessage`}
             key={data._id}
             ref={index === messages.length - 1 ? lastMsgRef : null}
           >

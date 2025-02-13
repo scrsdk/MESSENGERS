@@ -82,7 +82,6 @@ const MessageInput = ({
 
   // Send new message
   const sendMessage = useCallback(() => {
-    if (!roomId) return;
     const isExistingRoom = userRooms.some((room) => room._id === roomId);
 
     const payload = {

@@ -12,13 +12,14 @@ interface Props {
 }
 const RoomCard = (roomData: Partial<User | Room> & Props) => {
   const {
-    avatar,
-    name,
+    avatar = "",
+    name = "",
+    lastName = "",
     _id,
     isOnline,
     myData,
     shouldOpenChat = false,
-  } = roomData!;
+  } = roomData as User & Props;
   const setter = useGlobalStore((state) => state.setter);
   const rooms = useUserStore((state) => state.rooms);
   const roomSocket = useSockets((state) => state.rooms);
@@ -81,7 +82,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
       )}
       <div className="flex flex-col justify-between  w-full py-2">
         <p className="text-base font-vazirBold line-clamp-1 text-ellipsis">
-          {name}
+          {name + " " + lastName}
         </p>
 
         <p className="text-sm text-darkGray">

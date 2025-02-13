@@ -70,11 +70,13 @@ body {
 }
 
 .flex-center {
-  @apply flex items-center justify-center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 ::-webkit-scrollbar {
-  @apply w-[2px];
+  width: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -93,9 +95,18 @@ body {
   position: relative;
 }
 
-.highLightedMessage::after {
+.highLightedMessage::before {
   content: "";
-  @apply bg-lightBlue/15 p-1 rounded-md transition-all duration-200 absolute inset-0 w-full z-9999999999999;
+  background-color: var(--color-darkBlue);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 300ms, background-color 500ms;
+}
+.highLightedMessage.active::before {
+  opacity: 0.3;
 }
 
 .chat {
