@@ -180,7 +180,7 @@ const VoiceMessageRecorder = ({
     } catch (error) {
       console.error(error);
       toaster(
-        false,
+        "error",
         "Microphone access denied! Please allow microphone permissions."
       );
     }
