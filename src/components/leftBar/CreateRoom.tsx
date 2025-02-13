@@ -106,7 +106,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
 
   const createRoom = async () => {
     const name = roomName.trim();
-    if (!name?.length) return toaster(false, "Please enter room name");
+    if (!name?.length) return toaster("error", "Please enter room name");
 
     setIsLoading(true);
 
@@ -119,7 +119,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
         imageUrl = uploadedImageUrl;
       } catch (error) {
         console.log(error);
-        toaster(false, "Failed to upload image,try again ");
+        toaster("error", "Failed to upload image,try again ");
         setIsLoading(false);
         uploadError = true;
         return;

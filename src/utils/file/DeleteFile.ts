@@ -16,7 +16,7 @@ const deleteFile = async (fileUrl: string) => {
     if (response.status !== 200) throw new Error(response.data.message);
   } catch (error) {
     console.error("Delete failed:", error);
-    toaster(false, "Delete failed! Please try again.");
+    toaster("error", "Delete failed! Please try again.");
   }
 };
 

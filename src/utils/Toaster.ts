@@ -2,11 +2,11 @@ import { ReactNode } from "react";
 import { toast } from "react-toastify";
 
 const toaster = (
-  status: boolean,
+  status: "success" | "error" | "info" | "warning",
   message: string | ReactNode,
   duration = 3000
 ) => {
-  toast[status ? "success" : "error"](message, {
+  toast[status](message, {
     position: "top-center",
     autoClose: duration,
     hideProgressBar: true,

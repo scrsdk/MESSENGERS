@@ -28,7 +28,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
 
   const copyInviteLink = async () => {
     await copyText("Coming soon");
-    toaster(true, "Invite link copied!");
+    toaster("success", "Invite link copied!");
     closeMenu();
   };
 

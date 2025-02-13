@@ -19,7 +19,7 @@ const downloadFile = async (fileUrl: string) => {
     document.body.removeChild(a);
   } catch (error) {
     console.error("Download failed:", error);
-    toaster(false, "Download failed! Please try again.");
+    toaster("error", "Download failed! Please try again.");
   }
 };
 export default downloadFile;

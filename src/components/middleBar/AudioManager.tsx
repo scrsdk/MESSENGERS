@@ -47,7 +47,7 @@ const AudioManager = () => {
     };
 
     const handleError = () => {
-      toaster(false, "Download failed! Check your internet connection.");
+      toaster("error", "Download failed! Check your internet connection.");
 
       setter({
         downloadedAudios: downloadedAudios.filter(

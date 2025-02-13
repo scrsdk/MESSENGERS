@@ -130,7 +130,7 @@ const VoiceMessageRecorder = ({
         sendVoiceMessage(downloadUrl, timerRef.current);
       } catch (error) {
         console.error("Upload failed:", error);
-        toaster(false, "Upload failed! Please try again.");
+        toaster("error", "Upload failed! Please try again.");
         stopRecording();
       }
     },
@@ -139,7 +139,7 @@ const VoiceMessageRecorder = ({
 
   const startRecording = useCallback(async () => {
     if (!navigator.mediaDevices) {
-      return toaster(false, "Your browser does not support voice recording!");
+      return toaster("error", "Your browser does not support voice recording!");
     }
 
     try {

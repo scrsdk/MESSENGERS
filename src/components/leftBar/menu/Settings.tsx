@@ -104,7 +104,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       });
     } catch (error) {
       console.log(error);
-      toaster(false, "Failed to upload, check your network.");
+      toaster("error", "Failed to upload, check your network.");
     } finally {
       setIsLoading(false);
     }

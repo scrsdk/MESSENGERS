@@ -28,11 +28,11 @@ const SignUpForm = () => {
           ...response.data,
           isLogin: true,
         });
-        toaster(true, "You signed up successfully.");
+        toaster("success", "You signed up successfully.");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toaster(false, error.response.data.message);
+      toaster("error", error.response.data.message);
     }
   };
 
