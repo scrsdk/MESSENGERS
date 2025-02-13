@@ -42,7 +42,7 @@ const SearchResultCard = (
   roomData: Partial<Room & { findBy?: keyof Room }> & Props
 ) => {
   const { avatar, name, _id, myData, findBy = null, query } = roomData;
-  const { setter, isChatPageLoaded } = useGlobalStore((state) => state);
+  const { isChatPageLoaded, setter } = useGlobalStore((state) => state);
   const { rooms, _id: myID } = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
 
@@ -54,7 +54,7 @@ const SearchResultCard = (
         data.name === _id + "-" + myData._id // for private chats
     );
 
-    const selectedRoom: Omit<Room, "lastMsgData" | "notSeenCount"> = {
+    const userRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
       avatar: avatar ? avatar : "",
       createdAt: Date.now().toString(),
@@ -67,23 +67,22 @@ const SearchResultCard = (
       participants: [myData, roomData] as User[],
       type: "private",
       updatedAt: Date.now().toString(),
-      _id: _id ?? myData._id,
     };
 
-    roomSocket?.emit(
-      "joining",
-      roomHistory?._id || roomData?._id,
-      selectedRoom
-    );
-    setter({ isRoomDetailsShown: false, selectedRoom: selectedRoom as Room });
+    if (roomHistory) {
+      roomSocket?.emit("joining", roomHistory?._id);
 
-    setTimeout(
-      () => {
-        if (roomData.messages?.length)
-          scrollToMessage(roomData.messages[0]._id);
-      },
-      isChatPageLoaded ? 800 : 2000
-    );
+      setTimeout(
+        () => {
+          if (roomData.messages?.length)
+            scrollToMessage(roomData.messages[0]._id);
+        },
+        isChatPageLoaded ? 1000 : 6000
+      );
+    } else {
+      setter({ isRoomDetailsShown: false, selectedRoom: userRoom as Room });
+      roomSocket?.emit("joining", _id);
+    }
   };
 
   const openSavedMessages = () => {

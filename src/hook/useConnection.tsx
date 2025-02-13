@@ -144,7 +144,7 @@ const useConnection = ({
         "seenMsg",
       ].forEach((event) => socket.off(event));
     };
-  }, [selectedRoom?._id, setter, userDataUpdater, userId]);
+  }, [selectedRoom, setter, userDataUpdater, userId]);
 
   const initializeSocket = useCallback(() => {
     if (!socketRef.current) {

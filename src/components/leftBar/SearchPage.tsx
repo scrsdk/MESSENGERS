@@ -46,7 +46,10 @@ const SearchPage = ({ closeSearch }: Props) => {
           query: { userID: userData._id, payload: trimmedQuery },
         });
 
-        if (status === 200) setSearchResult(data);
+        if (status === 200) {
+          setSearchResult(data);
+          console.log(data);
+        }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: unknown) {
         setSearchResult([]);

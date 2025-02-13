@@ -5,6 +5,10 @@ const scrollToMessage = (
 ) => {
   const replayTargetElem = document.getElementsByClassName(id!)[0];
   // const pinMessageContainer = document.querySelector("#pinMessagesContainer");
+  if (!replayTargetElem) {
+    console.log(`Element with class '${id}' not found`);
+    return;
+  }
 
   replayTargetElem?.scrollIntoView({ block, behavior });
 
@@ -18,9 +22,7 @@ const scrollToMessage = (
   });
 
   const scrollToElem = () => {
-    if (!replayTargetElem) return;
-
-    replayTargetElem.classList.add("highLightedMessage");
+    replayTargetElem.classList.add("active");
 
     // if (0) {
     //     return; // for now
@@ -30,10 +32,7 @@ const scrollToMessage = (
     //     window.scrollBy({ top: extraScrollAmount })
     // }
 
-    setTimeout(
-      () => replayTargetElem.classList.remove("highLightedMessage"),
-      1000
-    );
+    setTimeout(() => replayTargetElem.classList.remove("active"), 1000);
   };
 
   observer.observe(replayTargetElem);

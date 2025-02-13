@@ -18,7 +18,6 @@ export const POST = async (req: Request) => {
       result = await RoomSchema.findOne({
         link: { $regex: new RegExp(`^${payload}$`, "i") },
       });
-      console.log(result);
       if (result) return Response.json([result], { status: 200 });
       if (!result) {
         result = await UserSchema.findOne({
