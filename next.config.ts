@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -10,10 +9,6 @@ const nextConfig: NextConfig = {
         hostname: "storage.c2.liara.space",
         port: "",
         pathname: "/tlgrm/**",
-      },
-      {
-        protocol: "https",
-        hostname: "**.vercel.app",
       },
     ],
   },
