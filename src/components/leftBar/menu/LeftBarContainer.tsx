@@ -17,7 +17,7 @@ const LeftBarContainer = ({
   return (
     <div
       data-aos="fade-left"
-      className="fixed size-full duration-300 transition-all inset-0 z-9999 bg-chatBg "
+      className="fixed size-full duration-300 transition-all inset-0 z-9999 bg-chatBg chatBackground "
     >
       <div className="size-full bg-leftBarBg md:w-[40%] lg:w-[35%] xl:w-[30%] overflow-y-auto overflow-x-hidden scroll-w-none">
         <div className="flex items-center p-4 sticky top-0  z-50 justify-between w-full text-white bg-leftBarBg">
