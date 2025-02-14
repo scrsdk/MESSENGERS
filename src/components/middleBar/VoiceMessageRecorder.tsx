@@ -127,7 +127,9 @@ const VoiceMessageRecorder = ({
         setIsLoading(true);
         const downloadUrl = await uploadFile(voiceFile);
 
-        sendVoiceMessage(downloadUrl, timerRef.current);
+        if (downloadUrl) {
+          sendVoiceMessage(downloadUrl, timerRef.current);
+        }
       } catch (error) {
         console.error("Upload failed:", error);
         toaster("error", "Upload failed! Please try again.");

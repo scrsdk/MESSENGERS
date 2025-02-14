@@ -1,19 +1,36 @@
-import axios from "axios";
+import { S3 } from "aws-sdk";
 import { toaster } from "@/utils";
 
+const extractFileName = (url: string) => {
+  const regex = /\/([^\/?]+)(?=\?)/;
+  const match = url.match(regex);
+  return match ? decodeURIComponent(match[1]) : null;
+};
+
 const deleteFile = async (fileUrl: string) => {
-  if (!fileUrl) return;
-
   try {
-    const fileName = fileUrl.split("/").pop();
-
-    const response = await axios.delete("/api/file/delete", {
-      data: { fileName },
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+    const s3 = new S3({
+      accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_KEY,
+      endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT,
     });
+    const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
+    const fileName = extractFileName(fileUrl);
 
-    if (response.status !== 200) throw new Error(response.data.message);
+    if (!bucketName) {
+      throw new Error("S3 bucket name is not defined");
+    }
+    if (!fileName) {
+      throw new Error("File name is not defined");
+    }
+
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+    };
+
+    await s3.deleteObject(params).promise();
+    console.log("File deleted successfully");
   } catch (error) {
     console.error("Delete failed:", error);
     toaster("error", "Delete failed! Please try again.");

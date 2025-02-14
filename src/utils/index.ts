@@ -12,7 +12,6 @@ import secondsToTimeString from "./SecondToTimeString";
 import debounce from "./Debounce";
 import dateString from "./DateString";
 import formatDate from "./FormatDate";
-import downloadFile from "./file/DownloadFile";
 import uploadFile from "./file/UploadFile";
 import deleteFile from "./file/DeleteFile";
 import convertToWebP from "./file/ConvertToWebP";
@@ -34,7 +33,6 @@ export {
   debounce,
   dateString,
   formatDate,
-  downloadFile,
   uploadFile,
   deleteFile,
   convertToWebP,
