@@ -15,6 +15,7 @@ export const GET = async (req: Request) => {
   try {
     const { searchParams } = new URL(req.url);
     const fileName = searchParams.get("fileName");
+    const fileType = searchParams.get("fileType");
 
     if (!fileName) {
       return Response.json(
@@ -43,6 +44,8 @@ export const GET = async (req: Request) => {
     return new Response(Body as ReadableStream, {
       headers: {
         "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Type": `${fileType}`,
       },
     });
   } catch (error) {
