@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const s3Url = `${process.env.S3_ENDPOINT}/${fileName}`;
+  const s3Url = `${process.env.S3_DIRECT_URL}/${fileName}`;
 
   return NextResponse.redirect(s3Url, 307);
 }
