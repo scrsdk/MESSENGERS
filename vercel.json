@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/file/download",
+      "destination": "/api/file/proxy"
+    }
+  ]
+}
