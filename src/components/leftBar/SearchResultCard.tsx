@@ -45,6 +45,7 @@ const SearchResultCard = (
   const { isChatPageLoaded, setter } = useGlobalStore((state) => state);
   const { rooms, _id: myID } = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
+  console.log(roomData.avatar);
 
   const openChat = () => {
     const roomHistory = rooms.find(
@@ -56,7 +57,7 @@ const SearchResultCard = (
 
     const userRoom: Omit<Room, "_id" | "lastMsgData" | "notSeenCount"> = {
       admins: [myData._id, _id!],
-      avatar: avatar ? avatar : "",
+      avatar: "",
       createdAt: Date.now().toString(),
       creator: myData._id,
       link: (Math.random() * 9999999).toString(),

@@ -123,8 +123,8 @@ const VoiceMessageRecorder = ({
   );
   const uploadVoice = useCallback(
     async (voiceFile: File) => {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         const downloadUrl = await uploadFile(voiceFile);
 
         sendVoiceMessage(downloadUrl, timerRef.current);

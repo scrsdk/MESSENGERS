@@ -10,11 +10,11 @@ import useGlobalStore from "@/store/globalStore";
 import useSockets from "@/store/useSockets";
 import User from "@/models/user";
 import { randomHexGenerate, toaster, uploadFile } from "@/utils";
-import ContactCard from "../modules/ContactCard";
 import Button from "../modules/ui/Button";
 import Loading from "../modules/ui/Loading";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import { TbCameraPlus } from "react-icons/tb";
+import ContactCard from "./ContactCard";
 
 type Props = {
   roomType: Room["type"];
