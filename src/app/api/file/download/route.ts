@@ -9,7 +9,6 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.S3_SECRET_KEY!,
   },
   endpoint: process.env.S3_ENDPOINT,
-  forcePathStyle: true,
 });
 
 export const GET = async (req: Request) => {

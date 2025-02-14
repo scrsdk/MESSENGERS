@@ -10,7 +10,6 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.S3_SECRET_KEY!,
   },
   endpoint: process.env.S3_ENDPOINT,
-  forcePathStyle: true,
 });
 
 export const POST = async (req: Request) => {
@@ -41,7 +40,7 @@ export const POST = async (req: Request) => {
     });
 
     const signedUrl = await getSignedUrl(s3Client, command, {
-      expiresIn: 60 * 5,
+      expiresIn: 60 * 60 * 24,
     });
 
     return Response.json({ url: signedUrl }, { status: 200 });
