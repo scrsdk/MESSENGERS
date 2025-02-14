@@ -16,6 +16,7 @@ import downloadFile from "./file/DownloadFile";
 import uploadFile from "./file/UploadFile";
 import deleteFile from "./file/DeleteFile";
 import convertToWebP from "./file/ConvertToWebP";
+import compressImage from "./file/CompressImage";
 import registerSW from "./RegisterSW";
 
 export {
@@ -38,4 +39,5 @@ export {
   deleteFile,
   convertToWebP,
   registerSW,
+  compressImage,
 };

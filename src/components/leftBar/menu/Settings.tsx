@@ -16,7 +16,7 @@ import Image from "next/image";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import {
-  convertToWebP,
+  compressImage,
   deleteFile,
   logout,
   openModal,
@@ -80,28 +80,28 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
   const uploadAvatar = useCallback(async () => {
     try {
-      setIsLoading(true);
-
       const socket = useSockets.getState().rooms;
-      const webPImage = await convertToWebP(uploadedImageFile!);
-      const uploadedImageUrl = await uploadFile(
-        webPImage ? webPImage : uploadedImageFile!
-      );
 
-      socket?.emit("updateUserData", {
-        userID: _id,
-        avatar: uploadedImageUrl,
-      });
+      if (uploadedImageFile) {
+        setIsLoading(true);
+        const optimizedFile = await compressImage(uploadedImageFile);
+        const uploadedImageUrl = await uploadFile(optimizedFile);
 
-      socket?.on("updateUserData", () => {
-        userStateUpdater((prev) => ({
-          ...prev,
-          avatar: uploadedImageUrl ?? "",
-        }));
+        socket?.emit("updateUserData", {
+          userID: _id,
+          avatar: uploadedImageUrl,
+        });
 
-        setUploadedImageFile(null);
-        setUploadedImageUrl(null);
-      });
+        socket?.on("updateUserData", () => {
+          userStateUpdater((prev) => ({
+            ...prev,
+            avatar: uploadedImageUrl ?? "",
+          }));
+
+          setUploadedImageFile(null);
+          setUploadedImageUrl(null);
+        });
+      }
     } catch (error) {
       console.log(error);
       toaster("error", "Failed to upload, check your network.");
