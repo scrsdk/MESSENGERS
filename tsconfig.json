@@ -35,8 +35,7 @@
     "src/schemas/namespaceSchema.js",
     "src/schemas/messageSchema.js",
     "src/db.js",
-    "tailwind.config.ts",
-    "src/utils/file/UploadFile.ts"
+    "tailwind.config.ts"
   ],
   "exclude": ["node_modules"]
 }
