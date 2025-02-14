@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/tlgrm/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.vercel.app",
+      },
     ],
   },
 };
