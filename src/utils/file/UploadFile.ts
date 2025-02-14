@@ -17,6 +17,7 @@ const uploadFile = async (file: File) => {
 
   await axios.put(response.data.url, file, {
     headers: { "Content-Type": file.type },
+    withCredentials: true,
   });
 
   const downloadUrl = `/api/file/download?fileName=${encodeURIComponent(
