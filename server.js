@@ -420,6 +420,40 @@ io.on("connection", (socket) => {
     socket.emit("updateUserData");
   });
 
+  socket.on("updateRoomData", async (updatedFields) => {
+    try {
+      const { roomID, ...fieldsToUpdate } = updatedFields;
+
+      const updatedRoom = await RoomSchema.findOneAndUpdate(
+        { _id: roomID },
+        { $set: fieldsToUpdate },
+        { new: true }
+      );
+
+      if (!updatedRoom) {
+        throw new Error("Room not found");
+      }
+
+      io.to(updatedFields.roomID).emit("updateRoomData", updatedRoom);
+
+      const otherRoomMembersSocket = onlineUsers.filter((data) =>
+        updatedRoom.participants.some((pID) => {
+          if (data.userID === pID.toString()) return true;
+        })
+      );
+
+      otherRoomMembersSocket.forEach(({ socketID: userSocketID }) => {
+        const socketID = io.sockets.sockets.get(userSocketID);
+        if (socketID) {
+          socketID.emit("updateRoomData", updatedRoom);
+        }
+      });
+    } catch (error) {
+      console.error("Error updating room:", error);
+      socket.emit("updateRoomDataError", { message: error.message });
+    }
+  });
+
   socket.on("getRoomMembers", async ({ roomID }) => {
     try {
       const roomMembers = await RoomSchema.findOne({ _id: roomID }).populate(
