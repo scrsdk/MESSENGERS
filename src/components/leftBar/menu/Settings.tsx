@@ -80,22 +80,25 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
       if (uploadedImageFile) {
         setIsLoading(true);
-        const uploadedImageUrl = await uploadFile(uploadedImageFile);
+        const imageUrl = await uploadFile(uploadedImageFile);
+        if (imageUrl) {
+          setUploadedImageUrl(imageUrl);
 
-        socket?.emit("updateUserData", {
-          userID: _id,
-          avatar: uploadedImageUrl,
-        });
+          socket?.emit("updateUserData", {
+            userID: _id,
+            avatar: uploadedImageUrl,
+          });
 
-        socket?.on("updateUserData", () => {
-          userStateUpdater((prev) => ({
-            ...prev,
-            avatar: uploadedImageUrl ?? "",
-          }));
+          socket?.on("updateUserData", () => {
+            userStateUpdater((prev) => ({
+              ...prev,
+              avatar: uploadedImageUrl!,
+            }));
 
-          setUploadedImageFile(null);
-          setUploadedImageUrl(null);
-        });
+            setUploadedImageFile(null);
+            setUploadedImageUrl(null);
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -103,7 +106,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     } finally {
       setIsLoading(false);
     }
-  }, [_id, uploadedImageFile, userStateUpdater]);
+  }, [_id, uploadedImageFile, uploadedImageUrl, userStateUpdater]);
 
   useEffect(() => {
     if (!uploadedImageUrl) return;
@@ -194,12 +197,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             {
               <div
                 className={`flex-center relative size-14 ${
-                  (!avatar || !uploadedImageUrl) && "bg-darkBlue"
+                  !avatar && "bg-darkBlue"
                 } overflow-hidden rounded-full`}
               >
-                {avatar || uploadedImageUrl ? (
+                {avatar ? (
                   <Image
-                    src={avatar || uploadedImageUrl!}
+                    src={avatar}
                     className="cursor-pointer object-cover size-full rounded-full"
                     width={55}
                     height={55}
