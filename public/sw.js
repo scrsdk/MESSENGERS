@@ -1,5 +1,5 @@
-const STATIC_CACHE = "telegram-static-v2";
-const DYNAMIC_CACHE = "telegram-dynamic-v2";
+const STATIC_CACHE = "telegram-static-v1";
+const DYNAMIC_CACHE = "telegram-dynamic-v1";
 const ASSETS = [
   self.origin + "/",
   // self.origin + "/global.css",
