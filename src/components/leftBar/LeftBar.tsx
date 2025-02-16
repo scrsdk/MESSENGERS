@@ -20,6 +20,7 @@ import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
 import Message from "@/models/message";
 import NotificationPermission from "@/hook/NotificationPermission";
+import { registerSW } from "@/utils";
 
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
@@ -42,7 +43,7 @@ const LeftBar = () => {
   const interactUser = useRef(false);
 
   useEffect(() => {
-    // registerSW();
+    registerSW();
     NotificationPermission();
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
