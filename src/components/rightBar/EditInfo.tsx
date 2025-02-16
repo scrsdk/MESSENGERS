@@ -49,7 +49,9 @@ const EditInfo = ({
   const [updatedRoomName, setUpdatedRoomName] = useState(name);
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { setter, onlineUsers } = useGlobalStore((state) => state);
+  const { setter, onlineUsers, selectedRoom } = useGlobalStore(
+    (state) => state
+  );
   const socket = useSockets().rooms;
 
   const getImgUrl = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -197,28 +199,28 @@ const EditInfo = ({
           )}
         </div>
       </div>
-
-      <div className="flex flex-col">
-        <div className="h-2 bg-black"></div>
-        <span className="text-sm p-2 text-darkBlue">Members</span>
+      {selectedRoom?.type === "group" && (
         <div className="flex flex-col">
-          {isLoading ? (
-            <Loading classNames="mx-auto" />
-          ) : (
-            members.length &&
-            members.map((member) => (
-              <RoomCard
-                key={member._id}
-                {...member}
-                myData={myData}
-                isOnline={isUserOnline(member._id)}
-                setSubscribers={setMembers}
-              />
-            ))
-          )}
+          <div className="h-2 bg-black"></div>
+          <span className="text-sm p-2 text-darkBlue">Members</span>
+          <div className="flex flex-col">
+            {isLoading ? (
+              <Loading classNames="mx-auto" />
+            ) : (
+              members.length &&
+              members.map((member) => (
+                <RoomCard
+                  key={member._id}
+                  {...member}
+                  myData={myData}
+                  isOnline={isUserOnline(member._id)}
+                  setSubscribers={setMembers}
+                />
+              ))
+            )}
+          </div>
         </div>
-      </div>
-
+      )}
       {isEmojiOpen && (
         <Suspense fallback={null}>
           <EmojiPicker
