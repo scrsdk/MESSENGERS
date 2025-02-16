@@ -224,7 +224,11 @@ const ChatMessage = ({
   return (
     <>
       <Suspense>
-        <PinnedMessages key={roomID} pinnedMessages={pinnedMessages} />
+        <PinnedMessages
+          key={roomID}
+          pinnedMessages={pinnedMessages}
+          messageContainerRef={messageContainerRef}
+        />
       </Suspense>
 
       <div
