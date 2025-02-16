@@ -8,7 +8,7 @@ import {
   useState,
   useCallback,
 } from "react";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoIosArrowUp, IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import MessageSender from "./MessageInput";
@@ -21,7 +21,10 @@ import { FiBookmark } from "react-icons/fi";
 import Loading from "../modules/ui/Loading";
 import User from "@/models/user";
 import DropDown from "../modules/ui/DropDown";
-import { MdOutlineLockClock } from "react-icons/md";
+import { IoLogOutOutline } from "react-icons/io5";
+import useModalStore from "@/store/modalStore";
+import Modal from "../modules/ui/Modal";
+import { scrollToMessage } from "@/utils";
 
 const ChatMessage = lazy(() => import("./ChatMessage"));
 
@@ -31,11 +34,15 @@ export interface msgDate {
 }
 
 const ChatContent = () => {
-  const { _id: myID, name: myName } = useUserStore((state) => state);
-  const { rooms } = useSockets((state) => state);
+  const {
+    _id: myID,
+    name: myName,
+    setter: userDataUpdater,
+  } = useUserStore((state) => state);
+  const { rooms: roomsSocket } = useSockets((state) => state);
   const { selectedRoom, onlineUsers, isRoomDetailsShown, setter } =
     useGlobalStore((state) => state) || {};
-
+  const { setter: modalSetter } = useModalStore((state) => state);
   const [typings, setTypings] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showRoomOptions, setShowRoomOptions] = useState(false);
@@ -82,7 +89,7 @@ const ChatContent = () => {
     return messages?.filter((msg) => msg.pinnedAt) || [];
   }, [messages]);
 
-  //Calculate the number of online members (to display in the header)
+  // Calculate the number of online members (to display in the header)
   const onlineMembersCount = useMemo(() => {
     if (!onlineUsers?.length || !participants?.length) return 0;
     return participants.filter((pId) =>
@@ -115,11 +122,68 @@ const ChatContent = () => {
 
   // Register an event listener for the "pinMessage" event from the server
   useEffect(() => {
-    rooms?.on("pinMessage", handlePinMessage);
+    roomsSocket?.on("pinMessage", handlePinMessage);
     return () => {
-      rooms?.off("pinMessage", handlePinMessage);
+      roomsSocket?.off("pinMessage", handlePinMessage);
     };
-  }, [rooms, handlePinMessage]);
+  }, [roomsSocket, handlePinMessage]);
+
+  // Remove user from selected group or channel
+  const leaveRoom = () => {
+    const newParticipants = participants.filter(
+      (participant) => participant !== myID
+    );
+    roomsSocket?.emit("updateRoomData", {
+      roomID: selectedRoom?._id,
+      participants: [...newParticipants],
+    });
+    roomsSocket?.once("updateRoomData", ({ _id, participants }) => {
+      userDataUpdater((prev) => ({
+        ...prev,
+        rooms: prev.rooms.map((room) =>
+          room._id === _id ? { ...room, participants } : room
+        ),
+      }));
+      setter({
+        selectedRoom: { ...selectedRoom!, participants },
+      });
+    });
+  };
+
+  const dropDownItems = [
+    {
+      title: "Go to first message",
+      icon: <IoIosArrowUp className="size-5 text-gray-400" />,
+      onClick: () => {
+        setShowRoomOptions(false);
+        const firstMessage = messages[0]?._id;
+        if (firstMessage) {
+          scrollToMessage(messages[0]?._id);
+        }
+      },
+    },
+    type !== "private" && {
+      title: type === "group" ? "Leave group" : "Leave Channel",
+      icon: <IoLogOutOutline className="size-5 text-gray-400" />,
+      onClick: () => {
+        setShowRoomOptions(false);
+        modalSetter((prev) => ({
+          ...prev,
+          isOpen: true,
+          title: type === "group" ? "Leave group" : "Leave Channel",
+          bodyText: `Are you sure you want to leave ${selectedRoom?.name}?`,
+          onSubmit: async () => {
+            leaveRoom();
+            setTimeout(() => {
+              setter({ selectedRoom: null });
+            }, 500);
+          },
+        }));
+      },
+    },
+  ]
+    .map((item) => item || null)
+    .filter((item) => item !== null);
 
   return (
     <div
@@ -139,7 +203,12 @@ const ChatContent = () => {
           />
 
           <div
-            onClick={() => setter({ isRoomDetailsShown: !isRoomDetailsShown })}
+            onClick={() =>
+              setter({
+                isRoomDetailsShown: !isRoomDetailsShown,
+                mockSelectedRoomData: null,
+              })
+            }
             className="flex items-start cursor-pointer gap-3"
           >
             {_id === myID ? (
@@ -205,20 +274,13 @@ const ChatContent = () => {
               <PiDotsThreeVerticalBold
                 onClick={() => setShowRoomOptions(true)}
                 size={20}
-                className="cursor-pointer mr-2"
+                className="w-fit cursor-pointer mr-2"
               />
             }
-            dropDownItems={[
-              {
-                title: "Coming Soon!",
-                icon: <MdOutlineLockClock fill="teal" className="size-4" />,
-                onClick: () => {},
-              },
-            ]}
+            dropDownItems={dropDownItems}
             isOpen={showRoomOptions}
             setIsOpen={setShowRoomOptions}
-            classNames="z-50 top-0 right-0 w-36"
-            style={{ zIndex: 9999 }}
+            classNames=" top-0 right-0 w-fit text-nowrap "
           />
         </div>
       </div>
@@ -251,7 +313,11 @@ const ChatContent = () => {
           closeReplay={() => setReplayData(null)}
         />
       ) : (
-        <JoinToRoom roomData={selectedRoom!} roomSocket={rooms} userID={myID} />
+        <JoinToRoom
+          roomData={selectedRoom!}
+          roomSocket={roomsSocket}
+          userID={myID}
+        />
       )}
       {isRoomDetailsShown && (
         <span
@@ -259,6 +325,7 @@ const ChatContent = () => {
           className="inset-0 xl:static absolute transition-all duration-200 "
         ></span>
       )}
+      <Modal />
     </div>
   );
 };
