@@ -12,7 +12,6 @@ const AuthenticationForm = () => {
   return (
     <section className="bg-leftBarBg flex-center size-full h-dvh">
       <div className="flex-center transition-all duration-300  flex-col max-w-[360px] w-full text-white">
-        {/* <Image src="/images/telegram.svg" alt="logo" width={160} height={160} /> */}
         <Player
           src={"/animations/telegram.json"}
           className="player size-70"

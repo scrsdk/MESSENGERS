@@ -61,7 +61,7 @@ const DropDown = ({
       {isOpen && (
         <ul
           tabIndex={0}
-          className={`dropdown-content menu bg-modalBg rounded-box shadow-xs max-h-64 overflow-y-auto scroll-w-none ${classNames} z-9999`}
+          className={`dropdown-content menu bg-modalBg rounded-box shadow-xs max-h-64 overflow-y-auto scroll-w-none ${classNames}`}
           style={style}
           id="dropDownContent"
         >

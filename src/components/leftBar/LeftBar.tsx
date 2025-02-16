@@ -18,14 +18,12 @@ import ChatCard from "./ChatCard";
 import RoomSkeleton from "../modules/ui/RoomSkeleton";
 import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
-import { registerSW } from "@/utils";
 import Message from "@/models/message";
 import NotificationPermission from "@/hook/NotificationPermission";
 
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
 const SearchPage = lazy(() => import("@/components/leftBar/SearchPage"));
-const Modal = lazy(() => import("../modules/ui/Modal"));
 
 const LeftBar = () => {
   const [filterBy, setFilterBy] = useState("all");
@@ -35,11 +33,29 @@ const LeftBar = () => {
 
   const userId = useUserStore((state) => state._id);
   const { updater, rooms: roomsSocket } = useSockets((state) => state);
-  const { setter: userDataUpdater } = useUserStore((state) => state);
+  const { setter: userDataUpdater, rooms: userRooms } = useUserStore(
+    (state) => state
+  );
   const { selectedRoom, setter, isRoomDetailsShown } = useGlobalStore(
     (state) => state
   );
   const interactUser = useRef(false);
+
+  useEffect(() => {
+    // registerSW();
+    NotificationPermission();
+    const handleContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target?.tagName === "TEXTAREA" || target?.tagName === "INPUT") {
+        return;
+      }
+      e.preventDefault();
+    };
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
 
   useEffect(() => {
     document.addEventListener("click", () => (interactUser.current = true));
@@ -86,7 +102,7 @@ const LeftBar = () => {
     };
   }, [playRingSound, roomsSocket, selectedRoom]);
 
-  const { status, rooms, isPageLoaded } = useConnection({
+  const { status, isPageLoaded } = useConnection({
     selectedRoom,
     setter,
     userId,
@@ -94,28 +110,12 @@ const LeftBar = () => {
     updater,
   });
 
-  useEffect(() => {
-    registerSW();
-    NotificationPermission();
-    const handleContextMenu = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target?.tagName === "TEXTAREA" || target?.tagName === "INPUT") {
-        return;
-      }
-      e.preventDefault();
-    };
-    document.addEventListener("contextmenu", handleContextMenu);
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
-
   //Sort rooms by filter and last message time
   const sortedRooms = useMemo(() => {
     const filteredRooms =
       filterBy === "all"
-        ? rooms
-        : rooms.filter((room) => room.type === filterBy);
+        ? userRooms
+        : userRooms.filter((room) => room.type === filterBy);
 
     return filteredRooms.sort((a, b) => {
       const aTime = a?.lastMsgData?.createdAt
@@ -126,7 +126,7 @@ const LeftBar = () => {
         : 0;
       return bTime - aTime;
     });
-  }, [rooms, filterBy]);
+  }, [userRooms, filterBy]);
 
   const handleOpenLeftBarMenu = useCallback(() => {
     setIsLeftBarMenuOpen(true);
@@ -160,7 +160,6 @@ const LeftBar = () => {
       />
       {isPageLoaded && (
         <>
-          <Modal />
           <CreateRoomBtn />
         </>
       )}

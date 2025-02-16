@@ -1,8 +1,8 @@
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdDone } from "react-icons/md";
-import { FaArrowRight } from "react-icons/fa6";
-import { ChangeEvent, Suspense, useMemo, useState } from "react";
+import { FaArrowRight, FaRegKeyboard } from "react-icons/fa6";
+import { ChangeEvent, Suspense, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Room from "@/models/room";
 import useUserStore from "@/store/userStore";
@@ -38,6 +38,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
   const [search, setSearch] = useState("");
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
   const { isRoomDetailsShown, onlineUsers } = useGlobalStore((state) => state);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const filteredUserCards = useMemo(() => {
     return userContacts?.length
@@ -96,10 +97,6 @@ const CreateRoom = ({ roomType, close }: Props) => {
   };
 
   // Add emoji to text
-  // const handleEmojiClick = useCallback((e: { emoji: string }) => {
-  //   setRoomName((prev) => prev + e.emoji);
-  // }, []);
-  //TODO پاکش کن
   const handleEmojiClick = (e: { emoji: string }) => {
     setRoomName((prev) => prev + e.emoji);
   };
@@ -214,15 +211,26 @@ const CreateRoom = ({ roomType, close }: Props) => {
           <div className="flex items-center gap-3 border-b-2 border-darkBlue w-full">
             <input
               type="text"
+              ref={inputRef}
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
               className="w-full basis-[90%] p-2 rounded-sm bg-inherit outline-hidden"
               placeholder={`Enter ${roomType} name`}
             />
-            <BsEmojiSmile
-              className="cursor-pointer size-5"
-              onClick={() => setIsEmojiOpen(!isEmojiOpen)}
-            />
+            {isEmojiOpen ? (
+              <FaRegKeyboard
+                onClick={() => {
+                  setIsEmojiOpen(false);
+                  inputRef.current?.focus();
+                }}
+                className="cursor-pointer size-6 mr-0.5"
+              />
+            ) : (
+              <BsEmojiSmile
+                onClick={() => setIsEmojiOpen(true)}
+                className="cursor-pointer size-6 mr-0.5"
+              />
+            )}
           </div>
         </div>
       ) : (

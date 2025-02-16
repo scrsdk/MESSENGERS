@@ -50,7 +50,7 @@ const PinnedMessages: React.FC<PinnedMessagesProps> = ({
   return (
     <div
       id="pinMessagesContainer"
-      className={`sticky top-0 py-1 px-2 h-12 bg-leftBarBg w-full z-40`}
+      className={`sticky top-0 py-1 px-2 h-12 bg-leftBarBg w-full z-10`}
     >
       <div className="flex items-center justify-between relative cursor-pointer gap-2 w-full">
         <div

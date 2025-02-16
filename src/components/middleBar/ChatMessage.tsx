@@ -245,7 +245,7 @@ const ChatMessage = ({
               });
             }
           }}
-          className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-10 transform  ${
+          className={`absolute left-1/2 mx-auto -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-3 rounded-2xl cursor-pointer transition-all duration-300 z-5 transform  ${
             floatingDate ? "translate-y-1.5" : "-translate-y-5 !p-0"
           }`}
         >

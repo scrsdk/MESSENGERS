@@ -17,7 +17,7 @@ const Modal = () => {
 
   return (
     <dialog id="modal" className={`modal  ${isOpen && "modal-open"} `}>
-      <div className="modal-box bg-modalBg text-white">
+      <div className="modal-box bg-modalBg text-white z-50">
         <h3 className="font-vazirBold text-base">{title}</h3>
         <p className="pt-2 w-full font-vazirRegular text-sm ">{bodyText}</p>
 

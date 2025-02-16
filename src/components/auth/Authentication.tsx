@@ -1,5 +1,5 @@
 "use client";
-import Loading from "@/components/modules/ui/LoadingApp";
+import LoadingApp from "@/components/modules/ui/LoadingApp";
 import useUserStore from "@/store/userStore";
 import axios from "axios";
 import { ReactNode, lazy, useEffect, useState } from "react";
@@ -15,7 +15,7 @@ const Authentication = ({ children }: { children: ReactNode }) => {
       try {
         const response = await axios.post("/api/auth/currentuser");
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           setter({
             ...response.data,
             isLogin: true,
@@ -30,7 +30,7 @@ const Authentication = ({ children }: { children: ReactNode }) => {
     })();
   }, [setter]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingApp />;
 
   return <>{isLogin ? <>{children}</> : <AuthenticationForm />}</>;
 };

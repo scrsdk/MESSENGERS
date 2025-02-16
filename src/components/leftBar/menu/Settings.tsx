@@ -15,14 +15,7 @@ import { MdLanguage } from "react-icons/md";
 import Image from "next/image";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import {
-  compressImage,
-  deleteFile,
-  logout,
-  openModal,
-  toaster,
-  uploadFile,
-} from "@/utils";
+import { deleteFile, logout, toaster, uploadFile } from "@/utils";
 import useUserStore from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import DropDown from "@/components/modules/ui/DropDown";
@@ -31,6 +24,7 @@ import Loading from "@/components/modules/ui/Loading";
 import Modal from "@/components/modules/ui/Modal";
 import { CgLock } from "react-icons/cg";
 import { FaRegFolderClosed } from "react-icons/fa6";
+import useModalStore from "@/store/modalStore";
 
 interface Props {
   getBack: () => void;
@@ -48,6 +42,8 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     phone,
     setter: userStateUpdater,
   } = useUserStore((state) => state);
+
+  const { setter: modalSetter } = useModalStore((state) => state);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
@@ -84,8 +80,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
       if (uploadedImageFile) {
         setIsLoading(true);
-        const optimizedFile = await compressImage(uploadedImageFile);
-        const uploadedImageUrl = await uploadFile(optimizedFile);
+        const uploadedImageUrl = await uploadFile(uploadedImageFile);
 
         socket?.emit("updateUserData", {
           userID: _id,
@@ -135,7 +130,8 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     avatar && {
       title: "Remove Profile Photo",
       onClick: () => {
-        openModal({
+        modalSetter({
+          isOpen: true,
           title: "Delete Photo",
           bodyText: "Are you sure you want to delete your profile photo?",
           okText: "Delete",
@@ -159,7 +155,8 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     {
       title: "Log out",
       onClick: () => {
-        openModal({
+        modalSetter({
+          isOpen: true,
           title: "Log out",
           bodyText: "Do you really want to log out?",
           okText: "Yes",

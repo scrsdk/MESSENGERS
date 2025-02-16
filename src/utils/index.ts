@@ -5,7 +5,6 @@ import randomHexGenerate from "./RandomHexGenerator";
 import scrollToMessage from "./ScrollToMessage";
 import copyText from "./CopyText";
 import logout from "./LogOut";
-import openModal from "./OpenModal";
 import getTimeFromDate from "./GetTimeFromDate";
 import getTimeReportFromDate from "./GetTimeReportFromDate";
 import secondsToTimeString from "./SecondToTimeString";
@@ -26,7 +25,6 @@ export {
   scrollToMessage,
   copyText,
   logout,
-  openModal,
   getTimeFromDate,
   getTimeReportFromDate,
   secondsToTimeString,
