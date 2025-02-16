@@ -1,22 +1,32 @@
 import Image from "next/image";
-import { IoClose } from "react-icons/io5";
 import { TbMessage } from "react-icons/tb";
 import { IoCopyOutline } from "react-icons/io5";
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toaster } from "@/utils";
-import RoomCard from "../leftBar/RoomCard";
 import { copyText as copyFn } from "@/utils";
 import User from "@/models/user";
 import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
+import { UserStoreUpdater } from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import Loading from "../modules/ui/Loading";
 import Room from "@/models/room";
-import DropDown from "../modules/ui/DropDown";
-import { MdOutlineLockClock } from "react-icons/md";
+import RoomCard from "./RoomCard";
+import { FiUserPlus } from "react-icons/fi";
+import { LuUsers } from "react-icons/lu";
+import { RiShieldStarLine } from "react-icons/ri";
 
-const RoomDetails = () => {
+interface RoomDetailsProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  selectedRoomData: any;
+  myData: User & UserStoreUpdater;
+  roomData: User & Room;
+}
+
+const RoomDetails = ({
+  selectedRoomData,
+  myData,
+  roomData,
+}: RoomDetailsProps) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [notifications, setNotifications] = useState(true);
@@ -26,18 +36,15 @@ const RoomDetails = () => {
     setter,
     isRoomDetailsShown,
     selectedRoom,
-    shouldCloseAll,
     mockSelectedRoomData,
     onlineUsers,
   } = useGlobalStore((state) => state) || {};
-  const [showRoomDetailsOptions, setShowRoomDetailsOptions] = useState(false);
 
-  const myData = useUserStore((state) => state);
+  // const myData = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
 
   const { _id: myID, rooms } = myData;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const selectedRoomData: any = mockSelectedRoomData ?? selectedRoom;
+  // const selectedRoomData: any = mockSelectedRoomData ?? selectedRoom;
   const { participants, type, _id: roomID } = { ...selectedRoomData };
 
   const onlineUsersCount = participants?.filter((pId: string) =>
@@ -54,13 +61,7 @@ const RoomDetails = () => {
     link,
     _id,
     biography,
-  } = useMemo(() => {
-    return type === "private"
-      ? participants?.find((data: Room) => data?._id !== myID) ||
-          participants?.find((data: Room) => data?._id === myID) ||
-          selectedRoomData
-      : selectedRoomData || "";
-  }, [myID, participants, selectedRoomData, type]);
+  } = roomData;
 
   useEffect(() => {
     if (!roomSocket || !roomID || !isRoomDetailsShown) return;
@@ -82,12 +83,9 @@ const RoomDetails = () => {
     }
     return () => {
       setGroupMembers([]);
+      roomSocket.off("getRoomMembers");
     };
   }, [roomSocket, roomID, isRoomDetailsShown, type]);
-
-  useEffect(() => {
-    setter({ mockSelectedRoomData: null });
-  }, [selectedRoom?._id, setter]);
 
   const copyText = async () => {
     await copyFn((username && "@" + username) || link);
@@ -134,21 +132,6 @@ const RoomDetails = () => {
     setter({ isRoomDetailsShown: false });
   };
 
-  const closeRoomDetails = () => {
-    if (shouldCloseAll)
-      return setter({
-        isRoomDetailsShown: false,
-        mockSelectedRoomData: null,
-        shouldCloseAll: false, // reset the value to default
-      });
-
-    if (mockSelectedRoomData) {
-      setter({ mockSelectedRoomData: null });
-    } else {
-      setter({ isRoomDetailsShown: false });
-    }
-  };
-
   const isUserOnline = useCallback(
     (userId: string) => {
       return onlineUsers.some((data) => {
@@ -157,44 +140,10 @@ const RoomDetails = () => {
     },
     [onlineUsers]
   );
-
   return (
-    <div
-      className={`flex-col fixed xl:static h-dvh w-full xl:w-[25%] md:w-[35%] transition-all duration-300 bg-leftBarBg text-white z-9999 ${
-        isRoomDetailsShown ? "xl:flex right-0" : "xl:hidden -right-full "
-      }`}
-    >
-      <div className="bg-chatBg p-3 relative chatBackground">
-        <div className="flex items-center justify-between w-full py-1 ">
-          <IoClose
-            onClick={closeRoomDetails}
-            className="size-5 cursor-pointer"
-          />
-          <div className="flex items-center gap-2 justify-end">
-            <DropDown
-              button={
-                <PiDotsThreeVerticalBold
-                  onClick={() => setShowRoomDetailsOptions(true)}
-                  size={20}
-                  className="cursor-pointer mr-2"
-                />
-              }
-              dropDownItems={[
-                {
-                  title: "Coming Soon!",
-                  icon: <MdOutlineLockClock fill="teal" className="size-4" />,
-                  onClick: () => {},
-                },
-              ]}
-              isOpen={showRoomDetailsOptions}
-              setIsOpen={setShowRoomDetailsOptions}
-              classNames="z-50 top-0 right-0 w-36"
-              style={{ zIndex: 9999 }}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 my-3">
+    <>
+      <div className=" bg-chatBg py-2 relative chatBackground">
+        <div className="flex items-center gap-3 pb-4 px-2">
           {avatar ? (
             <Image
               src={avatar}
@@ -215,7 +164,7 @@ const RoomDetails = () => {
             </h3>
 
             <div className="text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
-              {type == "private" ? (
+              {type === "private" ? (
                 onlineUsers.some((data) => {
                   if (data.userID == _id) return true;
                 }) ? (
@@ -244,7 +193,7 @@ const RoomDetails = () => {
         )}
       </div>
 
-      <div className="px-3 mt-5 space-y-4">
+      <div className="px-3 my-3 space-y-4">
         <p className="text-lightBlue">Info</p>
 
         {biography && (
@@ -296,32 +245,78 @@ const RoomDetails = () => {
         </div>
       </div>
 
-      {type === "group" && (
-        <div className="border-t border-black/40  mt-6">
-          {isLoading ? (
-            <div className="flex-center mt-10">
-              <Loading size="lg" />
+      {type === "channel" && (
+        <>
+          <div className="h-2 bg-black"></div>
+          <div className="mt-3 space-y-2 ">
+            <p className="text-lightBlue px-3 text-sm">Members</p>
+
+            {/* Subscribers */}
+
+            <div
+              className="px-3 py-2 flex items-start justify-between cursor-pointer hover:bg-white/5 transition-all duration-200"
+              onClick={() => setter({ rightBarRoute: "/add-subscribers" })}
+            >
+              <span className="flex gap-5">
+                <LuUsers className="size-5 pl-0.5 text-gray-400" />
+                <span>Subscribers</span>
+              </span>
+              <span className="pr-2">{roomData.participants.length}</span>
             </div>
-          ) : (
-            <div className="mt-3 space-y-2 ">
-              <p className="text-lightBlue px-3">Members</p>
-              <div className="flex flex-col mt-3 w-full overflow-y-scroll scroll-w-none">
-                {groupMembers?.length
-                  ? groupMembers.map((member) => (
-                      <RoomCard
-                        key={member._id}
-                        {...member}
-                        myData={myData}
-                        isOnline={isUserOnline(member._id)}
-                      />
-                    ))
-                  : null}
-              </div>
+
+            {/* Administrators */}
+            <div
+              className="px-3 py-2 flex items-start justify-between cursor-pointer hover:bg-white/5 transition-all duration-200"
+              onClick={() => setter({ rightBarRoute: "/administrators" })}
+            >
+              <span className="flex gap-5">
+                <RiShieldStarLine className="size-5 text-gray-400" />
+                <span>Administrators</span>
+              </span>
+              <span className="pr-2">{roomData.admins.length}</span>
             </div>
-          )}
-        </div>
+          </div>
+          <div className="h-2 bg-black"></div>
+        </>
       )}
-    </div>
+
+      {type === "group" && (
+        <>
+          <div className="h-2 bg-black"></div>
+          <div
+            className="px-3 py-2 flex items-start gap-4 text-darkBlue cursor-pointer hover:bg-white/5 transition-all duration-200"
+            onClick={() => setter({ rightBarRoute: "/add-members" })}
+          >
+            <FiUserPlus className="size-5 scale-x-[-1] " />
+            <span>Add members</span>
+          </div>
+          <div className="h-2 bg-black"></div>
+          <div className="border-t border-black/40">
+            {isLoading ? (
+              <div className="flex-center mt-10">
+                <Loading size="lg" />
+              </div>
+            ) : (
+              <div className="mt-3 space-y-2 ">
+                <p className="text-lightBlue px-3">Members</p>
+                <div className="flex flex-col mt-3 w-full overflow-y-scroll scroll-w-none">
+                  {groupMembers?.length
+                    ? groupMembers.map((member) => (
+                        <RoomCard
+                          key={member._id}
+                          {...member}
+                          myData={myData}
+                          isOnline={isUserOnline(member._id)}
+                        />
+                      ))
+                    : null}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { create } from "zustand";
 export interface GlobalStoreProps {
   selectedRoom: null | Room;
   mockSelectedRoomData: null | Room | User;
+  rightBarRoute: string;
   onlineUsers: { socketID: string; userID: string }[];
   socket: null | Socket;
   isRoomDetailsShown: boolean;
@@ -29,6 +30,7 @@ interface Updater {
 const useGlobalStore = create<GlobalStoreProps & Updater>((set) => ({
   selectedRoom: null,
   mockSelectedRoomData: null,
+  rightBarRoute: "/",
   onlineUsers: [],
   socket: null,
   shouldCloseAll: false,

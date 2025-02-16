@@ -66,9 +66,9 @@ const useConnection = ({
       handleListenerUpdate();
     });
 
-    socket.on("getRooms", async (fetchedRooms) => {
+    socket.on("getRooms", (fetchedRooms) => {
       setRooms(fetchedRooms);
-      await userDataUpdater({ rooms: fetchedRooms });
+      userDataUpdater({ rooms: fetchedRooms });
       setIsPageLoaded(true);
       handleListenerUpdate();
     });
@@ -86,6 +86,24 @@ const useConnection = ({
     socket.on("createRoom", (roomData) => {
       socket.emit("getRooms", userId);
       if (roomData.creator === userId) socket.emit("joining", roomData._id);
+    });
+
+    socket.on("updateRoomData", (roomData) => {
+      socket.emit("getRooms", userId);
+
+      setter((prev) => ({
+        ...prev,
+        selectedRoom:
+          prev.selectedRoom && prev.selectedRoom._id === roomData._id
+            ? {
+                ...prev.selectedRoom,
+                name: roomData.name,
+                avatar: roomData.avatar,
+                participants: roomData.participants,
+                admins: roomData.admins,
+              }
+            : prev.selectedRoom,
+      }));
     });
 
     socket.on("updateOnlineUsers", (onlineUsers) => setter({ onlineUsers }));
@@ -142,6 +160,7 @@ const useConnection = ({
         "updateOnlineUsers",
         "deleteRoom",
         "seenMsg",
+        "updateRoomData",
       ].forEach((event) => socket.off(event));
     };
   }, [selectedRoom, setter, userDataUpdater, userId]);
@@ -196,7 +215,7 @@ const useConnection = ({
     }
   }, [rooms, updater, userDataUpdater]);
 
-  return { status, rooms, isPageLoaded, setRooms, socketRef };
+  return { status, isPageLoaded, setRooms, socketRef };
 };
 
 export default useConnection;

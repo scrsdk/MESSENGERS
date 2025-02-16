@@ -69,7 +69,9 @@ const ChatCard = ({
   const notSeenCount = useRef<number>(initialNotSeenCount);
   const gradientClass = useMemo(() => getGradientClass(_id), [_id]);
 
-  const { selectedRoom, onlineUsers } = useGlobalStore((state) => state);
+  const { selectedRoom, onlineUsers, setter } = useGlobalStore(
+    (state) => state
+  );
   const { _id: myID } = useUserStore((state) => state) || {};
   const { rooms } = useSockets((state) => state);
 
@@ -121,6 +123,7 @@ const ChatCard = ({
     lastMsgData?.message || (lastMsgData?.voiceData ? "Voice message" : "");
 
   const joinToRoom = () => {
+    setter({ rightBarRoute: "/" });
     setIsActive(true);
     rooms?.emit("joining", _id);
   };
