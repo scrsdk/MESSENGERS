@@ -230,7 +230,7 @@ const ChatContent = () => {
             )}
 
             <div className="flex justify-center flex-col gap-1">
-              <h3 className="font-bold text-[16px] font-vazirBold">
+              <h3 className="font-bold text-base font-vazirBold truncate w-[85%] ">
                 {_id === myID ? "Saved messages" : name + " " + lastName}
               </h3>
 
@@ -280,7 +280,7 @@ const ChatContent = () => {
             dropDownItems={dropDownItems}
             isOpen={showRoomOptions}
             setIsOpen={setShowRoomOptions}
-            classNames=" top-0 right-0 w-fit text-nowrap "
+            classNames=" top-5 right-0 w-fit text-nowrap "
           />
         </div>
       </div>

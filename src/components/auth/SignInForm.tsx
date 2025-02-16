@@ -74,6 +74,7 @@ const SignInForm = () => {
               message: "Invalid phone number",
             },
           })}
+          dir="auto"
           type="tel"
           placeholder="Phone number"
           autoComplete="off"
@@ -116,6 +117,7 @@ const SignInForm = () => {
               }
             },
           })}
+          dir="auto"
           type="password"
           placeholder="Password"
           autoComplete="new-password"

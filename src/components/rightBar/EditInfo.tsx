@@ -176,6 +176,7 @@ const EditInfo = ({
           } w-full`}
         >
           <input
+            dir="auto"
             type="text"
             ref={inputRef}
             value={updatedRoomName}

@@ -78,6 +78,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
         </p>
 
         <input
+          dir="auto"
           type="text"
           value={updatedName}
           onChange={(e) => setUpdatedName(e.target.value)}
@@ -90,6 +91,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
         <LineSeparator />
 
         <input
+          dir="auto"
           type="text"
           value={updatedLastName}
           onChange={(e) => setUpdatedLastName(e.target.value)}

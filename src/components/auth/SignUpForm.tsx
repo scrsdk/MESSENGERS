@@ -77,6 +77,7 @@ const SignUpForm = () => {
               message: "Must be 5 to 20 characters",
             },
           })}
+          dir="auto"
           type="text"
           placeholder="Username"
           autoComplete="off"
@@ -116,6 +117,7 @@ const SignUpForm = () => {
               message: "Invalid phone number",
             },
           })}
+          dir="auto"
           type="tel"
           placeholder="Phone number"
           autoComplete="phone"
@@ -158,6 +160,7 @@ const SignUpForm = () => {
               }
             },
           })}
+          dir="auto"
           type="password"
           placeholder="Password"
           autoComplete="new-password"

@@ -158,8 +158,8 @@ const RoomDetails = ({
             </div>
           )}
 
-          <div className="flex justify-center flex-col gap-1">
-            <h3 className="font-vazirBold text-base line-clamp-1 text-ellipsis">
+          <div className="flex justify-center flex-col gap-1 text-ellipsis w-[80%]">
+            <h3 className="font-vazirBold text-base truncate">
               {name + " " + lastName}
             </h3>
 

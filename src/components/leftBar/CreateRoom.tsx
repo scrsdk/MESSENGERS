@@ -197,6 +197,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
           ) : (
             <div>
               <input
+                dir="auto"
                 type="file"
                 className="hidden"
                 id="imgUpload"
@@ -210,6 +211,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
 
           <div className="flex items-center gap-3 border-b-2 border-darkBlue w-full">
             <input
+              dir="auto"
               type="text"
               ref={inputRef}
               value={roomName}
@@ -236,6 +238,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
       ) : (
         <>
           <input
+            dir="auto"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

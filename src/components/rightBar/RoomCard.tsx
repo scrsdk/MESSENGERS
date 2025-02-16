@@ -31,7 +31,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
   const { setter, selectedRoom, rightBarRoute } = useGlobalStore(
     (state) => state
   );
-  const rooms = useUserStore((state) => state.rooms);
+  const { rooms, _id: myID } = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
   const [showUserOptions, setShowUserOptions] = useState(false);
 
@@ -227,7 +227,8 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
       {(rightBarRoute === "/add-subscribers" ||
         rightBarRoute === "/edit-info" ||
         rightBarRoute === "/administrators") &&
-        !isOwner && (
+        !isOwner &&
+        _id !== myID && (
           <div>
             <DropDown
               button={

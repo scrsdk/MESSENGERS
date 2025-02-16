@@ -231,12 +231,18 @@ const ChatCard = ({
         ></span>
       )}
 
-      <div className="flex flex-col gap-1 text-darkGray text-sm w-[75%]">
-        <div className="flex items-center">
-          <div className="text-white flex items-start gap-0.5 text-base font-vazirBold line-clamp-1 truncate">
-            {type === "group" && <HiMiniUserGroup className="mt-[0.17rem]" />}
-            {type === "channel" && <HiSpeakerphone className="mt-[0.17rem]" />}
-            {roomID === myID ? "Saved messages" : name + " " + lastName}
+      <div className="flex flex-col gap-1 text-darkGray text-sm w-[75%] truncate">
+        <div className="flex items-center truncate">
+          <div className="text-white flex items-start gap-0.5 text-base font-vazirBold truncate ">
+            {type === "group" && (
+              <HiMiniUserGroup className="mt-[0.17rem] min-w-fit" />
+            )}
+            {type === "channel" && (
+              <HiSpeakerphone className="mt-[0.17rem] min-w-fit" />
+            )}
+            <span dir="auto" className="truncate">
+              {roomID === myID ? "Saved messages" : name + " " + lastName}
+            </span>
           </div>
           <div className="flex gap-1 items-center absolute right-3">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

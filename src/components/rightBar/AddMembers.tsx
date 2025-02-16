@@ -128,6 +128,7 @@ const AddMembers = ({
   return (
     <>
       <input
+        dir="auto"
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
