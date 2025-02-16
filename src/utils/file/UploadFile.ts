@@ -1,6 +1,13 @@
 import { S3 } from "aws-sdk";
+import compressImage from "./CompressImage";
 
 const uploadFile = async (file: File) => {
+  let uploadFile: File = file;
+
+  if (file.type.match("image.*")) {
+    uploadFile = await compressImage(file);
+  }
+
   try {
     const s3 = new S3({
       accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
@@ -13,12 +20,12 @@ const uploadFile = async (file: File) => {
       throw new Error("S3 bucket name is not defined");
     }
 
-    const uniqueFileName = `${file.name}-${Date.now()}`;
+    const uniqueFileName = `${uploadFile.name}-${Date.now()}`;
 
     const params = {
       Bucket: bucketName,
       Key: encodeURIComponent(uniqueFileName),
-      Body: file,
+      Body: uploadFile,
     };
 
     await s3.upload(params).promise();
