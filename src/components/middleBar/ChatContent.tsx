@@ -193,10 +193,10 @@ const ChatContent = () => {
       {/* Chat Header */}
       <div
         id="chatContentHeader"
-        className="sticky top-0 flex items-center justify-between h-17 p-2  w-full border-b border-white/5 bg-leftBarBg"
+        className="sticky top-0  flex items-center justify-between h-17 p-2  w-full border-b border-white/5 bg-leftBarBg"
         style={{ zIndex: "20" }}
       >
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 w-full  overflow-hidden">
           <IoMdArrowRoundBack
             onClick={handleBack}
             className="cursor-pointer size-6 text-white/80"
@@ -209,7 +209,7 @@ const ChatContent = () => {
                 mockSelectedRoomData: null,
               })
             }
-            className="flex items-start cursor-pointer gap-3"
+            className="flex items-center cursor-pointer gap-3 truncate max-w-[80%]"
           >
             {_id === myID ? (
               <div className="size-11 bg-cyan-700 rounded-full shrink-0 flex-center text-white text-2xl">
@@ -229,12 +229,12 @@ const ChatContent = () => {
               </div>
             )}
 
-            <div className="flex justify-center flex-col gap-1">
-              <h3 className="font-bold text-base font-vazirBold truncate w-[85%] ">
+            <div className="flex justify-center flex-col gap-1 truncate">
+              <h3 className="text-base font-vazirBold truncate">
                 {_id === myID ? "Saved messages" : name + " " + lastName}
               </h3>
 
-              <div className="font-bold text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
+              <div className="text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
                 {selectedRoom?.type !== "channel" &&
                 typings.length &&
                 typings.filter((tl) => tl !== myName).length ? (

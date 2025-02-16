@@ -25,6 +25,7 @@ import Modal from "@/components/modules/ui/Modal";
 import { CgLock } from "react-icons/cg";
 import { FaRegFolderClosed } from "react-icons/fa6";
 import useModalStore from "@/store/modalStore";
+import ProfileImageViewer from "@/components/modules/ProfileImageViewer";
 
 interface Props {
   getBack: () => void;
@@ -48,6 +49,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const avatarElem = () => {
     const inputElem = document.createElement("input");
@@ -207,6 +209,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
                     width={55}
                     height={55}
                     alt="avatar"
+                    onClick={() => setIsViewerOpen(true)}
                   />
                 ) : (
                   <div className="flex-center bg-darkBlue shrink-0 text-center font-bold text-xl mt-1">
@@ -403,6 +406,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           </a>{" "}
         </div>
       </div>
+      {isViewerOpen && (
+        <ProfileImageViewer
+          imageUrl={avatar}
+          onClose={() => setIsViewerOpen(false)}
+        />
+      )}
     </LeftBarContainer>
   );
 };

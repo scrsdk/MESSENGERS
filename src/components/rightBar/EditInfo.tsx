@@ -154,7 +154,7 @@ const EditInfo = ({
           <Image
             src={roomImage}
             onClick={() => setRoomImage(null)}
-            className="cursor-pointer object-cover size-13 rounded-full"
+            className="cursor-pointer object-cover shrink-0 size-13 rounded-full"
             width={60}
             height={60}
             alt="avatar"

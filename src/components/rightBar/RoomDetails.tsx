@@ -14,6 +14,7 @@ import RoomCard from "./RoomCard";
 import { FiUserPlus } from "react-icons/fi";
 import { LuUsers } from "react-icons/lu";
 import { RiShieldStarLine } from "react-icons/ri";
+import ProfileImageViewer from "@/components/modules/ProfileImageViewer";
 
 interface RoomDetailsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +32,7 @@ const RoomDetails = ({
   const [isLoading, setIsLoading] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [groupMembers, setGroupMembers] = useState<User[]>([]);
-
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const {
     setter,
     isRoomDetailsShown,
@@ -140,6 +141,7 @@ const RoomDetails = ({
     },
     [onlineUsers]
   );
+
   return (
     <>
       <div className=" bg-chatBg py-2 relative chatBackground">
@@ -151,6 +153,7 @@ const RoomDetails = ({
               width={48}
               height={48}
               alt="avatar"
+              onClick={() => setIsViewerOpen(true)}
             />
           ) : (
             <div className="flex-center bg-darkBlue rounded-full size-12 shrink-0 text-center font-vazirBold text-xl">
@@ -315,6 +318,12 @@ const RoomDetails = ({
             )}
           </div>
         </>
+      )}
+      {isViewerOpen && (
+        <ProfileImageViewer
+          imageUrl={avatar}
+          onClose={() => setIsViewerOpen(false)}
+        />
       )}
     </>
   );
