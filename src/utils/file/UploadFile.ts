@@ -21,10 +21,10 @@ const uploadFile = async (file: File) => {
     }
 
     const uniqueFileName = `${uploadFile.name}-${Date.now()}`;
-
+    const url = file.type.match("image.*") ? "images/" : "voices/";
     const params = {
       Bucket: bucketName,
-      Key: encodeURIComponent(uniqueFileName),
+      Key: url + encodeURIComponent(uniqueFileName),
       Body: uploadFile,
     };
 
@@ -32,7 +32,7 @@ const uploadFile = async (file: File) => {
 
     const permanentSignedUrl = s3.getSignedUrl("getObject", {
       Bucket: bucketName,
-      Key: encodeURIComponent(uniqueFileName),
+      Key: url + encodeURIComponent(uniqueFileName),
       Expires: 31536000000,
     });
 

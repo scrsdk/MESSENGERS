@@ -13,7 +13,6 @@ import dateString from "./DateString";
 import formatDate from "./FormatDate";
 import uploadFile from "./file/UploadFile";
 import deleteFile from "./file/DeleteFile";
-import convertToWebP from "./file/ConvertToWebP";
 import compressImage from "./file/CompressImage";
 import registerSW from "./RegisterSW";
 
@@ -33,7 +32,6 @@ export {
   formatDate,
   uploadFile,
   deleteFile,
-  convertToWebP,
   registerSW,
   compressImage,
 };

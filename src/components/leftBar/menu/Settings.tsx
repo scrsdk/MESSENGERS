@@ -51,6 +51,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   const avatarElem = () => {
     const inputElem = document.createElement("input");
 
@@ -81,20 +82,22 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       const socket = useSockets.getState().rooms;
 
       if (uploadedImageFile) {
+        console.log("sss");
+        let imageUrl;
         setIsLoading(true);
-        const imageUrl = await uploadFile(uploadedImageFile);
-        if (imageUrl) {
-          setUploadedImageUrl(imageUrl);
+        const fileImageUrl = await uploadFile(uploadedImageFile);
+        if (fileImageUrl) {
+          imageUrl = fileImageUrl;
 
           socket?.emit("updateUserData", {
             userID: _id,
-            avatar: uploadedImageUrl,
+            avatar: imageUrl,
           });
 
           socket?.on("updateUserData", () => {
             userStateUpdater((prev) => ({
               ...prev,
-              avatar: uploadedImageUrl!,
+              avatar: imageUrl!,
             }));
 
             setUploadedImageFile(null);
@@ -108,7 +111,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     } finally {
       setIsLoading(false);
     }
-  }, [_id, uploadedImageFile, uploadedImageUrl, userStateUpdater]);
+  }, [_id, uploadedImageFile, userStateUpdater]);
 
   useEffect(() => {
     if (!uploadedImageUrl) return;

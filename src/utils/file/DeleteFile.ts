@@ -1,8 +1,8 @@
 import { S3 } from "aws-sdk";
 import { toaster } from "@/utils";
 
-const extractFileName = (url: string) => {
-  const regex = /\/([^\/?]+)(?=\?)/;
+const extractFilePath = (url: string) => {
+  const regex = /\/([^\/]+\/[^\/?]+)\?/;
   const match = url.match(regex);
   return match ? decodeURIComponent(match[1]) : null;
 };
@@ -15,22 +15,21 @@ const deleteFile = async (fileUrl: string) => {
       endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT,
     });
     const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
-    const fileName = extractFileName(fileUrl);
+    const filePath = extractFilePath(fileUrl);
 
     if (!bucketName) {
       throw new Error("S3 bucket name is not defined");
     }
-    if (!fileName) {
+    if (!filePath) {
       throw new Error("File name is not defined");
     }
 
     const params = {
       Bucket: bucketName,
-      Key: fileName,
+      Key: filePath,
     };
 
     await s3.deleteObject(params).promise();
-    console.log("File deleted successfully");
   } catch (error) {
     console.error("Delete failed:", error);
     toaster("error", "Delete failed! Please try again.");
