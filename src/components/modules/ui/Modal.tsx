@@ -1,4 +1,4 @@
-import useModalStore from "@/store/modalStore";
+import useModalStore from "@/stores/modalStore";
 import Button from "./Button";
 
 const Modal = () => {

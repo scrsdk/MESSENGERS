@@ -1,7 +1,7 @@
 import Room from "@/models/room";
 import User from "@/models/user";
-import { GlobalStoreProps } from "@/store/globalStore";
-import { UserStoreUpdater } from "@/store/userStore";
+import { GlobalStoreProps } from "@/stores/globalStore";
+import { UserStoreUpdater } from "@/stores/userStore";
 import { useEffect } from "react";
 import { DefaultEventsMap } from "socket.io";
 import { Socket } from "socket.io-client";

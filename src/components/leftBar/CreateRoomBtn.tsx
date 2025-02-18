@@ -2,7 +2,7 @@ import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import Room from "@/models/room";
-import useGlobalStore from "@/store/globalStore";
+import useGlobalStore from "@/stores/globalStore";
 import DropDown from "../modules/ui/DropDown";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { HiMiniUserGroup } from "react-icons/hi2";

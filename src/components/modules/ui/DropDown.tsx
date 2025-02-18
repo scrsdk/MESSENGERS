@@ -1,4 +1,4 @@
-import useModalStore from "@/store/modalStore";
+import useModalStore from "@/stores/modalStore";
 import { CSSProperties, ReactNode, useEffect, useRef } from "react";
 export interface DropDownItemProps {
   onClick: () => void;

@@ -1,8 +1,8 @@
 import Room from "@/models/room";
 import User from "@/models/user";
-import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import { scrollToMessage } from "@/utils";
 import Image from "next/image";
 import { FiBookmark } from "react-icons/fi";
@@ -88,7 +88,7 @@ const SearchResultCard = (
 
       setTimeout(
         () => {
-          if (roomData.messages?.length)
+          if (roomData.messages?.length === 1)
             scrollToMessage(roomData.messages[0]._id);
         },
         isChatPageLoaded ? 1000 : 6000

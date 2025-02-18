@@ -17,13 +17,13 @@ import {
   useMemo,
   useState,
 } from "react";
-import useSockets from "@/store/useSockets";
-import useUserStore from "@/store/userStore";
+import useSockets from "@/stores/useSockets";
+import useUserStore from "@/stores/userStore";
 import User from "@/models/user";
 import Modal from "../modules/ui/Modal";
 import DropDown from "../modules/ui/DropDown";
-import useModalStore from "@/store/modalStore";
-import useGlobalStore from "@/store/globalStore";
+import useModalStore from "@/stores/modalStore";
+import useGlobalStore from "@/stores/globalStore";
 import Image from "next/image";
 import Message from "@/models/message";
 import ProfileGradients from "../modules/ProfileGradients";

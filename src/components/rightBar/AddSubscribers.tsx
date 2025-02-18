@@ -1,8 +1,8 @@
-import { UserStoreUpdater } from "@/store/userStore";
+import { UserStoreUpdater } from "@/stores/userStore";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import User from "@/models/user";
-import useGlobalStore from "@/store/globalStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useSockets from "@/stores/useSockets";
 import Room from "@/models/room";
 import { FiUserPlus } from "react-icons/fi";
 import RoomCard from "./RoomCard";

@@ -8,13 +8,13 @@ import React, {
   Suspense,
   lazy,
 } from "react";
-import useGlobalStore from "@/store/globalStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useSockets from "@/stores/useSockets";
 import ScrollToBottom from "../modules/ScrollToBottom";
 import { IoIosArrowDown } from "react-icons/io";
 import useScrollChange from "@/hook/useScrollChange";
 import MessageModel from "@/models/message";
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import useScrollMessage from "@/hook/chatMessage/useScrollMessage";
 import useMessages from "@/hook/chatMessage/useMessages";
 import useTyping from "@/hook/chatMessage/useTyping";

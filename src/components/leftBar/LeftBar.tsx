@@ -1,8 +1,8 @@
 "use client";
 
-import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import React, {
   lazy,
   useEffect,
@@ -19,8 +19,8 @@ import RoomSkeleton from "../modules/ui/RoomSkeleton";
 import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
 import Message from "@/models/message";
-import NotificationPermission from "@/hook/NotificationPermission";
 import { registerSW } from "@/utils";
+import useNotification from "@/hook/useNotification";
 
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
@@ -41,10 +41,10 @@ const LeftBar = () => {
     (state) => state
   );
   const interactUser = useRef(false);
+  useNotification();
 
   useEffect(() => {
     registerSW();
-    NotificationPermission();
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target?.tagName === "TEXTAREA" || target?.tagName === "INPUT") {

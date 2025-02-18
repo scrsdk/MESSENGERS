@@ -13,23 +13,29 @@ export const POST = async (req: Request) => {
     const { query } = await req.json();
     const { userID, payload: purePayload } = query;
 
-    const payload = purePayload;
+    const payload = purePayload.toLowerCase();
 
     let result;
 
     if (payload.startsWith("@")) {
+      const searchText = payload.slice(1).trim();
+
+      if (searchText.length === 0) {
+        return Response.json(null, { status: 404 });
+      }
+
       result = await RoomSchema.findOne({
         link: { $regex: new RegExp(`^${escapeRegExp(payload)}$`, "i") },
       });
       if (result) return Response.json([result], { status: 200 });
-      if (!result) {
-        result = await UserSchema.findOne({
-          username: {
-            $regex: new RegExp(`^${escapeRegExp(payload.slice(1))}$`, "i"),
-          },
-        });
-        if (result) return Response.json([result], { status: 200 });
-      }
+
+      result = await UserSchema.find({
+        username: {
+          $regex: new RegExp(`^${escapeRegExp(searchText)}.*$`, "i"),
+        },
+      });
+
+      if (result.length > 0) return Response.json(result, { status: 200 });
 
       return Response.json(null, { status: 404 });
     }
@@ -106,7 +112,7 @@ export const POST = async (req: Request) => {
                   : roomData.name,
               avatar:
                 roomData.type === "private"
-                  ? otherParticipant?.avatar ?? "-"
+                  ? otherParticipant?.avatar ?? ""
                   : roomData.avatar,
             });
           }

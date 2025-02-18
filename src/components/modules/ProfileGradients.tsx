@@ -1,4 +1,4 @@
-import { getGradientClass } from "@/store/gradientStore";
+import { getGradientClass } from "@/stores/gradientStore";
 import { CSSProperties, useMemo } from "react";
 
 const ProfileGradients = ({

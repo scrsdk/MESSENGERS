@@ -1,8 +1,8 @@
 import Room from "@/models/room";
 import User from "@/models/user";
-import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import Image from "next/image";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import DropDown from "../modules/ui/DropDown";

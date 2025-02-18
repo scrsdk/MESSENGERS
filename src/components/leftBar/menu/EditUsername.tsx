@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import LeftBarContainer from "./LeftBarContainer";
 import { MdDone } from "react-icons/md";
 import axios from "axios";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import Loading from "@/components/modules/ui/Loading";
 
 const EditUsername = ({ getBack }: { getBack: () => void }) => {

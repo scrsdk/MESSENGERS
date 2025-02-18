@@ -1,4 +1,4 @@
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import ContactCard from "../leftBar/ContactCard";
 import {
   Dispatch,
@@ -9,8 +9,8 @@ import {
   useState,
 } from "react";
 import User from "@/models/user";
-import useGlobalStore from "@/store/globalStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useSockets from "@/stores/useSockets";
 import Room from "@/models/room";
 
 interface AddMembersProps {

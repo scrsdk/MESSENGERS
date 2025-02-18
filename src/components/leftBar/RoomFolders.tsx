@@ -1,4 +1,4 @@
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import { useEffect, useRef, useState } from "react";
 import ChatFolders from "./ChatFolders";
 

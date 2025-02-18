@@ -1,5 +1,5 @@
 "use client";
-import useGlobalStore from "@/store/globalStore";
+import useGlobalStore from "@/stores/globalStore";
 import { useEffect } from "react";
 import Aos from "aos";
 

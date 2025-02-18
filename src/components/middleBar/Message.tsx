@@ -14,11 +14,11 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import MessageActions from "./MessageActions";
 import MessageModel from "@/models/message";
 import Voice from "@/models/voice";
-import useSockets from "@/store/useSockets";
-import useAudio from "@/store/audioStore";
+import useSockets from "@/stores/useSockets";
+import useAudio from "@/stores/audioStore";
 import { IoMdCheckmark } from "react-icons/io";
-import useModalStore from "@/store/modalStore";
-import useGlobalStore from "@/store/globalStore";
+import useModalStore from "@/stores/modalStore";
+import useGlobalStore from "@/stores/globalStore";
 import Loading from "../modules/ui/Loading";
 import ProfileGradients from "../modules/ProfileGradients";
 

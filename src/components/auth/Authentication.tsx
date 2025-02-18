@@ -1,6 +1,6 @@
 "use client";
 import LoadingApp from "@/components/modules/ui/LoadingApp";
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import axios from "axios";
 import { ReactNode, lazy, useEffect, useState } from "react";
 const AuthenticationForm = lazy(

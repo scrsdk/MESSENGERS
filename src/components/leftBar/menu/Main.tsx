@@ -1,8 +1,8 @@
 import LineSeparator from "@/components/modules/LineSeparator";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
-import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import { copyText, toaster } from "@/utils";
 import Image from "next/image";
 import { CgProfile } from "react-icons/cg";

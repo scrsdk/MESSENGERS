@@ -1,9 +1,9 @@
 "use client";
 import Room from "@/models/room";
 import User from "@/models/user";
-import useGlobalStore from "@/store/globalStore";
-import useUserStore, { UserStoreUpdater } from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore, { UserStoreUpdater } from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import { toaster, uploadFile } from "@/utils";
 import Image from "next/image";
 import {

@@ -1,12 +1,12 @@
 import { IoMdArrowRoundBack } from "react-icons/io";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import Room from "@/models/room";
 import SearchResultCard from "./SearchResultCard";
 import User from "@/models/user";
 import RoomSkeleton from "../modules/ui/RoomSkeleton";
-import useGlobalStore from "@/store/globalStore";
+import useGlobalStore from "@/stores/globalStore";
 
 interface Props {
   closeSearch: () => void;
@@ -48,7 +48,6 @@ const SearchPage = ({ closeSearch }: Props) => {
 
         if (status === 200) {
           setSearchResult(data);
-          console.log(data);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: unknown) {

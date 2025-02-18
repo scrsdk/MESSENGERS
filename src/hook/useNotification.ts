@@ -1,4 +1,4 @@
-const NotificationPermission = async () => {
+const useNotification = async () => {
   if ("Notification" in window && Notification.permission !== "granted") {
     try {
       const permission = await Notification.requestPermission();
@@ -12,8 +12,5 @@ const NotificationPermission = async () => {
       console.error("Error requesting notification permission:", error);
     }
   }
-
-  return null;
 };
-
-export default NotificationPermission;
+export default useNotification;

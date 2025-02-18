@@ -1,9 +1,9 @@
 import Loading from "@/components/modules/ui/Loading";
 import Room from "@/models/room";
 import User from "@/models/user";
-import { GlobalStoreProps } from "@/store/globalStore";
-import { UserStoreUpdater } from "@/store/userStore";
-import { SocketsProps } from "@/store/useSockets";
+import { GlobalStoreProps } from "@/stores/globalStore";
+import { UserStoreUpdater } from "@/stores/userStore";
+import { SocketsProps } from "@/stores/useSockets";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 

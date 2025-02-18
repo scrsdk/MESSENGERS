@@ -16,15 +16,15 @@ import Image from "next/image";
 import MenuItem from "@/components/leftBar/menu/MenuItem";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { deleteFile, logout, toaster, uploadFile } from "@/utils";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import DropDown from "@/components/modules/ui/DropDown";
 import LineSeparator from "@/components/modules/LineSeparator";
 import Loading from "@/components/modules/ui/Loading";
 import Modal from "@/components/modules/ui/Modal";
 import { CgLock } from "react-icons/cg";
 import { FaRegFolderClosed } from "react-icons/fa6";
-import useModalStore from "@/store/modalStore";
+import useModalStore from "@/stores/modalStore";
 import ProfileImageViewer from "@/components/modules/ProfileImageViewer";
 
 interface Props {

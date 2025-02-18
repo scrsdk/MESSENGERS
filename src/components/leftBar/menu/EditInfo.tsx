@@ -1,8 +1,8 @@
 import LeftBarContainer from "./LeftBarContainer";
 import { MdDone } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import LineSeparator from "@/components/modules/LineSeparator";
 import Loading from "@/components/modules/ui/Loading";
 

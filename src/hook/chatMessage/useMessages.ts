@@ -1,5 +1,5 @@
 import Message from "@/models/message";
-import { GlobalStoreProps } from "@/store/globalStore";
+import { GlobalStoreProps } from "@/stores/globalStore";
 import { useEffect } from "react";
 import { DefaultEventsMap } from "socket.io";
 import { Socket } from "socket.io-client";

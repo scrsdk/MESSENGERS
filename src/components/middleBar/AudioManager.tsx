@@ -1,5 +1,5 @@
 "use client";
-import useAudio from "@/store/audioStore";
+import useAudio from "@/stores/audioStore";
 import { toaster } from "@/utils";
 import { useEffect, useRef, useMemo } from "react";
 

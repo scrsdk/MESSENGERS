@@ -1,5 +1,5 @@
 "use client";
-import useGlobalStore from "@/store/globalStore";
+import useGlobalStore from "@/stores/globalStore";
 import { lazy, Suspense } from "react";
 import Loading from "../modules/ui/Loading";
 import AudioManager from "./AudioManager";

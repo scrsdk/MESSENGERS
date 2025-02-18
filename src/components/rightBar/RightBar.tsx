@@ -1,10 +1,10 @@
 "use client";
-import useGlobalStore from "@/store/globalStore";
+import useGlobalStore from "@/stores/globalStore";
 import { Suspense, lazy, useMemo, useState } from "react";
 import EditInfo from "./EditInfo";
 import { IoArrowBackOutline, IoClose } from "react-icons/io5";
 import { MdDone, MdEdit } from "react-icons/md";
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import Loading from "../modules/ui/Loading";
 import Room from "@/models/room";
 import AddMembers from "./AddMembers";

@@ -1,7 +1,7 @@
 import Message from "@/models/message";
-import useGlobalStore from "@/store/globalStore";
-import useUserStore from "@/store/userStore";
-import useSockets from "@/store/useSockets";
+import useGlobalStore from "@/stores/globalStore";
+import useUserStore from "@/stores/userStore";
+import useSockets from "@/stores/useSockets";
 import { secondsToTimeString, toaster, uploadFile } from "@/utils";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PiMicrophoneLight } from "react-icons/pi";

@@ -1,4 +1,4 @@
-import useUserStore from "@/store/userStore";
+import useUserStore from "@/stores/userStore";
 import { toaster } from "@/utils";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
