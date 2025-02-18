@@ -20,7 +20,7 @@ const uploadFile = async (file: File) => {
       throw new Error("S3 bucket name is not defined");
     }
 
-    const uniqueFileName = `${uploadFile.name}-${Date.now()}`;
+    const uniqueFileName = `${Date.now()}-${uploadFile.name}`;
     const url = file.type.match("image.*") ? "images/" : "voices/";
     const params = {
       Bucket: bucketName,

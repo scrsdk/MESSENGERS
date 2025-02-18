@@ -6,22 +6,24 @@ import useSockets from "@/store/useSockets";
 import { scrollToMessage } from "@/utils";
 import Image from "next/image";
 import { FiBookmark } from "react-icons/fi";
+import ProfileGradients from "../modules/ProfileGradients";
 
 interface Props {
   myData: User;
   query: string;
 }
 
-const highlightChars = (query: string, name: string) => {
+const highlightChars = (query: string, name: string, lastName: string) => {
+  const fullName = `${name} ${lastName}`;
   const lowerCaseQuery = query.toLowerCase();
-  const lowerCaseName = name.toLowerCase();
+  const lowerCaseFullName = fullName.toLowerCase();
 
-  const isQueryIncludesInName = lowerCaseName.includes(lowerCaseQuery);
-  const startToHighlightIndex = lowerCaseName.indexOf(lowerCaseQuery);
+  const isQueryIncludesInFullName = lowerCaseFullName.includes(lowerCaseQuery);
+  const startToHighlightIndex = lowerCaseFullName.indexOf(lowerCaseQuery);
   const endToHighlightIndex = startToHighlightIndex + lowerCaseQuery.length - 1;
 
-  return isQueryIncludesInName ? (
-    name?.split("").map((char, index) => {
+  return isQueryIncludesInFullName ? (
+    fullName.split("").map((char, index) => {
       const isInHighlightRange =
         index >= startToHighlightIndex && index <= endToHighlightIndex;
       return (
@@ -34,18 +36,29 @@ const highlightChars = (query: string, name: string) => {
       );
     })
   ) : (
-    <span>{name}</span>
+    <span>{fullName}</span>
   );
 };
 
 const SearchResultCard = (
-  roomData: Partial<Room & { findBy?: keyof Room }> & Props
+  roomData: Partial<Room & User & { findBy?: keyof Room }> & Props
 ) => {
-  const { avatar, name, _id, myData, findBy = null, query } = roomData;
-  const { isChatPageLoaded, setter } = useGlobalStore((state) => state);
+  const {
+    avatar,
+    name,
+    lastName,
+    _id,
+    myData,
+    participants,
+    type,
+    findBy = null,
+    query,
+  } = roomData;
+  const { isChatPageLoaded, onlineUsers, setter } = useGlobalStore(
+    (state) => state
+  );
   const { rooms, _id: myID } = useUserStore((state) => state);
   const roomSocket = useSockets((state) => state.rooms);
-  console.log(roomData.avatar);
 
   const openChat = () => {
     const roomHistory = rooms.find(
@@ -92,6 +105,15 @@ const SearchResultCard = (
     )?._id;
     roomSocket?.emit("joining", savedMessageRoomID);
   };
+
+  const userID = (participants as User[])?.find(
+    (user: User) => user.name === name
+  )?._id;
+
+  const isUserOnline = onlineUsers.some((data) => {
+    if (data.userID === userID) return true;
+  });
+
   return (
     <div
       onClick={_id === myID ? openSavedMessages : openChat}
@@ -112,23 +134,34 @@ const SearchResultCard = (
           alt="avatar"
         />
       ) : (
-        <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-vazirBold text-lg">
+        <ProfileGradients
+          classNames="size-11 text-center text-lg"
+          id={userID ?? ""}
+        >
           {name ? name[0] : ""}
-        </div>
+        </ProfileGradients>
       )}
       <div className="flex flex-col justify-between w-full py-2">
         <p className="text-base font-vazirBold line-clamp-1 text-ellipsis break-words">
           {findBy == "participants" || findBy == "name"
-            ? highlightChars(query, name ? name : "")
+            ? highlightChars(query, name ? name : "", lastName ? lastName : "")
             : _id === myID
             ? "Saved messages"
-            : name}
+            : name + " " + lastName}
         </p>
 
         <p className="text-sm text-darkGray line-clamp-1 text-ellipsis break-words">
-          {findBy == "messages" && roomData.messages?.length
-            ? highlightChars(query, roomData.messages[0].message)
-            : "last seen recently"}
+          {findBy == "messages" && roomData.messages?.length ? (
+            highlightChars(query, roomData.messages[0].message, "")
+          ) : type === "group" ? (
+            `${participants?.length} members`
+          ) : type === "channel" ? (
+            `${participants?.length} subscribers`
+          ) : isUserOnline ? (
+            <span className="text-lightBlue">online</span>
+          ) : (
+            "last seen recently"
+          )}
         </p>
       </div>
     </div>

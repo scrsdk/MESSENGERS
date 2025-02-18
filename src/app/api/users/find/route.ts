@@ -4,6 +4,9 @@ import MessageSchema from "@/schemas/messageSchema";
 import RoomSchema from "@/schemas/roomSchema";
 import UserSchema from "@/schemas/userSchema";
 
+const escapeRegExp = (text: string) =>
+  text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+
 export const POST = async (req: Request) => {
   try {
     await connectToDB();
@@ -16,12 +19,14 @@ export const POST = async (req: Request) => {
 
     if (payload.startsWith("@")) {
       result = await RoomSchema.findOne({
-        link: { $regex: new RegExp(`^${payload}$`, "i") },
+        link: { $regex: new RegExp(`^${escapeRegExp(payload)}$`, "i") },
       });
       if (result) return Response.json([result], { status: 200 });
       if (!result) {
         result = await UserSchema.findOne({
-          username: { $regex: new RegExp(`^${payload.slice(1)}$`, "i") },
+          username: {
+            $regex: new RegExp(`^${escapeRegExp(payload.slice(1))}$`, "i"),
+          },
         });
         if (result) return Response.json([result], { status: 200 });
       }
@@ -33,11 +38,22 @@ export const POST = async (req: Request) => {
     const userRoomsData: any = await RoomSchema.find({
       participants: { $in: userID },
     })
-      .populate("messages", "", MessageSchema)
-      .populate("participants")
-      .lean();
+      .lean()
+      .then((rooms) =>
+        Promise.all(
+          rooms.map((room) =>
+            RoomSchema.populate(room, [
+              { path: "messages", model: MessageSchema },
+              { path: "participants" },
+            ])
+          )
+        )
+      );
 
-    const searchResult: (RoomModel & { findBy: keyof RoomModel })[] = [];
+    const searchResult: (
+      | RoomModel
+      | (UserModel & { findBy: keyof RoomModel })
+    )[] = [];
 
     userRoomsData.forEach(
       (roomData: RoomModel & { findBy: keyof RoomModel }) => {
@@ -48,44 +64,50 @@ export const POST = async (req: Request) => {
           searchResult.push({ ...roomData, findBy: "name" });
         }
 
-        if (
-          roomData.type == "private" &&
-          roomData.participants.some(
-            (data: UserModel) =>
-              data._id !== userID && data.name.toLowerCase().includes(payload)
-          )
-        ) {
-          searchResult.push({
-            ...roomData,
-            findBy: "participants",
-            name:
-              roomData.participants
-                .filter((data: UserModel) => data._id !== roomData.creator)
-                .at(-1)?.name ?? "-",
-          });
+        if (roomData.type === "private") {
+          const otherParticipant = roomData.participants.find(
+            (data: UserModel) => data._id.toString() !== userID.toString()
+          );
+
+          if (
+            otherParticipant &&
+            otherParticipant.name.toLowerCase().includes(payload)
+          ) {
+            searchResult.push({
+              ...roomData,
+              findBy: "participants",
+              name: otherParticipant.name,
+              lastName: otherParticipant.lastName,
+              avatar: otherParticipant.avatar,
+            });
+          }
         }
 
         roomData.messages.forEach((msgData) => {
-          const isMsgDeletedForUser = msgData.hideFor.some((id) => {
-            if (id.toString() === userID.toString()) return true;
-          });
+          const isMsgDeletedForUser = msgData.hideFor.some(
+            (id) => id.toString() === userID.toString()
+          );
 
           if (
             !isMsgDeletedForUser &&
             msgData.message.toLowerCase().includes(payload)
           ) {
+            const otherParticipant = roomData.participants.find(
+              (data: UserModel) => data._id.toString() !== userID.toString()
+            );
+
             searchResult.push({
               ...roomData,
               findBy: "messages",
               messages: [msgData],
               name:
-                roomData.type == "private"
-                  ? roomData.participants
-                      .filter(
-                        (data: UserModel) => data._id !== roomData.creator
-                      )
-                      .at(-1)?.name ?? "-"
+                roomData.type === "private"
+                  ? otherParticipant?.name ?? "-"
                   : roomData.name,
+              avatar:
+                roomData.type === "private"
+                  ? otherParticipant?.avatar ?? "-"
+                  : roomData.avatar,
             });
           }
         });
