@@ -1,15 +1,6 @@
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
-import { Theme } from "emoji-picker-react";
-import {
-  ChangeEvent,
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { MdAttachFile, MdModeEditOutline, MdOutlineDone } from "react-icons/md";
 import { BsFillReplyFill } from "react-icons/bs";
 import VoiceMessageRecorder from "./VoiceMessageRecorder";
@@ -20,8 +11,7 @@ import useSockets from "@/store/useSockets";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaRegKeyboard } from "react-icons/fa6";
 import { scrollToMessage, toaster } from "@/utils";
-
-const EmojiPicker = lazy(() => import("emoji-picker-react"));
+import EmojiPicker from "../modules/EmojiPicker";
 
 interface Props {
   replayData?: Partial<Message>;
@@ -352,23 +342,10 @@ const MessageInput = ({
       </div>
 
       {isEmojiOpen && (
-        <Suspense>
-          <EmojiPicker
-            open={isEmojiOpen}
-            theme={Theme.DARK}
-            height={260}
-            width="100%"
-            style={{
-              backgroundColor: "#17212B",
-              borderRadius: "0",
-              transition: "all 75ms",
-            }}
-            previewConfig={{ showPreview: false }}
-            searchDisabled
-            lazyLoadEmojis
-            onEmojiClick={handleEmojiClick}
-          />
-        </Suspense>
+        <EmojiPicker
+          handleEmojiClick={handleEmojiClick}
+          isEmojiOpen={isEmojiOpen}
+        />
       )}
     </div>
   );

@@ -26,6 +26,7 @@ import useModalStore from "@/store/modalStore";
 import useGlobalStore from "@/store/globalStore";
 import Image from "next/image";
 import Message from "@/models/message";
+import ProfileGradients from "../modules/ProfileGradients";
 
 interface MessageActionsProps {
   isFromMe: boolean;
@@ -163,9 +164,10 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
                           alt="avatar"
                         />
                       ) : (
-                        <div
-                          className="flex-center border border-gray-800 shrink-0 text-md bg-blue-400 rounded-full p-1 pt-2 size-6"
+                        <ProfileGradients
                           key={user._id}
+                          classNames="size-6 text-center text-md border border-gray-800 p-1 pt-2"
+                          id={user._id}
                           style={{
                             position: "absolute",
                             right: index === 1 ? "10px" : "0",
@@ -174,7 +176,7 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
                           }}
                         >
                           {user.name[0]}
-                        </div>
+                        </ProfileGradients>
                       )
                     )}
                   </span>
@@ -239,9 +241,13 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
                   alt="user avatar"
                 />
               ) : (
-                <div className="flex-center text-md bg-blue-400 rounded-full p-1 pt-2 size-6">
+                <ProfileGradients
+                  key={user._id}
+                  classNames="size-6 text-center text-md p-1 pt-2"
+                  id={user._id}
+                >
                   {user.name[0]}
-                </div>
+                </ProfileGradients>
               ),
               onClick: () => openProfile(user),
             }))),

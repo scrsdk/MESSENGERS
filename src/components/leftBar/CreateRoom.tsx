@@ -2,7 +2,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdDone } from "react-icons/md";
 import { FaArrowRight, FaRegKeyboard } from "react-icons/fa6";
-import { ChangeEvent, Suspense, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Room from "@/models/room";
 import useUserStore from "@/store/userStore";
@@ -12,9 +12,9 @@ import User from "@/models/user";
 import { randomHexGenerate, toaster, uploadFile } from "@/utils";
 import Button from "../modules/ui/Button";
 import Loading from "../modules/ui/Loading";
-import EmojiPicker, { Theme } from "emoji-picker-react";
 import { TbCameraPlus } from "react-icons/tb";
 import ContactCard from "./ContactCard";
+import EmojiPicker from "../modules/EmojiPicker";
 
 type Props = {
   roomType: Room["type"];
@@ -288,25 +288,11 @@ const CreateRoom = ({ roomType, close }: Props) => {
         )}
       </Button>
       {isEmojiOpen && (
-        <Suspense fallback={null}>
-          <EmojiPicker
-            open={isEmojiOpen}
-            theme={Theme.DARK}
-            height={300}
-            width="100%"
-            style={{
-              position: "absolute",
-              bottom: 0,
-              backgroundColor: "#17212B",
-              borderRadius: "0",
-              transition: "all 75ms",
-            }}
-            previewConfig={{ showPreview: false }}
-            searchDisabled
-            lazyLoadEmojis
-            onEmojiClick={handleEmojiClick}
-          />
-        </Suspense>
+        <EmojiPicker
+          isEmojiOpen={isEmojiOpen}
+          handleEmojiClick={handleEmojiClick}
+          style={{ position: "absolute", bottom: 0 }}
+        />
       )}
     </section>
   );

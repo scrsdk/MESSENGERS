@@ -15,6 +15,7 @@ import { FiUserPlus } from "react-icons/fi";
 import { LuUsers } from "react-icons/lu";
 import { RiShieldStarLine } from "react-icons/ri";
 import ProfileImageViewer from "@/components/modules/ProfileImageViewer";
+import ProfileGradients from "../modules/ProfileGradients";
 
 interface RoomDetailsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -156,9 +157,12 @@ const RoomDetails = ({
               onClick={() => setIsViewerOpen(true)}
             />
           ) : (
-            <div className="flex-center bg-darkBlue rounded-full size-12 shrink-0 text-center font-vazirBold text-xl">
+            <ProfileGradients
+              classNames="size-11 text-center text-lg "
+              id={_id}
+            >
               {name?.length && name![0]}
-            </div>
+            </ProfileGradients>
           )}
 
           <div className="flex justify-center flex-col gap-1 text-ellipsis w-[80%]">
@@ -175,12 +179,12 @@ const RoomDetails = ({
                 ) : (
                   "last seen recently"
                 )
-              ) : (
+              ) : type === "group" ? (
                 `${participants?.length} members ${
-                  type !== "channel" && onlineUsersCount
-                    ? ", " + onlineUsersCount + " online"
-                    : ""
+                  onlineUsersCount ? ", " + onlineUsersCount + " online" : ""
                 }`
+              ) : (
+                `${participants?.length} subscribers`
               )}
             </div>
           </div>

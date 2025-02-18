@@ -20,6 +20,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import useModalStore from "@/store/modalStore";
 import useGlobalStore from "@/store/globalStore";
 import Loading from "../modules/ui/Loading";
+import ProfileGradients from "../modules/ProfileGradients";
 
 interface Props {
   myId: string;
@@ -305,6 +306,7 @@ const Message = (msgData: MessageModel & Props) => {
       );
     }
   }, [downloadedAudios, voiceData, _id, isPlaying, isFromMe]);
+  // console.log(sender?.name, sender?._id);
 
   return (
     <>
@@ -319,32 +321,38 @@ const Message = (msgData: MessageModel & Props) => {
 
       <div
         ref={messageRef}
-        className={`chat transition-all items-end duration-100 w-full  ${
-          isFromMe ? "chat-end" : "chat-start"
+        className={`chat transition-all duration-100 w-full  ${
+          isFromMe ? "chat-end " : "chat-start"
         } ${isMounted ? "" : "opacity-0 scale-0"}`}
       >
         {/* Show sender avatar in received messages */}
-        {!isFromMe && !isPv && isLastMessageFromUser && !isChannel && (
-          <div onClick={openProfile} className="cursor-pointer ml-1">
-            {sender.avatar ? (
-              <div className="chat-image avatar">
-                <div className="w-8 rounded-full">
-                  <Image
-                    src={sender.avatar}
-                    width={32}
-                    height={32}
-                    alt="avatar"
-                    className="rounded-full"
-                  />
-                </div>
+        {!isFromMe &&
+          !isPv &&
+          !isChannel &&
+          isLastMessageFromUser &&
+          (sender.avatar ? (
+            <div
+              className="chat-image avatar cursor-pointer z-5"
+              onClick={openProfile}
+            >
+              <div className="size-8 shrink-0 rounded-full">
+                <Image
+                  src={sender.avatar}
+                  width={32}
+                  height={32}
+                  alt="avatar"
+                  className="size-8 shrink-0 rounded-full "
+                />
               </div>
-            ) : (
-              <div className="flex-center size-8 rounded-full bg-lightBlue">
-                {sender.name[0]}
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <ProfileGradients
+              classNames="size-8 chat-image avatar cursor-pointer"
+              id={sender?._id}
+            >
+              {sender.name[0]}
+            </ProfileGradients>
+          ))}
 
         <div
           id="messageBox"
@@ -374,7 +382,7 @@ const Message = (msgData: MessageModel & Props) => {
           {!isFromMe && !isPv && (
             <p
               dir="auto"
-              className="w-full text-xs font-vazirBold pt-2 pl-1 text-[#00e4a0]"
+              className="w-full text-xs font-vazirBold pt-2 pl-1 text-[#13d4d4]"
             >
               {isChannel
                 ? selectedRoom?.name
@@ -441,7 +449,7 @@ const Message = (msgData: MessageModel & Props) => {
                 </div>
               </div>
             )}
-            <p dir="auto" className="text-white">
+            <p dir="auto" className="text-white break-keep ">
               {message}
             </p>
           </div>

@@ -19,7 +19,6 @@ import useScrollMessage from "@/hook/chatMessage/useScrollMessage";
 import useMessages from "@/hook/chatMessage/useMessages";
 import useTyping from "@/hook/chatMessage/useTyping";
 import useRoomEvents from "@/hook/chatMessage/useRoomEvents";
-import Loading from "../modules/ui/Loading";
 const PinnedMessages = lazy(
   () => import("@/components/middleBar/PinnedMessages")
 );
@@ -256,7 +255,7 @@ const ChatMessage = ({
           {floatingDate}
         </div>
 
-        <Suspense fallback={<Loading size="xl" />}>
+        <Suspense>
           <MessageList
             messages={messages}
             myID={myID}

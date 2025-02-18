@@ -5,7 +5,7 @@
 }
 @theme {
   --color-chatBg: #0e1621;
-  --color-leftBarBg: #17212b;
+  --color-leftBarBg: #14212b;
   --color-darkGray: #8c8c8c;
   --color-modalBg: #333333;
   --color-darkBlue: #0088cc;
@@ -104,7 +104,7 @@ body {
   transition: opacity 300ms, background-color 500ms;
 }
 .highLightedMessage.active::before {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .chat {

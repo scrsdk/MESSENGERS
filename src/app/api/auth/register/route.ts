@@ -23,7 +23,7 @@ export const POST = async (req: Request) => {
 
     await RoomSchema.create({
       name: "Saved Messages",
-      avatar: "/images/savedMessages.png",
+      avatar: "",
       type: "private",
       creator: userData._id,
       participants: [userData._id],

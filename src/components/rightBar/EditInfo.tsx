@@ -5,13 +5,11 @@ import useGlobalStore from "@/store/globalStore";
 import useUserStore, { UserStoreUpdater } from "@/store/userStore";
 import useSockets from "@/store/useSockets";
 import { toaster, uploadFile } from "@/utils";
-import EmojiPicker, { Theme } from "emoji-picker-react";
 import Image from "next/image";
 import {
   Dispatch,
   ChangeEvent,
   SetStateAction,
-  Suspense,
   useEffect,
   useState,
   useCallback,
@@ -22,6 +20,7 @@ import { FaRegKeyboard } from "react-icons/fa6";
 import { TbCameraPlus } from "react-icons/tb";
 import Loading from "../modules/ui/Loading";
 import RoomCard from "./RoomCard";
+import EmojiPicker from "../modules/EmojiPicker";
 
 interface EditInfoProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -223,24 +222,11 @@ const EditInfo = ({
         </div>
       )}
       {isEmojiOpen && (
-        <Suspense fallback={null}>
-          <EmojiPicker
-            open={isEmojiOpen}
-            theme={Theme.DARK}
-            height={300}
-            width="100%"
-            style={{
-              position: "absolute",
-              bottom: 0,
-              backgroundColor: "#17212B",
-              borderRadius: "0",
-            }}
-            previewConfig={{ showPreview: false }}
-            searchDisabled
-            lazyLoadEmojis
-            onEmojiClick={handleEmojiClick}
-          />
-        </Suspense>
+        <EmojiPicker
+          isEmojiOpen={isEmojiOpen}
+          handleEmojiClick={handleEmojiClick}
+          style={{ position: "absolute", bottom: 0 }}
+        />
       )}
     </div>
   );

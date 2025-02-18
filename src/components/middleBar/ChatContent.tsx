@@ -25,6 +25,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import useModalStore from "@/store/modalStore";
 import Modal from "../modules/ui/Modal";
 import { scrollToMessage } from "@/utils";
+import ProfileGradients from "../modules/ProfileGradients";
 
 const ChatMessage = lazy(() => import("./ChatMessage"));
 
@@ -224,9 +225,12 @@ const ChatContent = () => {
                 alt="avatar"
               />
             ) : (
-              <div className="flex-center bg-gradient-to-b from-blue-400 to-blue-500 rounded-full size-11 text-center text-xl">
+              <ProfileGradients
+                classNames="size-11 text-center text-xl"
+                id={_id}
+              >
                 {name?.length && name[0]}
-              </div>
+              </ProfileGradients>
             )}
 
             <div className="flex justify-center flex-col gap-1 truncate">
@@ -254,12 +258,14 @@ const ChatContent = () => {
                       ) : (
                         "last seen recently"
                       )
+                    ) : type === "group" ? (
+                      `${participants.length} members ${
+                        onlineMembersCount
+                          ? ", " + onlineMembersCount + " online"
+                          : ""
+                      }`
                     ) : (
-                      participants.length +
-                      " members " +
-                      (selectedRoom?.type !== "channel" && onlineMembersCount
-                        ? ", " + onlineMembersCount + " online"
-                        : "")
+                      `${participants.length} subscribers`
                     )}
                   </>
                 )}

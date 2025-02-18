@@ -3,6 +3,7 @@ import User from "@/models/user";
 import Image from "next/image";
 import { useMemo } from "react";
 import { MdDone } from "react-icons/md";
+import ProfileGradients from "../modules/ProfileGradients";
 
 type ContactCardProps = {
   updateSelectedUsers: (id: string) => void;
@@ -39,9 +40,9 @@ const ContactCard = ({
             alt="avatar"
           />
         ) : (
-          <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-bold text-lg ">
+          <ProfileGradients classNames="size-11 text-center text-lg" id={_id}>
             {name![0]}
-          </div>
+          </ProfileGradients>
         )}
         <div className="flex flex-col justify-between  w-full py-2.5 ">
           <p className="text-base font-vazirBold line-clamp-1 text-ellipsis">

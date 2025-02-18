@@ -10,6 +10,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { RiShieldStarLine } from "react-icons/ri";
 import { GoNoEntry } from "react-icons/go";
 import { LuUserMinus } from "react-icons/lu";
+import ProfileGradients from "../modules/ProfileGradients";
 
 interface Props {
   isOnline?: boolean;
@@ -195,9 +196,9 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
             alt="avatar"
           />
         ) : (
-          <div className="flex-center bg-darkBlue rounded-full size-11 shrink-0 text-center font-bold text-lg">
+          <ProfileGradients classNames="size-11 text-center text-lg " id={_id}>
             {name![0]}
-          </div>
+          </ProfileGradients>
         )}
 
         <div className="flex flex-col justify-between  w-full py-2">

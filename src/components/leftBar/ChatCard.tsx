@@ -11,6 +11,7 @@ import { formatDate } from "@/utils";
 import { FiBookmark } from "react-icons/fi";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { HiSpeakerphone } from "react-icons/hi";
+import ProfileGradients from "../modules/ProfileGradients";
 
 declare global {
   interface Window {
@@ -24,31 +25,6 @@ interface User {
   name?: string;
   lastName?: string;
 }
-
-const gradients = [
-  "bg-gradient-to-b from-blue-400 to-blue-500",
-  "bg-gradient-to-b from-pink-400 to-pink-500",
-  "bg-gradient-to-b from-green-500 to-green-600",
-  "bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600",
-  "bg-gradient-to-b from-yellow-300 to-yellow-400",
-  "bg-gradient-to-b from-orange-300 to-orange-400",
-  "bg-gradient-to-b from-teal-400 to-teal-500",
-];
-
-// Global state for color assignments
-const colorAssignmentMap = new Map<string, string>();
-let nextColorIndex = 0;
-
-const getGradientClass = (identifier: string): string => {
-  if (!identifier) return gradients[0];
-  if (colorAssignmentMap.has(identifier)) {
-    return colorAssignmentMap.get(identifier)!;
-  }
-  const assignedColor = gradients[nextColorIndex];
-  colorAssignmentMap.set(identifier, assignedColor);
-  nextColorIndex = (nextColorIndex + 1) % gradients.length;
-  return assignedColor;
-};
 
 const ChatCard = ({
   _id,
@@ -67,7 +43,6 @@ const ChatCard = ({
   const [lastMsgData, setLastMsgData] = useState<Message>(initialLastMsgData!);
 
   const notSeenCount = useRef<number>(initialNotSeenCount);
-  const gradientClass = useMemo(() => getGradientClass(_id), [_id]);
 
   const { selectedRoom, onlineUsers, setter } = useGlobalStore(
     (state) => state
@@ -218,11 +193,9 @@ const ChatCard = ({
           alt="avatar"
         />
       ) : (
-        <div
-          className={`size-11  ${gradientClass} rounded-full flex-center text-white text-lg shrink-0`}
-        >
+        <ProfileGradients classNames="size-11" id={roomID}>
           {name?.charAt(0)}
-        </div>
+        </ProfileGradients>
       )}
 
       {type === "private" && isOnline && (
