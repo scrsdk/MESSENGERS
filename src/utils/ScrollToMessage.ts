@@ -5,7 +5,6 @@ const scrollToMessage = (
 ) => {
   const replayTargetElem = document.getElementsByClassName(id!)[0];
   if (!replayTargetElem) {
-    console.log(`Element with class '${id}' not found`);
     return;
   }
 
