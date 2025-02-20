@@ -19,8 +19,7 @@ import RoomSkeleton from "../modules/ui/RoomSkeleton";
 import RoomFolders from "./RoomFolders";
 import useConnection from "@/hook/useConnection";
 import Message from "@/models/message";
-import { registerSW } from "@/utils";
-import useNotification from "@/hook/useNotification";
+import NotificationPermission from "@/utils/NotificationPermission";
 
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
@@ -41,10 +40,9 @@ const LeftBar = () => {
     (state) => state
   );
   const interactUser = useRef(false);
-  useNotification();
 
   useEffect(() => {
-    registerSW();
+    NotificationPermission();
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target?.tagName === "TEXTAREA" || target?.tagName === "INPUT") {
