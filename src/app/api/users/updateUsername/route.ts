@@ -24,8 +24,6 @@ export const POST = async (req: Request) => {
     const isUsernameExist = await UserSchema.findOne({
       username: { $regex: new RegExp(`^${query}$`, "i") },
     });
-    console.log(query);
-    console.log(isUsernameExist);
 
     return Response.json(
       {
