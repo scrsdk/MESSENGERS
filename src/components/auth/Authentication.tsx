@@ -1,6 +1,7 @@
 "use client";
 import LoadingApp from "@/components/modules/ui/LoadingApp";
 import useUserStore from "@/stores/userStore";
+import { registerSW } from "@/utils";
 import axios from "axios";
 import { ReactNode, lazy, useEffect, useState } from "react";
 const AuthenticationForm = lazy(
@@ -11,6 +12,8 @@ const Authentication = ({ children }: { children: ReactNode }) => {
   const { setter, isLogin } = useUserStore((state) => state);
 
   useEffect(() => {
+    registerSW();
+
     (async () => {
       try {
         const response = await axios.post("/api/auth/currentuser");

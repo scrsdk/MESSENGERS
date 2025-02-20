@@ -1,113 +1,151 @@
-// const STATIC_CACHE = "telegram-static-v1";
-// const DYNAMIC_CACHE = "telegram-dynamic-v1";
-// const ASSETS = [
-//   self.origin + "/",
-//   // self.origin + "/global.css",
-//   self.origin + "/offline.html",
-//   self.origin + "/_next/static/",
-// ];
+const STATIC_CACHE = "telegram-static-v1";
+const DYNAMIC_CACHE = "telegram-dynamic-v1";
+const MAX_DYNAMIC_CACHE_SIZE = 50;
 
-// // محدود کردن اندازه کش
-// const limitCacheSize = async (cacheName, maxSize) => {
-//   const cache = await caches.open(cacheName);
-//   const keys = await cache.keys();
-//   if (keys.length > maxSize) {
-//     await cache.delete(keys[0]);
-//     limitCacheSize(cacheName, maxSize);
-//   }
-// };
+const ASSETS = [self.origin + "/"];
 
-// // نصب سرویس ورکر و کش کردن منابع اولیه
-// self.addEventListener("install", (event) => {
-//   console.log("Installing Service Worker...");
-//   event.waitUntil(
-//     caches.open(STATIC_CACHE).then(async (cache) => {
-//       for (const asset of ASSETS) {
-//         try {
-//           await cache.add(asset);
-//         } catch (error) {
-//           console.warn("⚠ Failed to cache:", asset, error);
-//         }
-//       }
-//     })
-//   );
-//   self.skipWaiting();
-// });
+// Limiting dynamic cache size
+const limitCacheSize = async (cacheName, maxSize) => {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length > maxSize) {
+    await cache.delete(keys[0]);
+    limitCacheSize(cacheName, maxSize);
+  }
+};
 
-// // حذف کش‌های قدیمی هنگام فعال‌سازی
-// self.addEventListener("activate", (event) => {
-//   console.log("Service Worker Activated, clearing old caches...");
-//   event.waitUntil(
-//     caches.keys().then((keys) => {
-//       return Promise.all(
-//         keys
-//           .filter((key) => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
-//           .map((key) => caches.delete(key))
-//       );
-//     })
-//   );
-//   self.clients.claim();
-// });
+// Installing a service worker and caching primary resources
+self.addEventListener("install", (event) => {
+  console.log("Installing Service Worker...");
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(STATIC_CACHE);
+      for (const asset of ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (error) {
+          console.warn("⚠ Failed to cache:", asset, error);
+        }
+      }
+    })()
+  );
+  self.skipWaiting();
+});
 
-// // استراتژی کشینگ
-// const cacheFirst = async (request) => {
-//   const cache = await caches.open(STATIC_CACHE);
-//   const cachedResponse = await cache.match(request);
-//   return (
-//     cachedResponse || fetch(request).catch(() => caches.match("/offline.html"))
-//   );
-// };
+// Delete old caches upon activation
+self.addEventListener("activate", (event) => {
+  console.log("Service Worker Activated, clearing old caches...");
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
+            .map((key) => caches.delete(key))
+        )
+      )
+  );
+  self.clients.claim();
+});
 
-// const networkFirst = async (request) => {
-//   try {
-//     const response = await fetch(request);
-//     const cache = await caches.open(DYNAMIC_CACHE);
-//     cache.put(request, response.clone());
-//     limitCacheSize(DYNAMIC_CACHE, 15);
-//     return response;
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//   } catch (error) {
-//     console.warn("⚠ Network request failed, serving from cache:", request.url);
+// Automatically cache static Next.js files on request
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
 
-//     const cache = await caches.open(STATIC_CACHE);
-//     const cachedResponse = await cache.match(request);
+  if (
+    url.pathname.includes("node_modules") ||
+    url.hostname.includes("firestore.googleapis.com")
+  ) {
+    return;
+  }
 
-//     return cachedResponse || cache.match(self.origin + "/offline.html");
-//   }
-// };
+  // If the request is for a font, image, or animation file, prioritize the cache.
+  if (url.pathname.match(/\.(woff2?|ttf|png|jpg|jpeg|gif|svg|json)$/)) {
+    event.respondWith(
+      caches.open(DYNAMIC_CACHE).then(async (cache) => {
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) return cachedResponse;
 
-// // مدیریت درخواست‌ها
-// self.addEventListener("fetch", (event) => {
-//   const url = new URL(event.request.url);
+        try {
+          const response = await fetch(event.request);
+          cache.put(event.request, response.clone());
+          limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE);
+          return response;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+          console.warn("⚠ Failed to fetch:", event.request.url);
+          return new Response("", { status: 404 });
+        }
+      })
+    );
+    return;
+  }
 
-//   if (
-//     url.pathname.includes("node_modules") ||
-//     url.hostname.includes("firestore.googleapis.com")
-//   ) {
-//     return;
-//   }
+  if (url.pathname.startsWith("/_next/static/")) {
+    event.respondWith(
+      caches.open(STATIC_CACHE).then(async (cache) => {
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) return cachedResponse;
 
-//   event.respondWith(
-//     event.request.headers.get("accept")?.includes("text/html")
-//       ? networkFirst(event.request)
-//       : cacheFirst(event.request)
-//   );
-// });
+        try {
+          const response = await fetch(event.request);
+          cache.put(event.request, response.clone());
+          return response;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+          console.warn("⚠ Failed to fetch:", event.request.url);
+          return new Response("", { status: 404 });
+        }
+      })
+    );
+    return;
+  }
 
-// Push Notification
-// self.addEventListener("push", (event) => {
-//   const data = event.data?.json();
-//   const options = {
-//     body: data.body,
-//     icon: "/icons/icon-192x192.png",
-//     badge: "/icons/badge-72x72.png",
-//     data: { url: data.url },
-//   };
-//   event.waitUntil(self.registration.showNotification(data.title, options));
-// });
+  if (url.pathname === "/") {
+    event.respondWith(
+      caches.match(self.origin + "/").then((cachedResponse) => {
+        return cachedResponse || fetch(event.request);
+      })
+    );
+    return;
+  }
 
-// // مدیریت کلیک روی نوتیفیکیشن
-// self.addEventListener("notificationclick", (event) => {
-//   event.notification.close();
-//   event.waitUntil(clients.openWindow(event.notification.data.url));
-// });
+  // Caching strategy for other requests
+  event.respondWith(
+    event.request.headers.get("accept")?.includes("text/html")
+      ? networkFirst(event.request)
+      : cacheFirst(event.request)
+  );
+});
+
+// Caching strategy
+const cacheFirst = async (request) => {
+  const cache = await caches.open(STATIC_CACHE);
+  const cachedResponse = await cache.match(request);
+  return (
+    cachedResponse || fetch(request).catch(() => cache.match(self.origin + "/"))
+  );
+};
+
+const networkFirst = async (request) => {
+  try {
+    const response = await fetch(request);
+    const cache = await caches.open(DYNAMIC_CACHE);
+    cache.put(request, response.clone());
+    limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE);
+    return response;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    console.warn("⚠ Network request failed, serving from cache:", request.url);
+    const cache = await caches.open(STATIC_CACHE);
+    return cache.match(request) || cache.match(self.origin + "/");
+  }
+};
+
+// Service Worker Update Management
+self.addEventListener("message", (event) => {
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});

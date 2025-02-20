@@ -15,6 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <link rel="manifest" href="/manifest.json" />
       <link
         rel="icon"
         type="image/png"
@@ -23,13 +24,11 @@ export default function RootLayout({
       />
       <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
       <link rel="shortcut icon" href="./images/favicon.ico" />
-      {/* <link
-        rel="apple-touch-icon"
-        sizes="180x180"
-        href="./images/apple-touch-icon.png"
-      /> */}
       <meta name="apple-mobile-web-app-title" content="Telegram" />
-      <link rel="manifest" href="/manifest.json" />
+      <link rel="apple-touch-icon" href="/images/telegram-192x192.png" />
+      <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+
+
       <meta name="theme-color" content="#232735" />
       <body className="font-vazirRegular bg-leftBarBg h-full">
         <ToastContainer />
