@@ -6,11 +6,13 @@ const ProfileGradients = ({
   children,
   classNames,
   style,
+  onClick,
 }: {
   id: string;
   children: React.ReactNode;
   classNames: string;
   style?: CSSProperties;
+  onClick?: () => void;
 }) => {
   const gradientClass = useMemo(() => getGradientClass(id), [id]);
 
@@ -18,6 +20,7 @@ const ProfileGradients = ({
     <div
       className={`${gradientClass} shrink-0 rounded-full flex-center text-white ${classNames}`}
       style={style}
+      onClick={onClick}
     >
       {children}
     </div>

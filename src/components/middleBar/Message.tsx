@@ -347,8 +347,9 @@ const Message = (msgData: MessageModel & Props) => {
             </div>
           ) : (
             <ProfileGradients
-              classNames="size-8 chat-image avatar cursor-pointer"
+              classNames="size-8 chat-image avatar cursor-pointer z-10"
               id={sender?._id}
+              onClick={openProfile}
             >
               {sender.name[0]}
             </ProfileGradients>
