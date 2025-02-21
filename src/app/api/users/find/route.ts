@@ -101,6 +101,9 @@ export const POST = async (req: Request) => {
             const otherParticipant = roomData.participants.find(
               (data: UserModel) => data._id.toString() !== userID.toString()
             );
+            const isMe = roomData.participants.find(
+              (data: UserModel) => data._id.toString() === userID.toString()
+            );
 
             searchResult.push({
               ...roomData,
@@ -108,8 +111,16 @@ export const POST = async (req: Request) => {
               messages: [msgData],
               name:
                 roomData.type === "private"
-                  ? otherParticipant?.name ?? "-"
+                  ? otherParticipant?.name
+                    ? otherParticipant?.name
+                    : isMe
+                    ? "Saved messages"
+                    : ""
                   : roomData.name,
+              lastName:
+                roomData.type === "private"
+                  ? otherParticipant?.lastName ?? ""
+                  : "",
               avatar:
                 roomData.type === "private"
                   ? otherParticipant?.avatar ?? ""

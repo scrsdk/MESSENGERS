@@ -46,7 +46,7 @@ const SearchResultCard = (
   const {
     avatar,
     name,
-    lastName,
+    lastName = "",
     _id,
     myData,
     participants,
@@ -114,12 +114,18 @@ const SearchResultCard = (
     if (data.userID === userID) return true;
   });
 
+  const isSavedMessages =
+    findBy === "messages" &&
+    type === "private" &&
+    participants?.length === 1 &&
+    (participants as User[])[0]._id === myID;
+
   return (
     <div
       onClick={_id === myID ? openSavedMessages : openChat}
       className="flex items-center gap-2 cursor-pointer overflow-x-hidden border-b border-black/15 hover:bg-white/5 transition-all duration-200"
     >
-      {_id === myID ? (
+      {_id === myID || isSavedMessages ? (
         <div
           className={`size-11 bg-cyan-700 shrink-0 rounded-full flex-center text-white text-2xl`}
         >
