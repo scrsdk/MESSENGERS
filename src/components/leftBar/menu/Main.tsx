@@ -25,6 +25,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
     (state) => state
   );
   const socket = useSockets((state) => state.rooms);
+  const { setter } = useGlobalStore((state) => state);
 
   const copyInviteLink = async () => {
     await copyText("Coming soon");
@@ -32,17 +33,31 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
     closeMenu();
   };
 
-  const openProfile = () => updateRoute("settings");
+  const openProfile = () => {
+    closeMenu();
+    updateRoute("settings");
+    setter({
+      showCreateRoomBtn: false,
+      selectedRoom: null,
+      isRoomDetailsShown: false,
+    });
+  };
 
   const createNewGroup = () => {
-    const createRoom = useGlobalStore.getState().createRoom;
-    createRoom("group");
+    setter({ createRoomType: "group" });
+    setter({
+      selectedRoom: null,
+      isRoomDetailsShown: false,
+    });
     closeMenu();
   };
 
   const createNewChannel = () => {
-    const createRoom = useGlobalStore.getState().createRoom;
-    createRoom("channel");
+    setter({ createRoomType: "channel" });
+    setter({
+      selectedRoom: null,
+      isRoomDetailsShown: false,
+    });
     closeMenu();
   };
 
@@ -58,7 +73,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
     <nav
       className={`fixed ${
         isOpen ? "left-0" : "-left-full"
-      } max-h-screen h-full overflow-auto duration-200 transition-all inset-y-0 z-9999 bg-leftBarBg text-white w-[80%] max-w-80 md:max-w-72 lg:max-w-80`}
+      } max-h-screen h-full overflow-auto duration-300 transition-all inset-y-0 z-9999 bg-leftBarBg text-white w-[80%] max-w-80 md:max-w-72 lg:max-w-80`}
     >
       <div className="flex flex-col pt-4 px-4 gap-4 bg-chatBg chatBackground pb-2">
         {avatar ? (
@@ -158,10 +173,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         <MenuItem
           icon={<IoSettingsOutline />}
           title="Settings"
-          onClick={() => {
-            updateRoute("settings");
-            closeMenu();
-          }}
+          onClick={openProfile}
         />
 
         <LineSeparator />

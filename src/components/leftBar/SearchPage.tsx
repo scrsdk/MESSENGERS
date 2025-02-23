@@ -67,7 +67,7 @@ const SearchPage = ({ closeSearch }: Props) => {
 
   return (
     <section
-      data-aos="fade-up"
+      data-aos="fade-right"
       onKeyUp={(e) => e.key == "Escape" && closeSearch()}
       className={`text-white fixed  w-full md:block md:w-[40%] lg:w-[35%] ${
         isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"

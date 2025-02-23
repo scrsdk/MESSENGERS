@@ -188,8 +188,9 @@ const ChatContent = () => {
 
   return (
     <div
-      data-aos="fade-right"
-      className="relative h-dvh flex flex-col chatBackground w-full"
+      data-aos="fade"
+      style={{ transform: "none" }}
+      className="relative h-dvh flex flex-col chatBackground w-full "
     >
       {/* Chat Header */}
       <div
@@ -286,7 +287,7 @@ const ChatContent = () => {
             dropDownItems={dropDownItems}
             isOpen={showRoomOptions}
             setIsOpen={setShowRoomOptions}
-            classNames=" top-5 right-0 w-fit text-nowrap "
+            classNames="top-5 right-0 w-fit text-nowrap"
           />
         </div>
       </div>

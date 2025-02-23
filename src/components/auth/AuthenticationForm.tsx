@@ -4,7 +4,8 @@ import { useState } from "react";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import Button from "../modules/ui/Button";
-import { Player } from "@lottiefiles/react-lottie-player";
+import Lottie from "react-lottie-player";
+import animationData from "../../../public/animations/telegram.json";
 
 const AuthenticationForm = () => {
   const [isLogging, setIsLogging] = useState(true);
@@ -12,12 +13,13 @@ const AuthenticationForm = () => {
   return (
     <section className="bg-leftBarBg flex-center size-full h-dvh">
       <div className="flex-center transition-all duration-300  flex-col max-w-[360px] w-full text-white">
-        <Player
-          src={"/animations/telegram.json"}
-          className="player size-70"
+        <Lottie
           loop
-          autoplay
+          play
+          animationData={animationData}
+          className="player size-80"
         />
+
         <h1 className="font-bold font-vazirBold text-4xl">
           Sign {isLogging ? "in" : "up"} to Telegram
         </h1>

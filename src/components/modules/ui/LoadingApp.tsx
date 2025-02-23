@@ -1,19 +1,28 @@
 import dynamic from "next/dynamic";
-const Player = dynamic(
-  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  {
-    ssr: false,
-  }
-);
+import { useEffect, useState } from "react";
+
+// Lottie Dynamic Load without SSR
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
+
 const LoadingApp = () => {
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch("/animations/appLoader.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
   return (
     <div className="fixed bg-leftBarBg h-screen size-full flex-center">
-      <Player
-        src={"/animations/appLoader.json"}
-        className="player size-80"
-        loop
-        autoplay
-      />
+      {animationData && (
+        <Lottie
+          loop
+          play
+          animationData={animationData}
+          className="player size-85"
+        />
+      )}
     </div>
   );
 };

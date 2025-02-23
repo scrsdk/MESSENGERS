@@ -16,26 +16,25 @@ const LeftBarContainer = ({
 }: Props) => {
   return (
     <div
-      data-aos="fade-left"
-      className="fixed size-full duration-300 transition-all inset-0 z-9999 bg-chatBg chatBackground "
+      data-aos="fade-right"
+      className="size-full bg-leftBarBg overflow-y-auto overflow-x-hidden scroll-w-none z-50"
+      style={{ zIndex: 99999999 }}
     >
-      <div className="size-full bg-leftBarBg md:w-[40%] lg:w-[35%] xl:w-[30%] overflow-y-auto overflow-x-hidden scroll-w-none">
-        <div className="flex items-center p-4 sticky top-0  z-50 justify-between w-full text-white bg-leftBarBg">
-          <div className="flex items-center gap-4">
-            <IoArrowBackOutline
-              onClick={getBack}
-              className="size-6 cursor-pointer"
-            />
-            {title ? (
-              <p className="font-bold font-vazirBold text-base">{title}</p>
-            ) : null}
-          </div>
-
-          {leftHeaderChild}
+      <div className="flex items-center p-4 sticky top-0  z-50 justify-between w-full text-white bg-leftBarBg">
+        <div className="flex items-center gap-4">
+          <IoArrowBackOutline
+            onClick={getBack}
+            className="size-6 cursor-pointer"
+          />
+          {title ? (
+            <p className="font-bold font-vazirBold text-base">{title}</p>
+          ) : null}
         </div>
 
-        <div className="z-30">{children}</div>
+        {leftHeaderChild}
       </div>
+
+      <div className="z-30">{children}</div>
     </div>
   );
 };

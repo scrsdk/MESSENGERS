@@ -12,7 +12,8 @@ export interface GlobalStoreProps {
   isRoomDetailsShown: boolean;
   shouldCloseAll: boolean;
   isChatPageLoaded: boolean;
-  createRoom: (type: "channel" | "group") => void;
+  showCreateRoomBtn: boolean;
+  createRoomType: "channel" | "group" | null;
 }
 
 interface Updater {
@@ -36,8 +37,8 @@ const useGlobalStore = create<GlobalStoreProps & Updater>((set) => ({
   shouldCloseAll: false,
   isRoomDetailsShown: false,
   isChatPageLoaded: false,
-
-  createRoom: () => {},
+  showCreateRoomBtn: true,
+  createRoomType: null,
 
   updater(
     key: keyof GlobalStoreProps,

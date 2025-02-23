@@ -26,6 +26,7 @@ import { CgLock } from "react-icons/cg";
 import { FaRegFolderClosed } from "react-icons/fa6";
 import useModalStore from "@/stores/modalStore";
 import ProfileImageViewer from "@/components/modules/ProfileImageViewer";
+import useGlobalStore from "@/stores/globalStore";
 
 interface Props {
   getBack: () => void;
@@ -45,6 +46,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
   } = useUserStore((state) => state);
 
   const { setter: modalSetter } = useModalStore((state) => state);
+  const { setter: globalSetter } = useGlobalStore((state) => state);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
@@ -179,243 +181,251 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     .filter((item) => item !== null);
 
   return (
-    <LeftBarContainer
-      getBack={getBack}
-      leftHeaderChild={
-        <>
-          <DropDown
-            isOpen={isDropDownOpen}
-            setIsOpen={setIsDropDownOpen}
-            dropDownItems={dropDownItems}
-            classNames="top-0 right-0 w-48"
-            button={
-              <BsThreeDotsVertical className="size-8 cursor-pointer ml-auto pr-2" />
-            }
-          />
-        </>
-      }
-    >
-      <Modal />
-      <div className="relative text-white">
-        <div className="absolute px-4 inset-x-0 w-full ">
-          <div className="flex items-center gap-3 my-3 ">
-            {
-              <div
-                className={`flex-center relative size-14 ${
-                  !avatar && "bg-darkBlue"
-                } overflow-hidden rounded-full`}
-              >
-                {avatar ? (
-                  <Image
-                    src={avatar}
-                    className="cursor-pointer object-cover size-full rounded-full"
-                    width={55}
-                    height={55}
-                    alt="avatar"
-                    onClick={() => setIsViewerOpen(true)}
-                  />
-                ) : (
-                  <div className="flex-center bg-darkBlue shrink-0 text-center font-bold text-xl mt-1">
-                    {name?.length && name![0]}
-                  </div>
-                )}
+    <>
+      <LeftBarContainer
+        getBack={() => {
+          getBack();
+          globalSetter({ showCreateRoomBtn: true });
+        }}
+        leftHeaderChild={
+          <>
+            <DropDown
+              isOpen={isDropDownOpen}
+              setIsOpen={setIsDropDownOpen}
+              dropDownItems={dropDownItems}
+              classNames="top-0 right-0 w-48"
+              button={
+                <BsThreeDotsVertical className="size-8 cursor-pointer ml-auto pr-2" />
+              }
+            />
+          </>
+        }
+      >
+        <Modal />
+        <div className="relative text-white">
+          <div className="absolute px-4 inset-x-0 w-full ">
+            <div className="flex items-center gap-3 my-3 ">
+              {
+                <div
+                  className={`flex-center relative size-14 ${
+                    !avatar && "bg-darkBlue"
+                  } overflow-hidden rounded-full`}
+                >
+                  {avatar ? (
+                    <Image
+                      src={avatar}
+                      className="cursor-pointer object-cover size-full rounded-full"
+                      width={55}
+                      height={55}
+                      alt="avatar"
+                      onClick={() => setIsViewerOpen(true)}
+                    />
+                  ) : (
+                    <div className="flex-center bg-darkBlue shrink-0 text-center font-bold text-xl mt-1">
+                      {name?.length && name![0]}
+                    </div>
+                  )}
 
-                {isLoading && <Loading classNames="absolute w-11 bg-white" />}
+                  {isLoading && <Loading classNames="absolute w-11 bg-white" />}
+                </div>
+              }
+
+              <div className="flex justify-center flex-col gap-1">
+                <h3 className="font-bold text-lg font-vazirBold line-clamp-1 text-ellipsis">
+                  {name + " " + lastName}
+                </h3>
+
+                <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
+                  Online
+                </div>
               </div>
-            }
+            </div>
 
-            <div className="flex justify-center flex-col gap-1">
-              <h3 className="font-bold text-lg font-vazirBold line-clamp-1 text-ellipsis">
-                {name + " " + lastName}
-              </h3>
+            <span className="absolute right-5 top-12 size-14 rounded-full cursor-pointer bg-darkBlue flex-center">
+              <TbCameraPlus className="size-6" onClick={avatarElem} />
+            </span>
+          </div>
 
-              <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
-                Online
-              </div>
+          <div className="h-20"></div>
+
+          <div className="flex flex-col mt-4">
+            <p className="text-darkBlue font-vazirBold py-2 px-4 font-bold text-sm">
+              Account
+            </p>
+
+            <div className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200">
+              <p className="text-sm">
+                +98{" "}
+                {phone
+                  .toString()
+                  .split("")
+                  .map((str, index) => {
+                    if (index < 7) {
+                      return str + ((index + 1) % 3 === 0 ? " " : "");
+                    } else {
+                      return str;
+                    }
+                  })}
+              </p>
+              <p className="text-darkGray text-[13px]">
+                Tap to change phone number
+              </p>
+            </div>
+
+            <LineSeparator />
+
+            <div
+              onClick={() => updateRoute("edit-username")}
+              className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200"
+            >
+              <p className="text-sm">@{username}</p>
+              <p className="text-darkGray text-[13px]">Username</p>
+            </div>
+
+            <LineSeparator />
+
+            <div
+              onClick={() => updateRoute("edit-info")}
+              className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200"
+            >
+              <p className="text-sm">{biography ? biography : "Bio"}</p>
+              <p className="text-darkGray text-[13px]">
+                {biography ? "Bio" : "Add a few words about yourself"}
+              </p>
             </div>
           </div>
 
-          <span className="absolute right-5 top-12 size-14 rounded-full cursor-pointer bg-darkBlue flex-center">
-            <TbCameraPlus className="size-6" onClick={avatarElem} />
-          </span>
-        </div>
+          <p className="h-2 w-full bg-black/70  absolute"></p>
 
-        <div className="h-20"></div>
-
-        <div className="flex flex-col mt-4">
-          <p className="text-darkBlue font-vazirBold py-2 px-4 font-bold text-sm">
-            Account
-          </p>
-
-          <div className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200">
-            <p className="text-sm">
-              +98{" "}
-              {phone
-                .toString()
-                .split("")
-                .map((str, index) => {
-                  if (index < 7) {
-                    return str + ((index + 1) % 3 === 0 ? " " : "");
-                  } else {
-                    return str;
-                  }
-                })}
+          <div className="flex flex-col pt-1">
+            <p className="text-darkBlue font-vazirBold px-4 py-2 mt-2 text-sm">
+              Settings
             </p>
-            <p className="text-darkGray text-[13px]">
-              Tap to change phone number
+
+            <div className="flex item-center relative">
+              <MenuItem
+                icon={<IoSettingsOutline />}
+                title="General Settings"
+                onClick={() => {}}
+              />
+              <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+                <MdOutlineLockClock fill="teal" size={15} />
+                <span>Coming Soon!</span>
+              </span>
+            </div>
+
+            <LineSeparator />
+
+            <div className="flex item-center relative">
+              <MenuItem
+                icon={<GoBell />}
+                title="Notifications"
+                onClick={() => {}}
+              />
+              <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+                <MdOutlineLockClock fill="teal" size={15} />
+                <span>Coming Soon!</span>
+              </span>
+            </div>
+
+            <LineSeparator />
+
+            <div className="flex item-center relative">
+              <MenuItem
+                icon={<CgLock />}
+                title="Privacy and Security"
+                onClick={() => {}}
+              />
+              <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+                <MdOutlineLockClock fill="teal" size={15} />
+                <span>Coming Soon!</span>
+              </span>
+            </div>
+
+            <LineSeparator />
+
+            <div className="flex item-center relative">
+              <MenuItem
+                icon={<FaRegFolderClosed />}
+                title="Chat Folders"
+                onClick={() => {}}
+              />
+              <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
+                <MdOutlineLockClock fill="teal" size={15} />
+                <span>Coming Soon!</span>
+              </span>
+            </div>
+
+            <LineSeparator />
+
+            <span className="relative flex items-center">
+              <MenuItem
+                icon={<MdLanguage />}
+                title="Language"
+                onClick={() => {}}
+              />
+              <span className="text-darkBlue absolute right-4 text-sm">
+                English
+              </span>
+            </span>
+          </div>
+
+          <p className="h-2 w-full bg-black/70  absolute"></p>
+
+          <div className="flex flex-col pt-1">
+            <p className="text-darkBlue font-vazirBold px-4 py-2 mt-2 text-sm">
+              Help
             </p>
+
+            <MenuItem
+              icon={<IoChatbubbleEllipsesOutline />}
+              title="Ask a Question"
+              onClick={() => {}}
+            />
+
+            <LineSeparator />
+
+            <MenuItem
+              icon={<AiOutlineQuestionCircle />}
+              title="Telegram FAQ"
+              onClick={() =>
+                window.open("https://telegram.org/faq?setln=en", "_blank")
+              }
+            />
+
+            <LineSeparator />
+
+            <MenuItem
+              icon={<GoShieldCheck />}
+              title="Privacy Policy"
+              onClick={() =>
+                window.open(
+                  "https://telegram.org/privacy/de?setln=en",
+                  "_blank"
+                )
+              }
+            />
           </div>
 
-          <LineSeparator />
-
-          <div
-            onClick={() => updateRoute("edit-username")}
-            className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200"
-          >
-            <p className="text-sm">@{username}</p>
-            <p className="text-darkGray text-[13px]">Username</p>
-          </div>
-
-          <LineSeparator />
-
-          <div
-            onClick={() => updateRoute("edit-info")}
-            className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200"
-          >
-            <p className="text-sm">{biography ? biography : "Bio"}</p>
-            <p className="text-darkGray text-[13px]">
-              {biography ? "Bio" : "Add a few words about yourself"}
-            </p>
+          <div className="w-full  py-5 px-4 text-center bg-black/70">
+            Created with 💙 by{" "}
+            <a
+              target="_blank"
+              href="https://github.com/Saeed-Abedini"
+              className="text-darkBlue"
+            >
+              SAEED
+            </a>{" "}
           </div>
         </div>
-
-        <p className="h-2 w-full bg-black/70  absolute"></p>
-
-        <div className="flex flex-col pt-1">
-          <p className="text-darkBlue font-vazirBold px-4 py-2 mt-2 text-sm">
-            Settings
-          </p>
-
-          <div className="flex item-center relative">
-            <MenuItem
-              icon={<IoSettingsOutline />}
-              title="General Settings"
-              onClick={() => {}}
-            />
-            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
-              <MdOutlineLockClock fill="teal" size={15} />
-              <span>Coming Soon!</span>
-            </span>
-          </div>
-
-          <LineSeparator />
-
-          <div className="flex item-center relative">
-            <MenuItem
-              icon={<GoBell />}
-              title="Notifications"
-              onClick={() => {}}
-            />
-            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
-              <MdOutlineLockClock fill="teal" size={15} />
-              <span>Coming Soon!</span>
-            </span>
-          </div>
-
-          <LineSeparator />
-
-          <div className="flex item-center relative">
-            <MenuItem
-              icon={<CgLock />}
-              title="Privacy and Security"
-              onClick={() => {}}
-            />
-            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
-              <MdOutlineLockClock fill="teal" size={15} />
-              <span>Coming Soon!</span>
-            </span>
-          </div>
-
-          <LineSeparator />
-
-          <div className="flex item-center relative">
-            <MenuItem
-              icon={<FaRegFolderClosed />}
-              title="Chat Folders"
-              onClick={() => {}}
-            />
-            <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
-              <MdOutlineLockClock fill="teal" size={15} />
-              <span>Coming Soon!</span>
-            </span>
-          </div>
-
-          <LineSeparator />
-
-          <span className="relative flex items-center">
-            <MenuItem
-              icon={<MdLanguage />}
-              title="Language"
-              onClick={() => {}}
-            />
-            <span className="text-darkBlue absolute right-4 text-sm">
-              English
-            </span>
-          </span>
-        </div>
-
-        <p className="h-2 w-full bg-black/70  absolute"></p>
-
-        <div className="flex flex-col pt-1">
-          <p className="text-darkBlue font-vazirBold px-4 py-2 mt-2 text-sm">
-            Help
-          </p>
-
-          <MenuItem
-            icon={<IoChatbubbleEllipsesOutline />}
-            title="Ask a Question"
-            onClick={() => {}}
-          />
-
-          <LineSeparator />
-
-          <MenuItem
-            icon={<AiOutlineQuestionCircle />}
-            title="Telegram FAQ"
-            onClick={() =>
-              window.open("https://telegram.org/faq?setln=en", "_blank")
-            }
-          />
-
-          <LineSeparator />
-
-          <MenuItem
-            icon={<GoShieldCheck />}
-            title="Privacy Policy"
-            onClick={() =>
-              window.open("https://telegram.org/privacy/de?setln=en", "_blank")
-            }
-          />
-        </div>
-
-        <div className="w-full  py-5 px-4 text-center bg-black/70">
-          Created with 💙 by{" "}
-          <a
-            target="_blank"
-            href="https://github.com/Saeed-Abedini"
-            className="text-darkBlue"
-          >
-            SAEED
-          </a>{" "}
-        </div>
-      </div>
+      </LeftBarContainer>
       {isViewerOpen && (
         <ProfileImageViewer
           imageUrl={avatar}
           onClose={() => setIsViewerOpen(false)}
         />
       )}
-    </LeftBarContainer>
+    </>
   );
 };
 

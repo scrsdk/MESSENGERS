@@ -1,26 +1,20 @@
-import { Suspense, lazy, useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-import Room from "@/models/room";
 import useGlobalStore from "@/stores/globalStore";
 import DropDown from "../modules/ui/DropDown";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { HiMiniUserGroup } from "react-icons/hi2";
 
-const CreateRoom = lazy(() => import("@/components/leftBar/CreateRoom"));
-
 const CreateRoomBtn = () => {
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const [roomType, setRoomType] = useState<Room["type"] | null>();
-  const setter = useGlobalStore((state) => state.setter);
+  const { setter } = useGlobalStore((state) => state);
 
   const dropDownItems = [
     {
       title: "New Channel",
       onClick: () => {
-        setRoomType("channel");
-        setIsOptionsOpen(true);
+        setter({ createRoomType: "channel" });
         setIsDropDownOpen(false);
       },
       icon: <HiOutlineSpeakerphone className="size-5 mr-3 text-gray-400" />,
@@ -28,25 +22,12 @@ const CreateRoomBtn = () => {
     {
       title: "New Group",
       onClick: () => {
-        setRoomType("group");
-        setIsOptionsOpen(true);
+        setter({ createRoomType: "group" });
         setIsDropDownOpen(false);
       },
       icon: <HiMiniUserGroup className="size-5 mr-3 text-gray-400" />,
     },
   ];
-
-  const handleCreateRoom = useCallback(() => {
-    setIsOptionsOpen(true);
-    setRoomType("group");
-    setIsDropDownOpen(false);
-  }, []);
-
-  useEffect(() => {
-    setter({
-      createRoom: handleCreateRoom,
-    });
-  }, [setter, handleCreateRoom]);
 
   return (
     <div className={`absolute right-3 bottom-3 z-10 text-white`}>
@@ -68,18 +49,6 @@ const CreateRoomBtn = () => {
           </div>
         }
       />
-
-      {isOptionsOpen && (
-        <Suspense>
-          <CreateRoom
-            close={() => {
-              setIsOptionsOpen(false);
-              setRoomType(null);
-            }}
-            roomType={roomType!}
-          />
-        </Suspense>
-      )}
     </div>
   );
 };

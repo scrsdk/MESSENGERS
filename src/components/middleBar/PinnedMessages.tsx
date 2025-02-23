@@ -108,6 +108,8 @@ const PinnedMessages: React.FC<PinnedMessagesProps> = ({
 
   return (
     <div
+      data-aos="slide-down"
+      data-aos-duration="400"
       id="pinMessagesContainer"
       className="sticky top-0 py-1 px-2 h-12 bg-leftBarBg w-full z-10"
     >

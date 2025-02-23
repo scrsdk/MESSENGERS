@@ -81,6 +81,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
           !isValidationLoading &&
           isUsernameValid && (
             <MdDone
+              data-aos="zoom-right"
               onClick={updateUsername}
               className="size-6 absolute right-2 cursor-pointer"
             />
@@ -88,7 +89,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
         ))
       }
     >
-      <div className="flex flex-col gap-2 pb-4 w-full  px-4 text-white">
+      <div className="flex flex-col gap-2 pb-4 !w-full  px-4 text-white">
         <p className="text-darkBlue font-vazirRegular pt-1  font-bold text-base">
           Set username
         </p>
@@ -108,7 +109,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
         </div>
       </div>
 
-      <div className="fixed size-full md:w-[40%] lg:w-[35%] xl:w-[30%] text-white/55 inset-x-0 text-sm h-full bg-black/70 px-4 pt-2 break-words">
+      <div className="fixed size-full text-white/55 inset-x-0 text-sm h-full bg-black/70 px-4 pt-2 break-words">
         {isValidationLoading ? (
           <p data-aos="zoom-left" className="my-2">
             Checking username...

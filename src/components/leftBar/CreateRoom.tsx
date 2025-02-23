@@ -16,12 +16,7 @@ import { TbCameraPlus } from "react-icons/tb";
 import ContactCard from "./ContactCard";
 import EmojiPicker from "../modules/EmojiPicker";
 
-type Props = {
-  roomType: Room["type"];
-  close: () => void;
-};
-
-const CreateRoom = ({ roomType, close }: Props) => {
+const CreateRoom = () => {
   const { _id: myID, rooms } = useUserStore((state) => state);
   const userContacts = rooms.filter(
     (room) => room.type === "private" && room.participants.length > 1
@@ -37,7 +32,8 @@ const CreateRoom = ({ roomType, close }: Props) => {
   const [roomName, setRoomName] = useState("");
   const [search, setSearch] = useState("");
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
-  const { isRoomDetailsShown, onlineUsers } = useGlobalStore((state) => state);
+  const { isRoomDetailsShown, onlineUsers, createRoomType, setter } =
+    useGlobalStore((state) => state);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const filteredUserCards = useMemo(() => {
@@ -51,7 +47,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
       : [];
   }, [myID, search, userContacts]);
 
-  if (!roomType) return;
+  if (!createRoomType) return;
 
   const isUserOnline = (id: string) => {
     return onlineUsers.some((data) => {
@@ -78,7 +74,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
     if (isRoomInfoPartShown) {
       setIsRoomInfoPartShown(false);
     } else {
-      close();
+      setter({ createRoomType: null });
     }
   };
 
@@ -130,7 +126,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
       admins: [myID],
       avatar: imageUrl as string,
       participants: [...selectedUsers, myID],
-      type: roomType,
+      type: createRoomType,
       creator: myID,
       link: "@" + randomHexGenerate(20),
       locations: [],
@@ -148,14 +144,15 @@ const CreateRoom = ({ roomType, close }: Props) => {
         setRoomName("");
         setIsRoomInfoPartShown(false);
         setRoomImage(null);
-        close();
+        setter({ createRoomType: null });
       }, 300);
     });
   };
 
   return (
-    <section
-      className={`fixed inset-y-0 w-full md:block md:w-[40%] lg:w-[35%] ${
+    <div
+      data-aos="fade-right"
+      className={`fixed inset-y-0  md:block md:w-[40%] lg:w-[35%] ${
         isRoomDetailsShown ? "xl:w-[25%]" : "xl:w-[30%]"
       }  left-0 bg-leftBarBg size-full text-white z-50`}
     >
@@ -166,16 +163,18 @@ const CreateRoom = ({ roomType, close }: Props) => {
         />
 
         {isRoomInfoPartShown ? (
-          <div className="capitalize text-sm ">New {roomType}</div>
+          <div className="capitalize text-sm ">New {createRoomType}</div>
         ) : (
           <div className=" flex flex-col justify-center">
-            <div className="capitalize text-sm">New {roomType}</div>
+            <div className="capitalize text-sm">New {createRoomType}</div>
             <div className="text-xs text-white/60">
               {selectedUsers.length
                 ? `${selectedUsers.length} ${
-                    roomType === "group" ? "of 200000 selected" : "members"
+                    createRoomType === "group"
+                      ? "of 200000 selected"
+                      : "members"
                   }`
-                : roomType === "group"
+                : createRoomType === "group"
                 ? "up to 200000 members"
                 : "0 members"}
             </div>
@@ -217,7 +216,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
               className="w-full basis-[90%] p-2 rounded-sm bg-inherit outline-hidden"
-              placeholder={`Enter ${roomType} name`}
+              placeholder={`Enter ${createRoomType} name`}
             />
             {isEmojiOpen ? (
               <FaRegKeyboard
@@ -244,7 +243,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
             onChange={(e) => setSearch(e.target.value)}
             className="bg-inherit p-1 w-full px-4 outline-hidden text-sm mt-1"
             placeholder={
-              roomType === "group"
+              createRoomType === "group"
                 ? "Who would you like to add?"
                 : "Add people to your channel"
             }
@@ -294,7 +293,7 @@ const CreateRoom = ({ roomType, close }: Props) => {
           style={{ position: "absolute", bottom: 0 }}
         />
       )}
-    </section>
+    </div>
   );
 };
 

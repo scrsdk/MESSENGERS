@@ -11,11 +11,11 @@ const MiddleBar = () => {
 
   return (
     <div
-      className={` bg-chatBg relative ${
+      className={` chatBackground relative ${
         !selectedRoom && "hidden"
       }  md:block md:w-[60%] lg:w-[65%] ${
         isRoomDetailsShown ? "xl:w-[50%]" : "xl:w-[70%]"
-      }   text-white overflow-x-hidden  scroll-w-none  size-full `}
+      }   text-white overflow-x-hidden  scroll-w-none size-full `}
     >
       <AudioManager />
       {selectedRoom !== null ? (
@@ -29,11 +29,7 @@ const MiddleBar = () => {
           <ChatContent />
         </Suspense>
       ) : (
-        <div data-aos="fade-left" className="flex-center size-full min-h-dvh">
-          <p className="rounded-full w-fit text-sm py-1 px-3 text-center bg-white/[15%]">
-            Select chat to start messaging
-          </p>
-        </div>
+        <div className="size-full min-h-dvh"></div>
       )}
     </div>
   );

@@ -342,10 +342,12 @@ const MessageInput = ({
       </div>
 
       {isEmojiOpen && (
-        <EmojiPicker
-          handleEmojiClick={handleEmojiClick}
-          isEmojiOpen={isEmojiOpen}
-        />
+        <div data-aos="fade-up" data-aos-duration="200">
+          <EmojiPicker
+            handleEmojiClick={handleEmojiClick}
+            isEmojiOpen={isEmojiOpen}
+          />
+        </div>
       )}
     </div>
   );

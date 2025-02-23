@@ -10,6 +10,7 @@ import React, {
   useState,
   useCallback,
   useRef,
+  Suspense,
 } from "react";
 import { BiSearch } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -24,6 +25,7 @@ import NotificationPermission from "@/utils/NotificationPermission";
 const CreateRoomBtn = lazy(() => import("@/components/leftBar/CreateRoomBtn"));
 const LeftBarMenu = lazy(() => import("@/components/leftBar/menu/LeftBarMenu"));
 const SearchPage = lazy(() => import("@/components/leftBar/SearchPage"));
+const CreateRoom = lazy(() => import("@/components/leftBar/CreateRoom"));
 
 const LeftBar = () => {
   const [filterBy, setFilterBy] = useState("all");
@@ -36,9 +38,13 @@ const LeftBar = () => {
   const { setter: userDataUpdater, rooms: userRooms } = useUserStore(
     (state) => state
   );
-  const { selectedRoom, setter, isRoomDetailsShown } = useGlobalStore(
-    (state) => state
-  );
+  const {
+    selectedRoom,
+    setter,
+    isRoomDetailsShown,
+    createRoomType,
+    showCreateRoomBtn,
+  } = useGlobalStore((state) => state);
   const interactUser = useRef(false);
 
   useEffect(() => {
@@ -157,11 +163,12 @@ const LeftBar = () => {
         isOpen={isLeftBarMenuOpen}
         closeMenu={handleCloseLeftBarMenu}
       />
-      {isPageLoaded && (
-        <>
-          <CreateRoomBtn />
-        </>
+      {createRoomType && (
+        <Suspense>
+          <CreateRoom />
+        </Suspense>
       )}
+      {isPageLoaded && showCreateRoomBtn && <CreateRoomBtn />}
       {isSearchOpen && <SearchPage closeSearch={handleCloseSearch} />}
 
       <div
