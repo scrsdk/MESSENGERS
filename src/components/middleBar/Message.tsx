@@ -259,9 +259,8 @@ const Message = (msgData: MessageModel & Props) => {
         msgID: _id,
         roomID,
       });
-      window?.updateCount?.(roomID);
     }
-  }, [isInViewport, isFromMe, roomID, seen, myId, sender, _id, rooms]);
+  }, [_id, isFromMe, isInViewport, myId, roomID, rooms, seen, sender]);
 
   //Set display state only once after mount.
   useEffect(() => {
@@ -286,7 +285,7 @@ const Message = (msgData: MessageModel & Props) => {
                 isFromMe ? "bg-darkBlue" : "bg-white"
               }`}
             />
-            <IoClose className="size-6" />
+            <IoClose data-aos="zoom-in" className="size-6" />
           </span>
         );
       } else if (isDownloaded) {
@@ -375,7 +374,7 @@ const Message = (msgData: MessageModel & Props) => {
               !isLastMessageFromUser &&
               !isFromMe &&
               `${
-                !isPv && !isChannel ? `ml-9` : "ml-0"
+                !isPv && !isChannel ? `ml-8` : "ml-0"
               } rounded-bl-md col-start-2`
             }
             ${isLastMessageFromUser ? "chat-bubble" : ""}`}
@@ -466,7 +465,9 @@ const Message = (msgData: MessageModel & Props) => {
                 {seen.length > 0 ? seen.length : ""}
               </div>
             )}
-            {msgData?.pinnedAt && <TiPin className="size-4" />}
+            {msgData?.pinnedAt && (
+              <TiPin data-aos="zoom-in" className="size-4" />
+            )}
             <p
               className={`whitespace-nowrap text-[10px] ${!isFromMe && "pr-1"}`}
             >

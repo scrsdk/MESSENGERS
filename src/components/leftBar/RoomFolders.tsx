@@ -14,25 +14,22 @@ const RoomFolders = ({
   >({});
   const [activeFolder, setActiveFolder] = useState("all");
   const chatFolderRef = useRef<HTMLDivElement>(null);
-  const { rooms } = useUserStore((state) => state);
+  const { rooms, notSeenCounts } = useUserStore((state) => state);
 
   useEffect(() => {
     if (!rooms?.length) return;
 
-    setFolderCount({});
+    const newFolderCount: Record<string, number> = {};
 
     rooms.forEach((room) => {
-      if (room?.notSeenCount) {
-        setFolderCount((prev) => {
-          return {
-            ...prev,
-            [room.type]: (prev[room.type] ?? 0) + 1,
-            all: (prev.all ?? 0) + 1, // no matter what, all should update with other folder updates
-          };
-        });
-      }
+      const count = notSeenCounts[room._id] || 0;
+
+      newFolderCount[room.type] = (newFolderCount[room.type] ?? 0) + count;
+      newFolderCount["all"] = (newFolderCount["all"] ?? 0) + count;
     });
-  }, [rooms, activeFolder]); //forceRender
+
+    setFolderCount(newFolderCount);
+  }, [rooms, notSeenCounts]);
 
   useEffect(() => {
     updateFilterBy(activeFolder);

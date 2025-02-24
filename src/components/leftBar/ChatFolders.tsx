@@ -17,16 +17,22 @@ const ChatFolders = ({ name, count, isActive, onClick }: Props) => {
 
       {count ? (
         <span
-          className={`text-xs size-4 mb-0.5 flex items-center justify-center  ${
+          data-aos="zoom-in"
+          className={`text-xs size-5 shrink-0 mb-0.5 flex-center text-leftBarBg rounded-full ${
             isActive ? "bg-lightBlue" : "bg-darkGray"
-          } text-leftBarBg rounded-full`}
+          } `}
         >
-          <span className="mt-1 font-vazirBold"> {count}</span>
+          <span className="mt-1 font-vazirBold">
+            {count > 99 ? "+99" : count}
+          </span>
         </span>
       ) : null}
 
       {isActive && (
-        <span className="absolute -bottom-1 bg-lightBlue rounded-t-md w-full h-1"></span>
+        <span
+          data-aos="fade"
+          className="absolute -bottom-1 bg-lightBlue rounded-t-md w-full h-1"
+        ></span>
       )}
     </div>
   );

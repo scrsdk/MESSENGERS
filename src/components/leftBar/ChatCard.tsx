@@ -1,7 +1,7 @@
 import { MdDone } from "react-icons/md";
 import { IoCheckmarkDone } from "react-icons/io5";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Room from "@/models/room";
 import Message from "@/models/message";
 import useUserStore from "@/stores/userStore";
@@ -41,13 +41,16 @@ const ChatCard = ({
   });
   const [isActive, setIsActive] = useState<boolean>(false);
   const [lastMsgData, setLastMsgData] = useState<Message>(initialLastMsgData!);
-
-  const notSeenCount = useRef<number>(initialNotSeenCount);
-
   const { selectedRoom, onlineUsers, setter } = useGlobalStore(
     (state) => state
   );
-  const { _id: myID } = useUserStore((state) => state) || {};
+
+  const {
+    _id: myID,
+    isInitialSet,
+    notSeenCounts,
+    setter: userSetter,
+  } = useUserStore((state) => state) || {};
   const { rooms } = useSockets((state) => state);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,7 +121,15 @@ const ChatCard = ({
 
     const handleSeenMsg = ({ roomID: seenRoomID }: { roomID: string }) => {
       if (seenRoomID === _id) {
-        notSeenCount.current = Math.max(notSeenCount.current - 1, 0);
+        userSetter((prev) => ({
+          notSeenCounts: {
+            ...prev.notSeenCounts,
+            [seenRoomID]: Math.max(
+              (prev.notSeenCounts[seenRoomID] || 0) - 1,
+              0
+            ),
+          },
+        }));
       }
     };
 
@@ -134,7 +145,12 @@ const ChatCard = ({
         ((typeof sender === "string" && sender !== myID) ||
           (typeof sender === "object" && sender?._id !== myID))
       ) {
-        notSeenCount.current = notSeenCount.current + 1;
+        userSetter((prev) => ({
+          notSeenCounts: {
+            ...prev.notSeenCounts,
+            [newMsgRoomID]: (prev.notSeenCounts[newMsgRoomID] || 0) + 1,
+          },
+        }));
       }
     };
 
@@ -149,26 +165,23 @@ const ChatCard = ({
       rooms?.off("seenMsg", handleSeenMsg);
       rooms?.off("newMessage", handleNewMessage);
     };
-  }, [_id, myID, rooms, selectedRoom?._id]);
-
-  useEffect(() => {
-    window.updateCount = (roomTargetId: string) => {
-      if (roomTargetId === roomID)
-        notSeenCount.current = Math.max(notSeenCount.current - 1, 0);
-    };
-
-    return () => {
-      delete window.updateCount;
-    };
-  }, [roomID]);
+  }, [_id, myID, rooms, selectedRoom?._id, userSetter]);
 
   useEffect(() => {
     setDraftMessage(localStorage.getItem(_id) || "");
   }, [_id, selectedRoom?._id]);
 
   useEffect(() => {
-    notSeenCount.current = initialNotSeenCount;
-  }, [initialNotSeenCount]);
+    if (!isInitialSet) {
+      userSetter((prev) => ({
+        notSeenCounts: {
+          ...prev.notSeenCounts,
+          [_id]: initialNotSeenCount,
+        },
+        isInitialSet: true,
+      }));
+    }
+  }, [_id, initialNotSeenCount, isInitialSet, userSetter]);
 
   return (
     <div
@@ -247,12 +260,12 @@ const ChatCard = ({
           </div>
 
           <div className="flex items-center gap-2 absolute right-3">
-            {notSeenCount.current > 0 && (
+            {notSeenCounts[_id] > 0 && (
               <div
                 data-aos="zoom-in"
                 className="flex-center pt-1 size-5 bg-lightBlue text-black rounded-full text-xs font-vazirBold shrink-0"
               >
-                {notSeenCount.current}
+                {notSeenCounts[_id] > 99 ? "+99" : notSeenCounts[_id]}
               </div>
             )}
 

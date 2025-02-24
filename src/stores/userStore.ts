@@ -2,6 +2,8 @@ import User from "@/models/user";
 import { create } from "zustand";
 
 export interface UserStoreUpdater {
+  isInitialSet: boolean;
+  notSeenCounts: Record<string, number>;
   updater: (key: keyof User, value: User[keyof User]) => void;
   setter: (
     state:
@@ -10,7 +12,9 @@ export interface UserStoreUpdater {
   ) => void;
 }
 
-const useUserStore = create<User & UserStoreUpdater>((set) => ({
+type UserStore = User & UserStoreUpdater;
+
+const useUserStore = create<UserStore>((set) => ({
   _id: "",
   name: "",
   lastName: "",
@@ -25,6 +29,8 @@ const useUserStore = create<User & UserStoreUpdater>((set) => ({
   status: "offline",
   updatedAt: "",
   roomMessageTrack: [],
+  isInitialSet: false,
+  notSeenCounts: {},
 
   updater(key: keyof User, value: User[keyof User]) {
     set({ [key]: value });

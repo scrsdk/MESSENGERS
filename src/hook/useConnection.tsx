@@ -183,12 +183,22 @@ const useConnection = ({
 
   useEffect(() => {
     const handleOnline = () => {
-      setStatus("Connecting...");
+      setStatus(
+        <span>
+          Connecting
+          <Loading loading="dots" size="xs" classNames="text-white mt-1.5" />
+        </span>
+      );
       initializeSocket();
     };
 
     const handleOffline = () => {
-      setStatus("Connecting...");
+      setStatus(
+        <span>
+          Connecting
+          <Loading loading="dots" size="xs" classNames="text-white mt-1.5" />
+        </span>
+      );
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current = null;
