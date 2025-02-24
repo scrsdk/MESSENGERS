@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "**.vercel.app",
+      },
+      {
+        protocol: "https",
         hostname: "storage.c2.liara.space",
         port: "",
         pathname: "/tlgrm/**",
