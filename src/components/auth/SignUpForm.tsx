@@ -38,7 +38,7 @@ const SignUpForm = () => {
 
   return (
     <div
-      data-aos="zoom-out"
+      data-aos="zoom-in-down"
       className="flex w-full flex-col mt-10 space-y-6 "
       onKeyUp={(e) => e.key == "Enter" && handleSubmit(submitForm)()}
     >

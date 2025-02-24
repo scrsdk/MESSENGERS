@@ -234,7 +234,9 @@ const MessageInput = ({
           {editData ? (
             <MdModeEditOutline className="size-6 text-lightBlue min-w-fit" />
           ) : (
-            <BsFillReplyFill className="size-6 text-lightBlue min-w-fit" />
+            replayData && (
+              <BsFillReplyFill className="size-6 text-lightBlue min-w-fit" />
+            )
           )}
           <div className="flex flex-col text-left">
             <h4 className="text-lightBlue line-clamp-1 text-sm">
@@ -242,7 +244,7 @@ const MessageInput = ({
                 ? `Reply to ${replayData.sender?.name}`
                 : editData?.voiceData
                 ? "Edit Caption"
-                : "Edit Message"}
+                : editData && "Edit Message"}
             </h4>
             <p className="line-clamp-1 text-xs text-white/60">
               {replayData?.voiceData
@@ -252,6 +254,7 @@ const MessageInput = ({
           </div>
         </div>
         <IoMdClose
+          data-aos="zoom-in"
           onClick={(e) => {
             e.stopPropagation();
             handleCloseReplyEdit();

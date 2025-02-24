@@ -52,6 +52,7 @@ const DropDown = ({
     <div className={`dropdown ${isOpen && "dropdown-open"}`} ref={dropdownRef}>
       <span
         tabIndex={0}
+        role="button"
         onFocus={() => setIsOpen(!isOpen)}
         ref={buttonRef}
         id="buttonRef"

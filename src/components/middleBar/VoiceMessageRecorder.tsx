@@ -5,8 +5,8 @@ import useSockets from "@/stores/useSockets";
 import { secondsToTimeString, toaster, uploadFile } from "@/utils";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PiMicrophoneLight } from "react-icons/pi";
-import Button from "../modules/ui/Button";
 import Loading from "../modules/ui/Loading";
+import { RiSendPlaneFill } from "react-icons/ri";
 
 interface Props {
   replayData: Partial<Message> | undefined;
@@ -197,9 +197,9 @@ const VoiceMessageRecorder = ({
       />
 
       {isRecording && (
-        <div className="flex items-center justify-between px-2 absolute inset-0 z-20 size-full bg-leftBarBg">
+        <div className="flex items-center justify-between pl-2 absolute inset-0 z-20 size-full bg-leftBarBg">
           <div className="flex items-center gap-2 w-18">
-            <div className="size-4 rounded-full bg-red-400 animate-pulse flex-center">
+            <div className="size-4 rounded-full bg-red-400 animate-pulse flex-center mb-0.5">
               <div className="size-3 rounded-full bg-red-400 border-3 border-leftBarBg"></div>
             </div>
             <p>{secondsToTimeString(timer)}</p>
@@ -217,12 +217,15 @@ const VoiceMessageRecorder = ({
               <Loading size="md" />
             </span>
           ) : (
-            <Button
+            <span
+              className="bg-lightBlue h-full w-12 flex-center rounded-tl-4xl rounded-bl-4xl cursor-pointer "
               onClick={stopRecording}
-              classNames="w-18 rounded-sm animate-pulse"
             >
-              SEND
-            </Button>
+              <RiSendPlaneFill
+                data-aos="zoom-in"
+                className=" rounded-sm animate-pulse size-7 rotate-45"
+              />
+            </span>
           )}
         </div>
       )}
