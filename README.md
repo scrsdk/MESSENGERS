@@ -11,7 +11,7 @@ A feature-rich Telegram clone built with **Next.js**, **Socket.io**, and **PWA**
 -  **User authentication & management**  
 -  **Groups & channels** support  
 -  **Profile & settings management**  
--  **Channel & group administration** (including member management)  
+-  **Channel & group administration**
 -  **Progressive Web App (PWA) support** for a seamless experience  
 
 ## ⚙️ Built with 
