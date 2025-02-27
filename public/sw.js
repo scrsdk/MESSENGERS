@@ -131,9 +131,11 @@ const cacheFirst = async (request) => {
 const networkFirst = async (request) => {
   try {
     const response = await fetch(request);
-    const cache = await caches.open(DYNAMIC_CACHE);
-    cache.put(request, response.clone());
-    limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE);
+    if (request.method === "GET") {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+      limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE);
+    }
     return response;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
