@@ -38,7 +38,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
 
   const showProfile = () => {
     setter({
-      mockSelectedRoomData: roomData as Room,
+      RoomDetailsData: roomData as Room,
       rightBarRoute: "/",
     });
   };

@@ -37,9 +37,6 @@
 * {
   user-select: none;
 }
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   height: 100%;
@@ -78,7 +75,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply rounded-full w-full cursor-pointer bg-white/[54.42%];
+  width: 100%;
+  background-color: #dadada;
+  border-radius: calc(infinity * 1px);
+  cursor: pointer;
 }
 
 .scroll-w-none {

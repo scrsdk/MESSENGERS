@@ -19,11 +19,11 @@ const RightBar = () => {
     isRoomDetailsShown,
     selectedRoom,
     shouldCloseAll,
-    mockSelectedRoomData,
+    RoomDetailsData,
     rightBarRoute,
   } = useGlobalStore((state) => state);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const selectedRoomData: any = mockSelectedRoomData ?? selectedRoom;
+  const selectedRoomData: any = RoomDetailsData ?? selectedRoom;
   const { participants, type, _id: roomID } = selectedRoomData || {};
   const myData = useUserStore((state) => state);
 
@@ -96,13 +96,13 @@ const RightBar = () => {
     if (shouldCloseAll) {
       return setter({
         isRoomDetailsShown: false,
-        mockSelectedRoomData: null,
+        RoomDetailsData: null,
         shouldCloseAll: false, // reset the value to default
       });
     }
 
-    if (mockSelectedRoomData) {
-      setter({ mockSelectedRoomData: null });
+    if (RoomDetailsData) {
+      setter({ RoomDetailsData: null });
     } else {
       setter({ isRoomDetailsShown: false });
     }
@@ -180,7 +180,7 @@ const RightBar = () => {
     return null;
   };
 
-  if (!(mockSelectedRoomData || selectedRoomData)) return null;
+  if (!(RoomDetailsData || selectedRoomData)) return null;
 
   return (
     <Suspense>

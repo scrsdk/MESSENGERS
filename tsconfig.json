@@ -23,19 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "server.js",
-    "src/schemas/locationSchema.js",
-    "src/schemas/userSchema.js",
-    "src/schemas/roomSchema.js",
-    "src/schemas/namespaceSchema.js",
-    "src/schemas/messageSchema.js",
-    "src/db.js",
-    "tailwind.config.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

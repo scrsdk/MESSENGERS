@@ -228,7 +228,7 @@ const Message = (msgData: MessageModel & Props) => {
   // Open the sender's profile
   const openProfile = useCallback(() => {
     setter({
-      mockSelectedRoomData: sender,
+      RoomDetailsData: sender,
       shouldCloseAll: true,
       isRoomDetailsShown: true,
     });

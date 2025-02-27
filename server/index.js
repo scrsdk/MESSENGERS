@@ -1,14 +1,13 @@
 import { Server } from "socket.io";
-import connectToDB from "./src/db.js";
-import RoomSchema from "./src/schemas/roomSchema.js";
-import MessageSchema from "./src/schemas/messageSchema.js";
-import MediaSchema from "./src/schemas/mediaSchema.js";
-import LocationSchema from "./src/schemas/locationSchema.js";
-import UserSchema from "./src/schemas/userSchema.js";
+import RoomSchema from "../src/schemas/roomSchema.js";
+import MessageSchema from "../src/schemas/messageSchema.js";
+import MediaSchema from "../src/schemas/mediaSchema.js";
+import LocationSchema from "../src/schemas/locationSchema.js";
+import UserSchema from "../src/schemas/userSchema.js";
+import connectToDB from "../src/db/index.js";
 const io = new Server(3001, {
   cors: {
     origin: "*",
-    method: ["PUT", "POST"],
   },
   pingTimeout: 30000,
 });

@@ -15,16 +15,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import useScrollChange from "@/hook/useScrollChange";
 import MessageModel from "@/models/message";
 import useUserStore from "@/stores/userStore";
-import useScrollMessage from "@/hook/chatMessage/useScrollMessage";
-import useMessages from "@/hook/chatMessage/useMessages";
-import useTyping from "@/hook/chatMessage/useTyping";
-import useRoomEvents from "@/hook/chatMessage/useRoomEvents";
+import useScrollMessage from "@/hook/chatBox/useScrollMessage";
+import useMessages from "@/hook/chatBox/useMessages";
+import useTyping from "@/hook/chatBox/useTyping";
+import useRoomEvents from "@/hook/chatBox/useRoomEvents";
 const PinnedMessages = lazy(
   () => import("@/components/middleBar/PinnedMessages")
 );
 const MessageList = lazy(() => import("./MessageList"));
 
-interface ChatMessageProps {
+interface ChatBoxProps {
   setTypings: React.Dispatch<React.SetStateAction<string[]>>;
   setEditData: React.Dispatch<React.SetStateAction<MessageModel | null>>;
   setReplayData: React.Dispatch<React.SetStateAction<string | null>>;
@@ -34,7 +34,7 @@ interface ChatMessageProps {
   _id: string;
 }
 
-const ChatMessage = ({
+const ChatBox = ({
   setTypings,
   setEditData,
   setReplayData,
@@ -42,7 +42,7 @@ const ChatMessage = ({
   isLoaded,
   setIsLoaded,
   _id,
-}: ChatMessageProps) => {
+}: ChatBoxProps) => {
   const [isLastMsgInView, setIsLastMsgInView] = useState(false);
   const [floatingDate, setFloatingDate] = useState(null);
   const { rooms } = useSockets((state) => state);
@@ -298,4 +298,4 @@ const ChatMessage = ({
   );
 };
 
-export default memo(ChatMessage);
+export default memo(ChatBox);

@@ -1,6 +1,6 @@
+import connectToDB from "@/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { compare, hash } from "bcrypt";
-import connectToDB from "@/db";
 import UserSchema from "@/schemas/userSchema";
 
 const POST = async (req: NextApiRequest, res: NextApiResponse) => {

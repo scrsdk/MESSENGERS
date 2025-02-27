@@ -38,7 +38,7 @@ const RoomDetails = ({
     setter,
     isRoomDetailsShown,
     selectedRoom,
-    mockSelectedRoomData,
+    RoomDetailsData,
     onlineUsers,
   } = useGlobalStore((state) => state) || {};
 
@@ -46,7 +46,7 @@ const RoomDetails = ({
   const roomSocket = useSockets((state) => state.rooms);
 
   const { _id: myID, rooms } = myData;
-  // const selectedRoomData: any = mockSelectedRoomData ?? selectedRoom;
+  // const selectedRoomData: any = RoomDetailsData ?? selectedRoom;
   const { participants, type, _id: roomID } = { ...selectedRoomData };
 
   const onlineUsersCount = participants?.filter((pId: string) =>
@@ -126,8 +126,8 @@ const RoomDetails = ({
         selectedRoom:
           type === "private"
             ? (roomSelected as Room)
-            : (mockSelectedRoomData as Room),
-        mockSelectedRoomData: null,
+            : (RoomDetailsData as Room),
+        RoomDetailsData: null,
       });
     }
 

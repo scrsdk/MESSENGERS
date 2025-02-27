@@ -97,7 +97,7 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
   const openProfile = useCallback(
     (profileData: User) => {
       setter({
-        mockSelectedRoomData: profileData,
+        RoomDetailsData: profileData,
         shouldCloseAll: true,
         isRoomDetailsShown: true,
       });

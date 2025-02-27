@@ -4,7 +4,7 @@ import { lazy, Suspense } from "react";
 import Loading from "../modules/ui/Loading";
 import AudioManager from "./AudioManager";
 
-const ChatContent = lazy(() => import("../middleBar/ChatContent"));
+const ChatPage = lazy(() => import("./ChatPage"));
 
 const MiddleBar = () => {
   const { selectedRoom, isRoomDetailsShown } = useGlobalStore((state) => state);
@@ -26,7 +26,7 @@ const MiddleBar = () => {
             </div>
           }
         >
-          <ChatContent />
+          <ChatPage />
         </Suspense>
       ) : (
         <div className="size-full min-h-dvh"></div>

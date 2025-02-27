@@ -27,14 +27,14 @@ import Modal from "../modules/ui/Modal";
 import { scrollToMessage } from "@/utils";
 import ProfileGradients from "../modules/ProfileGradients";
 
-const ChatMessage = lazy(() => import("./ChatMessage"));
+const ChatMessage = lazy(() => import("./ChatBox"));
 
 export interface msgDate {
   date: string;
   usedBy: string;
 }
 
-const ChatContent = () => {
+const ChatPage = () => {
   const {
     _id: myID,
     name: myName,
@@ -208,7 +208,7 @@ const ChatContent = () => {
             onClick={() =>
               setter({
                 isRoomDetailsShown: !isRoomDetailsShown,
-                mockSelectedRoomData: null,
+                RoomDetailsData: null,
               })
             }
             className="flex items-center cursor-pointer gap-3 truncate max-w-[80%]"
@@ -337,4 +337,4 @@ const ChatContent = () => {
   );
 };
 
-export default ChatContent;
+export default ChatPage;
