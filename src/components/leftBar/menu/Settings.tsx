@@ -181,7 +181,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     .filter((item) => item !== null);
 
   return (
-    <>
+    <div className="w-full">
       <LeftBarContainer
         getBack={() => {
           getBack();
@@ -201,7 +201,6 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           </>
         }
       >
-        <Modal />
         <div className="relative text-white">
           <div className="absolute px-4 inset-x-0 w-full ">
             <div className="flex items-center gap-3 my-3 ">
@@ -419,13 +418,14 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           </div>
         </div>
       </LeftBarContainer>
+      <Modal />
       {isViewerOpen && (
         <ProfileImageViewer
           imageUrl={avatar}
           onClose={() => setIsViewerOpen(false)}
         />
       )}
-    </>
+    </div>
   );
 };
 
