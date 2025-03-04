@@ -44,19 +44,19 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
   };
 
   const createNewGroup = () => {
-    setter({ createRoomType: "group" });
     setter({
       selectedRoom: null,
       isRoomDetailsShown: false,
+      createRoomType: "group",
     });
     closeMenu();
   };
 
   const createNewChannel = () => {
-    setter({ createRoomType: "channel" });
     setter({
       selectedRoom: null,
       isRoomDetailsShown: false,
+      createRoomType: "channel",
     });
     closeMenu();
   };
