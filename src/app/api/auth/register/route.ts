@@ -1,15 +1,25 @@
+// src/app/api/auth/register/route.ts
+
 import connectToDB from "@/db";
 import RoomSchema from "@/schemas/roomSchema";
 import UserSchema from "@/schemas/userSchema";
 import { cookies } from "next/headers";
 import { hash } from "bcrypt";
 import tokenGenerator from "@/utils/TokenGenerator";
+import { NextResponse } from 'next/server';
 
 export const POST = async (req: Request) => {
   try {
     await connectToDB();
 
     const { username, phone, password: purePass } = await req.json();
+
+    if (!username || !phone || !purePass) {
+      return NextResponse.json(
+        { message: 'Missing username, phone, or password in request body' },
+        { status: 400 }
+      );
+    }
 
     const password = await hash(purePass, 12);
 
@@ -38,25 +48,34 @@ export const POST = async (req: Request) => {
       path: "/",
       secure: true,
     });
-    return Response.json(userData, { status: 201 });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    const existedUsernameOrPhone = Object.keys(
-      error.errorResponse?.keyPattern
-    ).join("");
 
-    if (existedUsernameOrPhone) {
-      const duplicatedProp =
-        existedUsernameOrPhone == "phone" ? "phone" : "username";
-      return Response.json(
+    return NextResponse.json(userData, { status: 201 });
+
+  } catch (error: any) { // <--- ИЗМЕНЕНИЕ: добавьте комментарий для подавления ESLint
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.error('Error during user registration:', error);
+
+    let duplicatedProp = null;
+
+    if (error.code === 11000 && error.keyPattern) {
+      const key = Object.keys(error.keyPattern)[0];
+      if (key === "phone") {
+        duplicatedProp = "phone";
+      } else if (key === "username") {
+        duplicatedProp = "username";
+      }
+    }
+
+    if (duplicatedProp) {
+      return NextResponse.json(
         { message: `Already there is an account using this ${duplicatedProp}` },
-        { status: 421 }
+        { status: 409 }
       );
     }
 
-    return Response.json(
-      { message: "Unknown error, try later" },
-      { status: 421 }
+    return NextResponse.json(
+      { message: "Unknown error, try later", details: error.message },
+      { status: 500 }
     );
   }
 };
