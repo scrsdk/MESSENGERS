@@ -5,6 +5,19 @@ import { cookies } from "next/headers";
 import { hash } from "bcrypt";
 import tokenGenerator from "@/utils/TokenGenerator";
 
+// Определяем интерфейс для ожидаемой ошибки MongoDB при дублировании
+interface MongoDuplicateKeyError extends Error {
+  code?: number;
+  keyPattern?: { [key: string]: number };
+  // Могут быть и другие свойства, если необходимо
+}
+
+// Определяем интерфейс для ошибки валидации Mongoose
+interface MongooseValidationError extends Error {
+  name: 'ValidationError';
+  errors: { [key: string]: { message: string } };
+}
+
 export const POST = async (req: Request) => {
   try {
     await connectToDB();
@@ -31,41 +44,42 @@ export const POST = async (req: Request) => {
 
     const token = tokenGenerator(userData.phone, 7);
 
-    // cookies() в Next.js 13/14 является функцией, которую не нужно await,
-    // если она импортируется напрямую из 'next/headers'.
-    // Если же у вас какая-то обертка, тогда await может быть нужен.
-    // Для большинства случаев, просто cookies().set()
     cookies().set("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 15,
-      sameSite: "none", // или 'lax', 'strict' в зависимости от ваших требований
+      sameSite: "none",
       path: "/",
-      secure: true, // Использовать true в продакшене (HTTPS)
+      secure: true,
     });
 
     return Response.json(userData, { status: 201 });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    // В первую очередь, всегда полезно логировать ошибку
+  } catch (error: unknown) { // <<-- Использование 'unknown'
     console.error("Ошибка при регистрации пользователя:", error);
 
-    // Проверяем, является ли ошибка ошибкой дублирования MongoDB (код 11000)
-    // В Mongoose, `keyPattern` находится непосредственно в объекте ошибки для ошибок дублирования.
-    if (error.code === 11000 && error.keyPattern) {
-      const duplicatedProp = Object.keys(error.keyPattern).join("");
+    // Проверка на ошибку дублирования MongoDB
+    if (
+      typeof error === 'object' && error !== null &&
+      (error as MongoDuplicateKeyError).code === 11000 &&
+      (error as MongoDuplicateKeyError).keyPattern
+    ) {
+      const duplicatedProp = Object.keys((error as MongoDuplicateKeyError).keyPattern).join("");
       const message = `Already there is an account using this ${duplicatedProp}`;
-      return Response.json({ message }, { status: 409 }); // 409 Conflict - более подходящий статус для дублирования
+      return Response.json({ message }, { status: 409 });
     }
-    // Если это не ошибка дублирования, а другая ошибка Mongoose (например, валидации)
-    else if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map((val: any) => val.message);
-      return Response.json({ message: `Validation Error: ${messages.join(', ')}` }, { status: 400 }); // 400 Bad Request
+    // Проверка на ошибку валидации Mongoose
+    else if (
+      typeof error === 'object' && error !== null &&
+      (error as MongooseValidationError).name === 'ValidationError' &&
+      (error as MongooseValidationError).errors
+    ) {
+      const messages = Object.values((error as MongooseValidationError).errors).map((val: any) => val.message);
+      return Response.json({ message: `Validation Error: ${messages.join(', ')}` }, { status: 400 });
     }
     // Для всех остальных, неизвестных ошибок
     else {
       return Response.json(
         { message: "Unknown error, please try again later." },
-        { status: 500 } // 500 Internal Server Error - стандартный для неизвестных ошибок сервера
+        { status: 500 }
       );
     }
   }
