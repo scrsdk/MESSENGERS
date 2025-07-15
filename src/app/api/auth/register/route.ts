@@ -11,6 +11,7 @@ export const POST = async (req: Request) => {
 
     const { username, phone, password: purePass } = await req.json();
 
+    // ИСПРАВЛЕНИЕ 1: Добавлены логические операторы '||' (ИЛИ)
     // Проверка наличия обязательных полей
     if (!username || !phone || !purePass) {
       return Response.json(
@@ -39,6 +40,7 @@ export const POST = async (req: Request) => {
 
     const token = tokenGenerator(userData.phone, 7);
 
+    // ИСПРАВЛЕНИЕ 2: Убран 'await' перед cookies()
     cookies().set("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 15, // 15 дней
@@ -53,35 +55,28 @@ export const POST = async (req: Request) => {
 
     let duplicatedProp: string | null = null;
 
-    // Шаг 1: Проверяем, является ли 'error' объектом и не null
-    if (typeof error === "object" && error !== null) {
-      // Шаг 2: Создаем временную переменную, чтобы TypeScript мог сузить тип
-      // Мы предполагаем, что объект может содержать 'code' и 'keyPattern'.
-      // Использование 'as { ... }' здесь не является 'any', и обычно принимается ESLint.
-      const err = error as { code?: unknown; keyPattern?: unknown; message?: string };
-
-      // Шаг 3: Проверяем, что 'code' существует, является числом и равно 11000
-      if (
-        typeof err.code === 'number' &&
-        err.code === 11000
-      ) {
-        // Шаг 4: Если это ошибка дубликата, проверяем 'keyPattern'
-        if (
-          typeof err.keyPattern === 'object' &&
-          err.keyPattern !== null
-        ) {
-          // Шаг 5: Теперь, когда мы уверены в структуре, можно безопасно
-          // получить ключи из keyPattern. TypeScript теперь знает, что это объект.
-          const keyPattern = err.keyPattern as Record<string, number>;
-          const keys = Object.keys(keyPattern);
-          if (keys.length > 0) {
-            duplicatedProp = keys[0];
-          }
-        }
+    // Проверка, является ли ошибка MongoDB ошибкой дубликата ключа (код 11000)
+    // Дополнительные проверки на структуру объекта ошибки
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: unknown }).code === 11000 && // Проверяем код ошибки MongoDB для дубликата ключа
+      "keyPattern" in error &&
+      typeof (error as { keyPattern: unknown }).keyPattern === "object" &&
+      (error as { keyPattern: unknown }).keyPattern !== null
+    ) {
+      // MongoDB Duplicate Key Error. keyPattern содержит объект с дублирующимся полем
+      const mongoError = error as { keyPattern: Record<string, number> };
+      const keys = Object.keys(mongoError.keyPattern);
+      if (keys.length > 0) {
+        // Берем первое (и обычно единственное) поле, которое вызвало дубликат
+        duplicatedProp = keys[0];
       }
     }
 
     if (duplicatedProp) {
+      // ИСПРАВЛЕНИЕ 3: Добавлены обратные кавычки (`) для шаблонной строки
       // Возвращаем более специфичное сообщение и статус 409 Conflict
       return Response.json(
         { message: `An account with this ${duplicatedProp} already exists.` },
@@ -90,6 +85,9 @@ export const POST = async (req: Request) => {
     }
 
     // Если это не ошибка дубликата или другая известная ошибка
+    // Можно добавить более детальную обработку других типов ошибок
+    // Например, ошибки валидации Mongoose
+
     // Для всех остальных неизвестных ошибок
     const errorMessage = (error instanceof Error) ? error.message : 'An unknown error occurred.';
 
