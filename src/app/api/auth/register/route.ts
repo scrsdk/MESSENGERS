@@ -40,8 +40,7 @@ export const POST = async (req: Request) => {
 
     const token = tokenGenerator(userData.phone, 7);
 
-    // ИСПРАВЛЕНИЕ 2: Убран 'await' перед cookies()
-    cookies().set("token", token, {
+    (await cookies()).set("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 15, // 15 дней
       sameSite: "none", // Важно для кросс-доменных запросов в production
