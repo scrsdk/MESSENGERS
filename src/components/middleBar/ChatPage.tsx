@@ -236,7 +236,7 @@ const ChatPage = () => {
 
             <div className="flex justify-center flex-col gap-1 truncate">
               <h3 className="text-base font-vazirBold truncate">
-                {_id === myID ? "Saved messages" : name + " " + lastName}
+                {_id === myID ? "Избранное" : name + " " + lastName}
               </h3>
 
               <div className="text-sm text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
@@ -255,9 +255,9 @@ const ChatPage = () => {
                   <>
                     {type === "private" ? (
                       onlineUsers.some((data) => data.userID === _id) ? (
-                        <span className="text-lightBlue">Online</span>
+                        <span className="text-lightBlue">В сети</span>
                       ) : (
-                        "last seen recently"
+                        "последний раз недавно"
                       )
                     ) : type === "group" ? (
                       `${participants.length} members ${
