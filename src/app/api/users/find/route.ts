@@ -114,7 +114,7 @@ export const POST = async (req: Request) => {
                   ? otherParticipant?.name
                     ? otherParticipant?.name
                     : isMe
-                    ? "Saved messages"
+                    ? "Избранное"
                     : ""
                   : roomData.name,
               lastName:
@@ -135,7 +135,7 @@ export const POST = async (req: Request) => {
   } catch (err) {
     console.log(err);
     return Response.json(
-      { message: "Unknown error, try later." },
+      { message: "Неизвестная ошибка, попробуйте позже." },
       { status: 500 }
     );
   }
