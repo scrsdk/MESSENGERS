@@ -28,7 +28,7 @@ const SignInForm = () => {
           ...response.data,
           isLogin: true,
         });
-        toaster("success", "You logged in successfully.");
+        toaster("success", "Вы успешно вошли в систему.");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -65,18 +65,18 @@ const SignInForm = () => {
             ></path>
           </g>
         </svg>
-        <span className="text-xs opacity-70">+98</span>
+        <span className="text-xs opacity-70">+7</span>
         <input
           {...register("phone", {
             required: " ",
             pattern: {
               value: /(^9[0-9]{9}$)|(^\u06F0\u06F9[\u06F0-\u06F9]{9})$/,
-              message: "Invalid phone number",
+              message: "Неверный номер телефона",
             },
           })}
           dir="auto"
           type="tel"
-          placeholder="Phone number"
+          placeholder="Номер телефона"
           autoComplete="off"
         />
       </label>
@@ -110,7 +110,7 @@ const SignInForm = () => {
             validate: (value) => {
               if (value.length) {
                 if (value.length > 20 || value.length < 8) {
-                  return "Must be more than 8 and less than 20";
+                  return "Должно быть больше 8 и меньше 20";
                 } else {
                   return true;
                 }
@@ -119,7 +119,7 @@ const SignInForm = () => {
           })}
           dir="auto"
           type="password"
-          placeholder="Password"
+          placeholder="Пароль"
           autoComplete="new-password"
         />
       </label>
@@ -135,7 +135,7 @@ const SignInForm = () => {
         {isSubmitting ? (
           <Loading loading="dots" size="lg" color="info" />
         ) : (
-          "Sign in"
+          "Войти"
         )}
       </Button>
     </div>
