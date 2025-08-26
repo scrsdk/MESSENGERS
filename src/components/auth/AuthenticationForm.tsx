@@ -21,19 +21,19 @@ const AuthenticationForm = () => {
         />
 
         <h1 className="font-bold font-vazirBold text-4xl">
-          Sign {isLogging ? "in" : "up"} to Telegram
+          Telegram ID
         </h1>
 
         <p className="text-gray-400 text-center px-10 text-sm  font-vazirLight mt-3">
           {isLogging
-            ? "Please confirm your phone number and password to sign in."
-            : "Please fill the fields to sign up."}
+            ? "Пожалуйста, подтвердите свой номер телефона и пароль для входа в систему."
+            : "Пожалуйста, заполните поля для регистрации."}
         </p>
 
         {isLogging ? <SignInForm /> : <SignUpForm />}
 
         <div className="text-left w-full ml-1 mt-5 text-sm">
-          {isLogging ? "Don't have an account? " : "Already have an account?"}
+          {isLogging ? "У вас нет учетной записи? " : "Already have an account?"}
           <Button
             variant="ghost"
             color="info"
@@ -41,7 +41,7 @@ const AuthenticationForm = () => {
             classNames="ml-1 "
             onClick={() => setIsLogging((prev) => !prev)}
           >
-            {isLogging ? " Sign up" : " Sign in"}
+            {isLogging ? " Зарегистрироваться " : " Войти "}
           </Button>
         </div>
       </div>
