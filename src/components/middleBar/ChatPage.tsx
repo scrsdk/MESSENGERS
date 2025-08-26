@@ -153,7 +153,7 @@ const ChatPage = () => {
 
   const dropDownItems = [
     {
-      title: "Go to first message",
+      title: "Перейти к первому сообщению",
       icon: <IoIosArrowUp className="size-5 text-gray-400" />,
       onClick: () => {
         setShowRoomOptions(false);
