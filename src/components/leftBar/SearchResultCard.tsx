@@ -152,7 +152,7 @@ const SearchResultCard = (
           {findBy == "participants" || findBy == "name"
             ? highlightChars(query, name ? name : "", lastName ? lastName : "")
             : _id === myID
-            ? "Saved messages"
+            ? "Избранное"
             : name + " " + lastName}
         </p>
 
@@ -164,9 +164,9 @@ const SearchResultCard = (
           ) : type === "channel" ? (
             `${participants?.length} subscribers`
           ) : isUserOnline ? (
-            <span className="text-lightBlue">online</span>
+            <span className="text-lightBlue">в сети</span>
           ) : (
-            "last seen recently"
+            "последний раз недавно"
           )}
         </p>
       </div>
