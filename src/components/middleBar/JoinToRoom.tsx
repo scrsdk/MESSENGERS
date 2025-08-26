@@ -39,7 +39,7 @@ const JoinToRoom = ({ roomData, roomSocket, userID }: Props) => {
       onClick={joinRoom}
       className="bg-darkBlue min-h-12 w-full text-base cursor-pointer"
     >
-      {!isLoading ? "Join" : <Loading classNames="text-white" />}
+      {!isLoading ? "Подписаться " : <Loading classNames="text-white" />}
     </Button>
   );
 };
