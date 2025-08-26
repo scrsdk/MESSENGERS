@@ -184,7 +184,7 @@ const RoomDetails = ({
                   onlineUsersCount ? ", " + onlineUsersCount + " online" : ""
                 }`
               ) : (
-                `${participants?.length} subscribers`
+                `${participants?.length} подписчиков`
               )}
             </div>
           </div>
@@ -201,12 +201,12 @@ const RoomDetails = ({
       </div>
 
       <div className="px-3 my-3 space-y-4">
-        <p className="text-lightBlue">Info</p>
+        <p className="text-lightBlue">Информация</p>
 
         {biography && (
           <div>
             <p className="text-[16px]">{biography}</p>
-            <p className="text-darkGray text-[13px]">Bio</p>
+            <p className="text-darkGray text-[13px]">Описание</p>
           </div>
         )}
 
@@ -216,7 +216,7 @@ const RoomDetails = ({
               {(username && "@" + username) || link}
             </p>
             <p className="text-darkGray text-sm">
-              {type === "private" ? "Username" : "Link"}
+              {type === "private" ? "Username" : "Ссылка"}
             </p>
           </div>
 
@@ -226,7 +226,7 @@ const RoomDetails = ({
           >
             {isCopied ? (
               <p className="text-sm" data-aos="zoom-out">
-                Copied
+                Скопировано
               </p>
             ) : (
               <IoCopyOutline data-aos="zoom-out" className="size-5" />
@@ -239,7 +239,7 @@ const RoomDetails = ({
             <p>Notifications</p>
 
             <p className="text-darkGray text-sm">
-              {notifications ? "On" : "Off"}
+              {notifications ? "Вкл" : "Откл"}
             </p>
           </div>
 
@@ -266,7 +266,7 @@ const RoomDetails = ({
             >
               <span className="flex gap-5">
                 <LuUsers className="size-5 pl-0.5 text-gray-400" />
-                <span>Subscribers</span>
+                <span>Подписчики</span>
               </span>
               <span className="pr-2">{roomData.participants.length}</span>
             </div>
@@ -278,7 +278,7 @@ const RoomDetails = ({
             >
               <span className="flex gap-5">
                 <RiShieldStarLine className="size-5 text-gray-400" />
-                <span>Administrators</span>
+                <span>Администраторы</span>
               </span>
               <span className="pr-2">{roomData.admins.length}</span>
             </div>
@@ -295,7 +295,7 @@ const RoomDetails = ({
             onClick={() => setter({ rightBarRoute: "/add-members" })}
           >
             <FiUserPlus className="size-5 scale-x-[-1] " />
-            <span>Add members</span>
+            <span>Добавить участника</span>
           </div>
           <div className="h-2 bg-black"></div>
           <div className="border-t border-black/40">
