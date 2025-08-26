@@ -143,7 +143,7 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
               "Back"
             ) : (
               <div className="flex relative justify-between items-center w-full ">
-                <span>Played by</span>
+                <span>Сыграл</span>
                 {playedByUsersData?.length > 0 && (
                   <span>
                     {playedByUsersData.slice(0, 2).map((user, index) =>
@@ -194,30 +194,30 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
         ...(!isCollapsed
           ? [
               roomData?.type !== "channel" && {
-                title: "Reply",
+                title: "Ответить",
                 icon: <GoReply className="size-5  text-gray-400 " />,
                 onClick: actionHandler(msgData?.addReplay),
               },
               (roomData?.type !== "channel" ||
                 roomData?.admins?.includes(myID)) && {
-                title: msgData?.pinnedAt ? "Unpin" : "Pin",
+                title: msgData?.pinnedAt ? "Открепить" : "Закрепить",
                 icon: <LuPin className="size-5  text-gray-400 " />,
                 onClick: actionHandler(msgData?.pin),
               },
               {
-                title: "Copy",
+                title: "Скопировать",
                 icon: <MdContentCopy className="size-5  text-gray-400 " />,
                 onClick: copy,
               },
               msgData?.sender._id === myID && {
-                title: "Edit",
+                title: "Изменить",
                 icon: <MdOutlineModeEdit className="size-5  text-gray-400 " />,
                 onClick: actionHandler(msgData?.edit),
               },
               (roomData?.type === "private" ||
                 msgData?.sender._id === myID ||
                 roomData?.admins?.includes(myID)) && {
-                title: "Delete",
+                title: "Удалить",
                 icon: <AiOutlineDelete className="size-5  text-gray-400 " />,
                 onClick: deleteMessage,
               },
