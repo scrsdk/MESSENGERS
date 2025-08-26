@@ -119,7 +119,7 @@ const PinnedMessages: React.FC<PinnedMessagesProps> = ({
           className="w-full pl-2 border-l-3 border-darkBlue flex flex-col items-start"
         >
           <h5 className="font-bold font-vazirBold text-sm text-lightBlue">
-            Pin messages
+            Закреплённое сообщение
           </h5>
           <div className="flex gap-1 h-fit w-[95%] text-darkGray text-sm">
             <span className="text-lightBlue/70">
