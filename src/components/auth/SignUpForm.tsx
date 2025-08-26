@@ -28,7 +28,7 @@ const SignUpForm = () => {
           ...response.data,
           isLogin: true,
         });
-        toaster("success", "You signed up successfully.");
+        toaster("success", "Вы успешно зарегистрировались.");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -70,11 +70,11 @@ const SignUpForm = () => {
             pattern: /^(?!.*[_.-]{2,})[a-zA-Z0-9_]{5,20}$/,
             minLength: {
               value: 5,
-              message: "Must be 5 to 20 characters",
+              message: "Должно быть от 5 до 20 символов",
             },
             maxLength: {
               value: 20,
-              message: "Must be 5 to 20 characters",
+              message: "Должно быть от 5 до 20 символов",
             },
           })}
           dir="auto"
@@ -108,18 +108,18 @@ const SignUpForm = () => {
             ></path>
           </g>
         </svg>
-        <span className="text-xs opacity-70">+98</span>
+        <span className="text-xs opacity-70">+7</span>
         <input
           {...register("phone", {
             required: " ",
             pattern: {
               value: /(^9[0-9]{9}$)|(^\u06F0\u06F9[\u06F0-\u06F9]{9})$/,
-              message: "Invalid phone number",
+              message: "Неверный номер телефона",
             },
           })}
           dir="auto"
           type="tel"
-          placeholder="Phone number"
+          placeholder="Номер телефона"
           autoComplete="phone"
         />
       </label>
@@ -153,7 +153,7 @@ const SignUpForm = () => {
             validate: (value) => {
               if (value?.length) {
                 if (value?.length > 20 || value?.length < 8) {
-                  return "Must be more than 8 and less than 20";
+                  return "Должно быть больше 8 и меньше 20";
                 } else {
                   return true;
                 }
@@ -162,7 +162,7 @@ const SignUpForm = () => {
           })}
           dir="auto"
           type="password"
-          placeholder="Password"
+          placeholder="Пароль"
           autoComplete="new-password"
         />
       </label>
@@ -178,7 +178,7 @@ const SignUpForm = () => {
         {isSubmitting ? (
           <Loading loading="dots" size="lg" color="info" />
         ) : (
-          "Sign up"
+          "Зарегистрироваться"
         )}
       </Button>
     </div>
