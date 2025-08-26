@@ -74,7 +74,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
     >
       <div className="flex flex-col gap-2 p-4 w-full text-white">
         <p className="text-darkBlue font-vazirRegular py-1 font-bold text-base">
-          Your name
+          Ваше имя
         </p>
 
         <input
@@ -82,7 +82,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
           type="text"
           value={updatedName}
           onChange={(e) => setUpdatedName(e.target.value)}
-          placeholder="Name"
+          placeholder="Имя"
           className="outline-hidden bg-inherit w-full"
           max={20}
           maxLength={20}
@@ -95,7 +95,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
           type="text"
           value={updatedLastName}
           onChange={(e) => setUpdatedLastName(e.target.value)}
-          placeholder="Last name"
+          placeholder="Фамилия"
           className="outline-hidden bg-inherit w-full"
           max={20}
           maxLength={20}
@@ -107,7 +107,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
       <div className="flex flex-col gap-2 px-4 w-full h-full">
         <div className="flex items-center w-full justify-between pt-4">
           <p className="text-darkBlue font-vazirRegular font-bold text-base">
-            Your bio
+            О себе
           </p>
           <p className="text-darkGray">
             {70 - (updatedBiography?.length ?? 0)}
@@ -124,7 +124,7 @@ const EditInfo = ({ getBack }: { getBack: () => void }) => {
             });
           }}
           className="resize-none w-full h-3 text-white bg-inherit outline-hidden"
-          placeholder="Your biography"
+          placeholder="О себе"
         />
       </div>
 
