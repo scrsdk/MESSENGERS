@@ -72,9 +72,9 @@ const MessageActions = ({ isFromMe }: MessageActionsProps) => {
     modalSetter((prev) => ({
       ...prev,
       isOpen: true,
-      title: "Delete message",
-      bodyText: "Are you sure you want to delete this message?",
-      isCheckedText: "Also delete for others",
+      title: "Удалить сообщениеe",
+      bodyText: "Вы уверены, что хотите удалить это сообщение?",
+      isCheckedText: "Также удалить для других",
       onSubmit: async () => {
         const currentIsChecked = useModalStore.getState().isChecked;
 
