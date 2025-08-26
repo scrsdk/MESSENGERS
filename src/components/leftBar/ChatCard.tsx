@@ -82,7 +82,7 @@ const ChatCard = ({
         (data) => isUser(data) && data?._id === myID
       ) as User | undefined;
       return {
-        name: currentUser?.name || "Saved messages",
+        name: currentUser?.name || "Избранное",
         avatar: currentUser?.avatar,
         _id: currentUser?._id || "",
       };
