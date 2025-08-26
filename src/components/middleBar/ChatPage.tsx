@@ -164,15 +164,15 @@ const ChatPage = () => {
       },
     },
     type !== "private" && {
-      title: type === "group" ? "Leave group" : "Leave Channel",
+      title: type === "group" ? "Покинуть группу" : "Покинуть канал",
       icon: <IoLogOutOutline className="size-5 text-gray-400" />,
       onClick: () => {
         setShowRoomOptions(false);
         modalSetter((prev) => ({
           ...prev,
           isOpen: true,
-          title: type === "group" ? "Leave group" : "Leave Channel",
-          bodyText: `Are you sure you want to leave ${selectedRoom?.name}?`,
+          title: type === "group" ? "Покинуть группу" : "Покинуть канал",
+          bodyText: `Ты уверен, что хочешь уйти? ${selectedRoom?.name}?`,
           onSubmit: async () => {
             leaveRoom();
             setTimeout(() => {
