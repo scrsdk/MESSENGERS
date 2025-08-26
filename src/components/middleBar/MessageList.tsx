@@ -73,7 +73,7 @@ const MessageList = ({
     ) : (
       <div className="flex-center size-full pb-[40vh]">
         <p className="rounded-full w-fit text-sm py-1 px-3 text-center bg-gray-800/80">
-          Send a message to start the chat
+          Отправьте сообщение, чтобы начать чат
         </p>
       </div>
     );
