@@ -19,18 +19,18 @@ const formatDate = (inputDate: string) => {
 
   if (dateObj.getFullYear() === now.getFullYear()) {
     const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      "Янв",
+      "Фев",
+      "Мар",
+      "Апр",
+      "Май",
+      "Июн",
+      "Июл",
+      "Авг",
+      "Сен",
+      "Окт",
+      "Ноя",
+      "Дек",
     ];
     const day = dateObj.getDate();
     const month = months[dateObj.getMonth()];
