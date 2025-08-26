@@ -84,7 +84,7 @@ const SearchPage = ({ closeSearch }: Props) => {
           value={searchQuery}
           ref={inputRef}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search"
+          placeholder="Поиск"
           className="bg-inherit placeholder:text-white/60 w-full outline-hidden"
           type="text"
         />
@@ -117,7 +117,7 @@ const SearchPage = ({ closeSearch }: Props) => {
                   data-aos="fade-up"
                   className="flex flex-center h-96 text-darkGray"
                 >
-                  No results
+                 Не найдено!
                 </div>
               )}
         </div>
