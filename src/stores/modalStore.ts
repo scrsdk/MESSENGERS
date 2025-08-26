@@ -3,8 +3,8 @@ import { create } from "zustand";
 
 const defaultModalData = {
   isOpen: false,
-  okText: "Yes",
-  cancelText: "Cancel",
+  okText: "Да",
+  cancelText: "Нет",
   title: "",
   bodyText: "",
   isCheckedText: "",
