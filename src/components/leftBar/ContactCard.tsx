@@ -51,9 +51,9 @@ const ContactCard = ({
 
           <p className="text-sm text-darkGray">
             {isUserOnline ? (
-              <span className="text-lightBlue">Online</span>
+              <span className="text-lightBlue">В сети</span>
             ) : (
-              "last seen recently"
+              "последний раз недавно"
             )}
           </p>
         </div>
