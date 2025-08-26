@@ -13,13 +13,13 @@ export const POST = async (req: Request) => {
     const userData = await UserSchema.findOne({ phone: phone.toString() });
     if (!userData)
       return Response.json(
-        { message: "No user exist with phone." },
+        { message: "Нет пользователя с телефоном." },
         { status: 401 }
       );
 
     if (!(await compare(password, userData.password)))
       return Response.json(
-        { message: "Incorrect phone or password" },
+        { message: "Неправильный телефон или пароль" },
         { status: 401 }
       );
 
