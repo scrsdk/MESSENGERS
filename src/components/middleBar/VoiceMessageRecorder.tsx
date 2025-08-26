@@ -183,7 +183,7 @@ const VoiceMessageRecorder = ({
       console.error(error);
       toaster(
         "error",
-        "Microphone access denied! Please allow microphone permissions."
+        "Доступ к микрофону запрещен! Пожалуйста, разрешите разрешения на микрофон."
       );
     }
   }, [uploadVoice]);
@@ -209,7 +209,7 @@ const VoiceMessageRecorder = ({
             onClick={cancelRecording}
             className="px-5 py-3 text-sm bg-transparent font-vazirBold cursor-pointer text-red-500"
           >
-            CANCEL
+            ОТМЕНИТЬ
           </button>
 
           {isLoading ? (
