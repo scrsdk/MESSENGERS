@@ -17,7 +17,7 @@ export const POST = async (req: Request) => {
 
     if (!token)
       return Response.json(
-        { message: "You are not logged in" },
+        { message: "Вы не вошли в систему" },
         { status: 401 }
       );
 
@@ -30,7 +30,7 @@ export const POST = async (req: Request) => {
     if (!userData || !verifiedToken) {
       (await cookies()).delete("token");
       return Response.json(
-        { message: "No user exist with this username or password!" },
+        { message: "Нет пользователя с этим именем пользователя или паролем!" },
         { status: 401 }
       );
     }
