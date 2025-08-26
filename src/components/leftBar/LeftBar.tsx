@@ -208,7 +208,7 @@ const LeftBar = () => {
               sortedRooms.map((data) => <ChatCard {...data} key={data?._id} />)
             ) : (
               <div className="text-xl text-white font-bold w-full text-center font-vazirBold pt-20">
-                No chats found
+                Чатов нет
               </div>
             )
           ) : (
