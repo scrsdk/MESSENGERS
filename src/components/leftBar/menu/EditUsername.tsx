@@ -91,7 +91,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
     >
       <div className="flex flex-col gap-2 pb-4 !w-full  px-4 text-white">
         <p className="text-darkBlue font-vazirRegular pt-1  font-bold text-base">
-          Set username
+          Измените имя пользователя
         </p>
         <div className="flex">
           <span>@</span>
@@ -112,7 +112,7 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
       <div className="fixed size-full text-white/55 inset-x-0 text-sm h-full bg-black/70 px-4 pt-2 break-words">
         {isValidationLoading ? (
           <p data-aos="zoom-left" className="my-2">
-            Checking username...
+            Проверка username...
           </p>
         ) : null}
         {currentUsername.trim() !== username.trim() && !isValidationLoading && (
@@ -123,18 +123,17 @@ const EditUsername = ({ getBack }: { getBack: () => void }) => {
             }`}
           >
             {isUsernameValid
-              ? `${username} is available`
+              ? `${username} доступно`
               : errorMsg ??
-                "Username must be between 5 & 20 Characters length."}
+                "Имя пользователя должно быть длиной от 5 до 20 символов."}
           </p>
         )}
-        You can choose a username on{" "}
-        <span className="font-bold font-vazirBold">Telegram</span>. If you do,
-        people will be able to find you by this username and contact you without
-        needing your phone number.
+        Вы можете выбрать имя пользователя на{" "}
+        <span className="font-bold font-vazirBold">Telegram</span>. Если ты это сделаешь,
+        Люди смогут найти вас по этому имени пользователя и связаться с вами без
+        номера телефона.
         <br />
-        <br /> You can use a-z, 0-9 and underscores. Minimum length is 3
-        Characters.
+        <br /> Вы можете использовать a-z, 0-9 и подчеркивание. Минимальная длина - 3
       </div>
     </LeftBarContainer>
   );
