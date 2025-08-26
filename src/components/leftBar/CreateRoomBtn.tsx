@@ -12,7 +12,7 @@ const CreateRoomBtn = () => {
 
   const dropDownItems = [
     {
-      title: "New Channel",
+      title: "Создать канал",
       onClick: () => {
         setter({ createRoomType: "channel" });
         setIsDropDownOpen(false);
@@ -20,7 +20,7 @@ const CreateRoomBtn = () => {
       icon: <HiOutlineSpeakerphone className="size-5 mr-3 text-gray-400" />,
     },
     {
-      title: "New Group",
+      title: "Создать группу",
       onClick: () => {
         setter({ createRoomType: "group" });
         setIsDropDownOpen(false);
