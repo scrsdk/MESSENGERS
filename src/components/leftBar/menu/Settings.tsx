@@ -109,7 +109,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       }
     } catch (error) {
       console.log(error);
-      toaster("error", "Failed to upload, check your network.");
+      toaster("error", "Не удалось загрузить, проверьте интернет.");
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +122,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
   const dropDownItems = [
     {
-      title: "Edit info",
+      title: "Редактировать",
       onClick: () => {
         updateRoute("edit-info");
         setIsDropDownOpen(false);
@@ -130,7 +130,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       icon: <GoPencil className="size-5  text-gray-400" />,
     },
     {
-      title: "Update Profile Photo",
+      title: "Загрузить фото",
       onClick: () => {
         avatarElem();
         setIsDropDownOpen(false);
@@ -138,13 +138,13 @@ const Settings = ({ getBack, updateRoute }: Props) => {
       icon: <TbCameraPlus className="size-5  text-gray-400" />,
     },
     avatar && {
-      title: "Remove Profile Photo",
+      title: "Удалить фото",
       onClick: () => {
         modalSetter({
           isOpen: true,
-          title: "Delete Photo",
-          bodyText: "Are you sure you want to delete your profile photo?",
-          okText: "Delete",
+          title: "Удаление фото",
+          bodyText: "Вы уверены, что хотите удалить фото?",
+          okText: "Удалить",
           onSubmit: async () => {
             const socket = useSockets.getState().rooms;
             socket?.emit("updateUserData", { userID: _id, avatar: "" });
@@ -163,13 +163,13 @@ const Settings = ({ getBack, updateRoute }: Props) => {
     },
 
     {
-      title: "Log out",
+      title: "Выйти",
       onClick: () => {
         modalSetter({
           isOpen: true,
-          title: "Log out",
-          bodyText: "Do you really want to log out?",
-          okText: "Yes",
+          title: "Выйти",
+          bodyText: "Ты действительно хочешь выйти из аккаунта?",
+          okText: "Да",
           onSubmit: logout,
         });
         setIsDropDownOpen(false);
@@ -235,7 +235,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
                 </h3>
 
                 <div className="font-bold text-[14px] text-darkGray font-vazirBold line-clamp-1 whitespace-normal text-nowrap">
-                  Online
+                  В сети
                 </div>
               </div>
             </div>
@@ -249,12 +249,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
           <div className="flex flex-col mt-4">
             <p className="text-darkBlue font-vazirBold py-2 px-4 font-bold text-sm">
-              Account
+              Аккаунт
             </p>
 
             <div className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200">
               <p className="text-sm">
-                +98{" "}
+                +7{" "}
                 {phone
                   .toString()
                   .split("")
@@ -267,7 +267,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
                   })}
               </p>
               <p className="text-darkGray text-[13px]">
-                Tap to change phone number
+                Нажмите, чтобы изменить номер телефона
               </p>
             </div>
 
@@ -287,9 +287,9 @@ const Settings = ({ getBack, updateRoute }: Props) => {
               onClick={() => updateRoute("edit-info")}
               className="cursor-pointer px-4 py-2 hover:bg-white/5 transition-all duration-200"
             >
-              <p className="text-sm">{biography ? biography : "Bio"}</p>
+              <p className="text-sm">{biography ? biography : "О себе"}</p>
               <p className="text-darkGray text-[13px]">
-                {biography ? "Bio" : "Add a few words about yourself"}
+                {biography ? "О себе" : "Добавьте несколько слов о себе"}
               </p>
             </div>
           </div>
@@ -298,18 +298,18 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
           <div className="flex flex-col pt-1">
             <p className="text-darkBlue font-vazirBold px-4 py-2 mt-2 text-sm">
-              Settings
+              Настройки
             </p>
 
             <div className="flex item-center relative">
               <MenuItem
                 icon={<IoSettingsOutline />}
-                title="General Settings"
+                title="Общие Настройки"
                 onClick={() => {}}
               />
               <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
                 <MdOutlineLockClock fill="teal" size={15} />
-                <span>Coming Soon!</span>
+                <span>Скоро!</span>
               </span>
             </div>
 
@@ -318,12 +318,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             <div className="flex item-center relative">
               <MenuItem
                 icon={<GoBell />}
-                title="Notifications"
+                title="Уведомления"
                 onClick={() => {}}
               />
               <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
                 <MdOutlineLockClock fill="teal" size={15} />
-                <span>Coming Soon!</span>
+                <span>Скоро!</span>
               </span>
             </div>
 
@@ -332,12 +332,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             <div className="flex item-center relative">
               <MenuItem
                 icon={<CgLock />}
-                title="Privacy and Security"
+                title="Конфиденциальность"
                 onClick={() => {}}
               />
               <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
                 <MdOutlineLockClock fill="teal" size={15} />
-                <span>Coming Soon!</span>
+                <span>Скоро!</span>
               </span>
             </div>
 
@@ -346,12 +346,12 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             <div className="flex item-center relative">
               <MenuItem
                 icon={<FaRegFolderClosed />}
-                title="Chat Folders"
+                title="Папки чата"
                 onClick={() => {}}
               />
               <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
                 <MdOutlineLockClock fill="teal" size={15} />
-                <span>Coming Soon!</span>
+                <span>Скоро!</span>
               </span>
             </div>
 
@@ -360,11 +360,11 @@ const Settings = ({ getBack, updateRoute }: Props) => {
             <span className="relative flex items-center">
               <MenuItem
                 icon={<MdLanguage />}
-                title="Language"
+                title="Язык"
                 onClick={() => {}}
               />
               <span className="text-darkBlue absolute right-4 text-sm">
-                English
+                Русский
               </span>
             </span>
           </div>
@@ -378,7 +378,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
             <MenuItem
               icon={<IoChatbubbleEllipsesOutline />}
-              title="Ask a Question"
+              title="Вопросы о Telegram"
               onClick={() => {}}
             />
 
@@ -396,7 +396,7 @@ const Settings = ({ getBack, updateRoute }: Props) => {
 
             <MenuItem
               icon={<GoShieldCheck />}
-              title="Privacy Policy"
+              title="Политика конфиденциальности"
               onClick={() =>
                 window.open(
                   "https://telegram.org/privacy/de?setln=en",
@@ -407,13 +407,13 @@ const Settings = ({ getBack, updateRoute }: Props) => {
           </div>
 
           <div className="w-full  py-5 px-4 text-center bg-black/70">
-            Created with 💙 by{" "}
+            MLS PRODUCTION
             <a
               target="_blank"
-              href="https://github.com/Saeed-Abedini"
+              href=""
               className="text-darkBlue"
             >
-              SAEED
+              
             </a>{" "}
           </div>
         </div>
