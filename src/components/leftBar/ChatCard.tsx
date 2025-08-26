@@ -227,7 +227,7 @@ const ChatCard = ({
               <HiSpeakerphone className="mt-[0.17rem] min-w-fit" />
             )}
             <span dir="auto" className="truncate">
-              {roomID === myID ? "Saved messages" : name + " " + lastName}
+              {roomID === myID ? "Избранное" : name + " " + lastName}
             </span>
           </div>
           <div className="flex gap-1 items-center absolute right-3">
