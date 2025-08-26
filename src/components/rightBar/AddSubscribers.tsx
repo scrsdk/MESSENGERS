@@ -107,12 +107,12 @@ const AddSubscribers = ({ roomData, myData }: AddMembersProps) => {
         </div>
         {rightBarRoute === "/add-subscribers" && (
           <div className="text-xs text-gray-400 py-3 px-2">
-            Only channel admins can see this list.
+            Только администраторы канала могут видеть этот список.
           </div>
         )}
         {rightBarRoute === "/administrators" && (
           <div className="text-xs text-gray-400 py-3 px-2">
-            You can add admins to help you manage your channel.
+            Вы можете добавить администраторов, которые помогут вам управлять своим каналом.
           </div>
         )}
       </div>
