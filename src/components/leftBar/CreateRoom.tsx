@@ -244,8 +244,8 @@ const CreateRoom = () => {
             className="bg-inherit p-1 w-full px-4 outline-hidden text-sm mt-1"
             placeholder={
               createRoomType === "group"
-                ? "Who would you like to add?"
-                : "Add people to your channel"
+                ? "Кого бы вы хотели добавить?"
+                : "Добавьте людей на свой канал"
             }
           />
 
