@@ -4,8 +4,8 @@ import { ToastContainer } from "react-toastify";
 import AosAnimation from "@/components/modules/ui/AosAnimation";
 
 export const metadata: Metadata = {
-  title: "Telegram messenger",
-  description: "FullStack NextJs Telegram messenger with socket.io",
+  title: "Telegram Clone",
+  description: "Telegram @deveweb3",
 };
 
 export default function RootLayout({
