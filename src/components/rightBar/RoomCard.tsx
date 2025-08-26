@@ -208,7 +208,7 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
                 <span>{name + " " + lastName}</span>
                 {isAdmin && !isOwner && (
                   <span className="text-xs text-darkBlue mb-0.5 font-vazirRegular">
-                    Admin
+                    Администратор
                   </span>
                 )}
               </span>
@@ -218,9 +218,9 @@ const RoomCard = (roomData: Partial<User | Room> & Props) => {
 
           <p className="text-sm text-darkGray">
             {isOnline ? (
-              <span className="text-lightBlue">Online</span>
+              <span className="text-lightBlue">В сети</span>
             ) : (
-              "last seen recently"
+              "последний раз недавно"
             )}
           </p>
         </div>
