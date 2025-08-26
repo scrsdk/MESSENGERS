@@ -7,7 +7,7 @@ const logout = async () => {
     return location.reload();
   } catch (error) {
     console.log(error);
-    toaster("error", "Network issues!");
+    toaster("error", "Проблемы с сетью!");
   }
 };
 
