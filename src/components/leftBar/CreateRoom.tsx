@@ -99,7 +99,7 @@ const CreateRoom = () => {
 
   const createRoom = async () => {
     const name = roomName.trim();
-    if (!name?.length) return toaster("error", "Please enter room name");
+    if (!name?.length) return toaster("error", "Пожалуйста, введите название");
 
     setIsLoading(true);
 
@@ -112,7 +112,7 @@ const CreateRoom = () => {
         imageUrl = uploadedImageUrl;
       } catch (error) {
         console.log(error);
-        toaster("error", "Failed to upload image,try again ");
+        toaster("error", "Не удалось загрузить изображение, попробуйте еще раз ");
         setIsLoading(false);
         uploadError = true;
         return;
@@ -163,20 +163,20 @@ const CreateRoom = () => {
         />
 
         {isRoomInfoPartShown ? (
-          <div className="capitalize text-sm ">New {createRoomType}</div>
+          <div className="capitalize text-sm ">Новый {createRoomType}</div>
         ) : (
           <div className=" flex flex-col justify-center">
-            <div className="capitalize text-sm">New {createRoomType}</div>
+            <div className="capitalize text-sm">Новый {createRoomType}</div>
             <div className="text-xs text-white/60">
               {selectedUsers.length
                 ? `${selectedUsers.length} ${
                     createRoomType === "group"
-                      ? "of 200000 selected"
-                      : "members"
+                      ? "из 200000 выбранных"
+                      : "участников"
                   }`
                 : createRoomType === "group"
-                ? "up to 200000 members"
-                : "0 members"}
+                ? "до 200000 членов"
+                : "0 участников"}
             </div>
           </div>
         )}
@@ -216,7 +216,7 @@ const CreateRoom = () => {
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
               className="w-full basis-[90%] p-2 rounded-sm bg-inherit outline-hidden"
-              placeholder={`Enter ${createRoomType} name`}
+              placeholder={`Введите ${createRoomType} имя`}
             />
             {isEmojiOpen ? (
               <FaRegKeyboard
