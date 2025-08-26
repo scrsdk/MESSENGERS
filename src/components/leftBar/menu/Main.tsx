@@ -28,8 +28,8 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
   const { setter } = useGlobalStore((state) => state);
 
   const copyInviteLink = async () => {
-    await copyText("Coming soon");
-    toaster("success", "Invite link copied!");
+    await copyText("MLS PRODUCTION");
+    toaster("success", "Ссылка скопирована!");
     closeMenu();
   };
 
@@ -116,7 +116,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
       <div>
         <MenuItem
           icon={<CgProfile />}
-          title="My Profile"
+          title="Профиль"
           onClick={openProfile}
         />
 
@@ -124,13 +124,13 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
 
         <MenuItem
           icon={<LuUsers />}
-          title="New Group"
+          title="Создать группу"
           onClick={createNewGroup}
         />
 
         <MenuItem
           icon={<HiOutlineSpeakerphone />}
-          title="New Channel"
+          title="Создать канал"
           onClick={createNewChannel}
         />
 
@@ -139,40 +139,40 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
         <div className="flex item-center relative">
           <MenuItem
             icon={<RiUser3Line />}
-            title="Contacts"
+            title="Контакты"
             onClick={() => {
               closeMenu();
             }}
           />
           <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
             <MdOutlineLockClock fill="teal" size={15} />
-            <span>Coming Soon!</span>
+            <span>Скоро!</span>
           </span>
         </div>
 
         <div className="flex item-center relative">
           <MenuItem
             icon={<IoCallOutline />}
-            title="Calls"
+            title="Звонки"
             onClick={() => {
               closeMenu();
             }}
           />
           <span className="flex items-center gap-1 text-xs text-gray-400 absolute right-3 top-4">
             <MdOutlineLockClock fill="teal" size={15} />
-            <span>Coming Soon!</span>
+            <span>Скоро!</span>
           </span>
         </div>
 
         <MenuItem
           icon={<CiBookmark />}
-          title="Saved Messages"
+          title="Избранное"
           onClick={openSavedMessages}
         />
 
         <MenuItem
           icon={<IoSettingsOutline />}
-          title="Settings"
+          title="Настройки"
           onClick={openProfile}
         />
 
@@ -180,7 +180,7 @@ const Main = ({ closeMenu, updateRoute, isOpen }: Props) => {
 
         <MenuItem
           icon={<FiUserPlus />}
-          title="Invite Friends"
+          title="Пригласить друзей"
           onClick={copyInviteLink}
         />
       </div>
